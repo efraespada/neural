@@ -1,13 +1,9 @@
-"""Repository interfaces for My Verisure integration."""
+"""Repository interfaces for Neural AI integration."""
 
-from .auth_repository import AuthRepository
-from .installation_repository import InstallationRepository
-from .alarm_repository import AlarmRepository
-from .session_repository import SessionRepository
+from .ai_repository import AIRepository
+from .ha_repository import HARepository
 
 __all__ = [
-    "AuthRepository",
-    "InstallationRepository",
-    "AlarmRepository",
-    "SessionRepository",
+    "AIRepository",
+    "HARepository",
 ]

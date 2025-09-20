@@ -1,4 +1,4 @@
-"""DataUpdateCoordinator for the My Verisure integration."""
+"""DataUpdateCoordinator for the Neural AI integration."""
 
 from __future__ import annotations
 
@@ -29,14 +29,14 @@ from core.dependency_injection.providers import (
     get_auth_use_case,
     get_session_use_case,
     get_installation_use_case,
-    get_alarm_use_case,
+    get_ai_use_case,
     clear_dependencies,
 )
 from .const import CONF_INSTALLATION_ID, CONF_USER, DEFAULT_SCAN_INTERVAL, DOMAIN, LOGGER, CONF_SCAN_INTERVAL
 
 
 class MyVerisureDataUpdateCoordinator(DataUpdateCoordinator):
-    """A My Verisure Data Update Coordinator."""
+    """A Neural AI Data Update Coordinator."""
 
     config_entry: ConfigEntry
 
@@ -60,7 +60,7 @@ class MyVerisureDataUpdateCoordinator(DataUpdateCoordinator):
         self.auth_use_case = get_auth_use_case()
         self.session_use_case = get_session_use_case()
         self.installation_use_case = get_installation_use_case()
-        self.alarm_use_case = get_alarm_use_case()
+        self.ai_use_case = get_ai_use_case()
         
         # Store session file path for later loading
         self.session_file = session_file
@@ -165,18 +165,18 @@ class MyVerisureDataUpdateCoordinator(DataUpdateCoordinator):
             return False
 
     async def _async_update_data(self) -> Dict[str, Any]:
-        """Update data via My Verisure API."""
+        """Update data via Neural AI API."""
         try:
             # Ensure we're logged in
             if not await self.async_login():
-                raise UpdateFailed("Failed to login to My Verisure")
+                raise UpdateFailed("Failed to login to Neural AI")
 
-            # Get alarm status using alarm use case
-            alarm_status = await self.alarm_use_case.get_alarm_status(self.installation_id)
+            # Get AI status using AI use case
+            ai_status = await self.ai_use_case.get_status()
             
             # Convert to dictionary format expected by Home Assistant
             return {
-                "alarm_status": alarm_status.to_dict() if hasattr(alarm_status, 'to_dict') else alarm_status,
+                "ai_status": ai_status.to_dict() if hasattr(ai_status, 'to_dict') else ai_status,
                 "last_update": time.time(),
             }
             
@@ -193,37 +193,30 @@ class MyVerisureDataUpdateCoordinator(DataUpdateCoordinator):
             LOGGER.error("Unexpected error: %s", ex)
             raise UpdateFailed(f"Unexpected error: {ex}") from ex
 
-    async def async_arm_away(self) -> bool:
-        """Arm the alarm in away mode."""
+    async def async_send_message(self, message: str, model: str = None) -> str:
+        """Send a message to AI."""
         try:
-            return await self.alarm_use_case.arm_away(self.installation_id)
+            return await self.ai_use_case.send_message(message, model)
         except Exception as e:
-            LOGGER.error("Failed to arm away: %s", e)
-            return False
+            LOGGER.error("Failed to send message to AI: %s", e)
+            return ""
 
-    async def async_arm_home(self) -> bool:
-        """Arm the alarm in home mode."""
+    async def async_get_ai_status(self) -> dict:
+        """Get AI status."""
         try:
-            return await self.alarm_use_case.arm_home(self.installation_id)
+            status = await self.ai_use_case.get_status()
+            return status.to_dict() if hasattr(status, 'to_dict') else status
         except Exception as e:
-            LOGGER.error("Failed to arm home: %s", e)
-            return False
+            LOGGER.error("Failed to get AI status: %s", e)
+            return {}
 
-    async def async_arm_night(self) -> bool:
-        """Arm the alarm in night mode."""
+    async def async_list_models(self) -> list:
+        """List available AI models."""
         try:
-            return await self.alarm_use_case.arm_night(self.installation_id)
+            return await self.ai_use_case.list_models()
         except Exception as e:
-            LOGGER.error("Failed to arm night: %s", e)
-            return False
-
-    async def async_disarm(self) -> bool:
-        """Disarm the alarm."""
-        try:
-            return await self.alarm_use_case.disarm(self.installation_id)
-        except Exception as e:
-            LOGGER.error("Failed to disarm: %s", e)
-            return False
+            LOGGER.error("Failed to list AI models: %s", e)
+            return []
 
     async def async_get_installations(self):
         """Get user installations."""

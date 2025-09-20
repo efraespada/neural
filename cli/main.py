@@ -10,11 +10,10 @@ import os
 # Add core to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
 
-from .commands.auth import AuthCommand
-from .commands.info import InfoCommand
-from .commands.alarm import AlarmCommand
+from .commands.ai import AICommand
+from .commands.ha import HACommand
 from .utils.display import print_header, print_error, print_info
-from .utils.session_manager import session_manager
+# Session manager removed - no longer needed for Neural AI
 
 logger = logging.getLogger(__name__)
 
@@ -31,28 +30,35 @@ def setup_logging(verbose: bool = False):
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser."""
     parser = argparse.ArgumentParser(
-        description="My Verisure CLI - Command Line Interface for My Verisure integration",
+        description="Neural AI CLI - Command Line Interface for Neural AI integration",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Authentication
-  my_verisure auth login
-  my_verisure auth logout
-  my_verisure auth status
+  # AI interaction
+  neural ai chat "Hello, how are you?"
+  neural ai status
+  neural ai models
 
-  # Information
-  my_verisure info installations
-  my_verisure info services --installation-id 12345
-  my_verisure info status --installation-id 12345
+  # Home Assistant integration
+  neural ha entities
+  neural ha sensors
+  neural ha summary
+  neural ha entity sensor.temperature
+  neural ha test
+  neural ha complete
+  
+  # Home Assistant with custom token
+  neural ha --ha-token YOUR_TOKEN test
 
-  # Alarm control
-  my_verisure alarm status --installation-id 12345
-  my_verisure alarm arm --mode away --installation-id 12345
-  my_verisure alarm disarm --installation-id 12345
+  # Home Assistant authentication
+  neural auth status
+  neural auth login
+  neural auth login --token YOUR_TOKEN
+  neural auth logout
 
   # Non-interactive mode (for scripts)
-  my_verisure auth login --non-interactive
-  my_verisure alarm arm --mode away --no-confirm
+  neural ai chat "Hello" --non-interactive
+  neural ha entities --domain sensor
         """,
     )
 
@@ -71,68 +77,60 @@ Examples:
         dest="command", help="Available commands"
     )
 
-    # Auth command
-    auth_parser = subparsers.add_parser(
-        "auth", help="Authentication management"
+
+    # AI command
+    ai_parser = subparsers.add_parser("ai", help="AI interaction")
+    ai_subparsers = ai_parser.add_subparsers(
+        dest="action", help="AI actions"
     )
+
+    chat_parser = ai_subparsers.add_parser("chat", help="Chat with AI")
+    chat_parser.add_argument("message", help="Message to send to AI")
+    chat_parser.add_argument("--model", help="AI model to use")
+
+    status_ai_parser = ai_subparsers.add_parser(
+        "status", help="Show AI status"
+    )
+
+    models_parser = ai_subparsers.add_parser(
+        "models", help="List available AI models"
+    )
+
+    # Home Assistant command
+    ha_parser = subparsers.add_parser("ha", help="Home Assistant integration")
+    ha_parser.add_argument("--ha-token", help="Home Assistant API token")
+    ha_subparsers = ha_parser.add_subparsers(
+        dest="action", help="Home Assistant actions"
+    )
+
+    entities_parser = ha_subparsers.add_parser("entities", help="Get all entities")
+    entities_parser.add_argument("--domain", help="Filter by domain")
+
+    ha_subparsers.add_parser("sensors", help="Get sensor entities")
+
+    ha_subparsers.add_parser("summary", help="Get entity summary")
+
+    entity_parser = ha_subparsers.add_parser("entity", help="Get specific entity")
+    entity_parser.add_argument("entity_id", help="Entity ID")
+
+    ha_subparsers.add_parser("test", help="Test connection to Home Assistant")
+    
+    ha_subparsers.add_parser("complete", help="Get complete Home Assistant information")
+    
+    ha_subparsers.add_parser("info", help="Show Home Assistant connection information")
+
+    # Authentication command
+    auth_parser = subparsers.add_parser("auth", help="Home Assistant authentication")
     auth_subparsers = auth_parser.add_subparsers(
         dest="action", help="Authentication actions"
     )
 
-    auth_subparsers.add_parser("login", help="Login to My Verisure")
-    auth_subparsers.add_parser("logout", help="Logout from My Verisure")
     auth_subparsers.add_parser("status", help="Show authentication status")
-
-    # Info command
-    info_parser = subparsers.add_parser("info", help="Information commands")
-    info_subparsers = info_parser.add_subparsers(
-        dest="action", help="Information actions"
-    )
-
-    info_subparsers.add_parser("installations", help="List all installations")
-
-    services_parser = info_subparsers.add_parser(
-        "services", help="Show installation services"
-    )
-    services_parser.add_argument("--installation-id", help="Installation ID")
-
-    status_parser = info_subparsers.add_parser(
-        "status", help="Show installation status"
-    )
-    status_parser.add_argument("--installation-id", help="Installation ID")
-
-    # Alarm command
-    alarm_parser = subparsers.add_parser("alarm", help="Alarm control")
-    alarm_subparsers = alarm_parser.add_subparsers(
-        dest="action", help="Alarm actions"
-    )
-
-    status_alarm_parser = alarm_subparsers.add_parser(
-        "status", help="Show alarm status"
-    )
-    status_alarm_parser.add_argument(
-        "--installation-id", help="Installation ID"
-    )
-
-    arm_parser = alarm_subparsers.add_parser("arm", help="Arm the alarm")
-    arm_parser.add_argument(
-        "--mode",
-        required=True,
-        choices=["away", "home", "night"],
-        help="Arming mode",
-    )
-    arm_parser.add_argument("--installation-id", help="Installation ID")
-    arm_parser.add_argument(
-        "--no-confirm", action="store_true", help="Skip confirmation prompt"
-    )
-
-    disarm_parser = alarm_subparsers.add_parser(
-        "disarm", help="Disarm the alarm"
-    )
-    disarm_parser.add_argument("--installation-id", help="Installation ID")
-    disarm_parser.add_argument(
-        "--no-confirm", action="store_true", help="Skip confirmation prompt"
-    )
+    
+    login_parser = auth_subparsers.add_parser("login", help="Login to Home Assistant")
+    login_parser.add_argument("--token", help="Long-lived access token")
+    
+    auth_subparsers.add_parser("logout", help="Logout from Home Assistant")
 
     return parser
 
@@ -146,57 +144,104 @@ async def main():
     setup_logging(args.verbose)
 
     # Show header
-    print_header("MY VERISURE CLI")
-    print_info("Command Line Interface for My Verisure integration")
+    print_header("NEURAL AI CLI")
+    print_info("Command Line Interface for Neural AI integration")
     print()
 
     try:
-        if args.command == "auth":
-            command = AuthCommand()
-            success = await command.execute(
-                args.action, interactive=not args.non_interactive
-            )
-
-        elif args.command == "info":
-            command = InfoCommand()
-            if args.action == "services":
+        if args.command == "ai":
+            command = AICommand()
+            if args.action == "chat":
                 success = await command.execute(
                     args.action,
-                    installation_id=args.installation_id,
+                    message=args.message,
+                    model=args.model,
                     interactive=not args.non_interactive,
                 )
             elif args.action == "status":
                 success = await command.execute(
                     args.action,
-                    installation_id=args.installation_id,
+                    interactive=not args.non_interactive,
+                )
+            elif args.action == "models":
+                success = await command.execute(
+                    args.action,
                     interactive=not args.non_interactive,
                 )
             else:
-                success = await command.execute(
-                    args.action, interactive=not args.non_interactive
-                )
+                success = False
 
-        elif args.command == "alarm":
-            command = AlarmCommand()
+        elif args.command == "ha":
+            command = HACommand()
+            # Pass HA connection parameters
+            ha_params = {
+                'ha_token': getattr(args, 'ha_token', None),
+            }
+            
+            if args.action == "entities":
+                success = await command.execute(
+                    args.action,
+                    domain=args.domain,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "sensors":
+                success = await command.execute(
+                    args.action,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "summary":
+                success = await command.execute(
+                    args.action,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "entity":
+                success = await command.execute(
+                    args.action,
+                    entity_id=args.entity_id,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "test":
+                success = await command.execute(
+                    args.action,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "complete":
+                success = await command.execute(
+                    args.action,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "info":
+                success = await command.execute(
+                    args.action,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            else:
+                success = False
+
+        elif args.command == "auth":
+            from .commands.auth import AuthCommand
+            command = AuthCommand()
             if args.action == "status":
                 success = await command.execute(
                     args.action,
-                    installation_id=args.installation_id,
                     interactive=not args.non_interactive,
                 )
-            elif args.action == "arm":
+            elif args.action == "login":
                 success = await command.execute(
                     args.action,
-                    mode=args.mode,
-                    installation_id=args.installation_id,
-                    confirm=not args.no_confirm,
+                    token=getattr(args, 'token', None),
                     interactive=not args.non_interactive,
                 )
-            elif args.action == "disarm":
+            elif args.action == "logout":
                 success = await command.execute(
                     args.action,
-                    installation_id=args.installation_id,
-                    confirm=not args.no_confirm,
                     interactive=not args.non_interactive,
                 )
             else:
@@ -206,20 +251,14 @@ async def main():
             parser.print_help()
             return 0
 
-        # Cleanup (skip for auth status since it doesn't initialize dependencies)
-        if not (args.command == "auth" and args.action == "status"):
-            await session_manager.cleanup()
-
         return 0 if success else 1
 
     except KeyboardInterrupt:
         print("\n⏹️  Proceso interrumpido por el usuario")
-        await session_manager.cleanup()
         return 1
 
     except Exception as e:
         print_error(f"Error inesperado: {e}")
-        await session_manager.cleanup()
         return 1
 
 

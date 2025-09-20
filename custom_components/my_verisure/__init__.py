@@ -1,4 +1,4 @@
-"""My Verisure integration."""
+"""Neural AI integration."""
 
 __version__ = "1.0.0"
 

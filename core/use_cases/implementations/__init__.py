@@ -1,13 +1,9 @@
-"""Use case implementations for My Verisure integration."""
+"""Use case implementations for Neural AI integration."""
 
-from .auth_use_case_impl import AuthUseCaseImpl
-from .installation_use_case_impl import InstallationUseCaseImpl
-from .alarm_use_case_impl import AlarmUseCaseImpl
-from .session_use_case_impl import SessionUseCaseImpl
+from .ai_use_case_impl import AIUseCaseImpl
+from .ha_use_case_impl import HAUseCaseImpl
 
 __all__ = [
-    "AuthUseCaseImpl",
-    "InstallationUseCaseImpl",
-    "AlarmUseCaseImpl",
-    "SessionUseCaseImpl",
+    "AIUseCaseImpl",
+    "HAUseCaseImpl",
 ]

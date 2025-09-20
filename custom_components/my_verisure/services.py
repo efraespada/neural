@@ -1,4 +1,4 @@
-"""Services for the My Verisure integration."""
+"""Services for the Neural AI integration."""
 
 from __future__ import annotations
 
@@ -9,171 +9,90 @@ import voluptuous as vol
 from .const import DOMAIN, LOGGER
 
 # Service schemas
-SERVICE_ARM_AWAY_SCHEMA = vol.Schema({
-    vol.Required("installation_id"): cv.string,
+SERVICE_SEND_MESSAGE_SCHEMA = vol.Schema({
+    vol.Required("message"): cv.string,
+    vol.Optional("model"): cv.string,
 })
 
-SERVICE_ARM_HOME_SCHEMA = vol.Schema({
-    vol.Required("installation_id"): cv.string,
-})
+SERVICE_GET_STATUS_SCHEMA = vol.Schema({})
 
-SERVICE_ARM_NIGHT_SCHEMA = vol.Schema({
-    vol.Required("installation_id"): cv.string,
-})
-
-SERVICE_DISARM_SCHEMA = vol.Schema({
-    vol.Required("installation_id"): cv.string,
-})
-
-SERVICE_GET_STATUS_SCHEMA = vol.Schema({
-    vol.Required("installation_id"): cv.string,
-})
-
-
+SERVICE_LIST_MODELS_SCHEMA = vol.Schema({})
 
 
 async def async_setup_services(hass: HomeAssistant) -> None:
-    """Set up services for My Verisure."""
+    """Set up services for Neural AI."""
     
-    async def async_arm_away_service(call: ServiceCall) -> None:
-        """Service to arm the alarm away."""
-        installation_id = call.data["installation_id"]
+    async def async_send_message_service(call: ServiceCall) -> None:
+        """Service to send a message to AI."""
+        message = call.data["message"]
+        model = call.data.get("model")
         
-        # Find the coordinator for this installation
+        # Find the coordinator
         for entry_id, coordinator in hass.data[DOMAIN].items():
-            if coordinator.config_entry.data.get("installation_id") == installation_id:
+            if entry_id != "services_setup":  # Skip the services setup flag
                 try:
-                    success = await coordinator.client.arm_alarm_away(installation_id)
-                    if success:
-                        LOGGER.info("Alarm armed away successfully via service")
+                    response = await coordinator.async_send_message(message, model)
+                    if response:
+                        LOGGER.info("AI response received via service: %s", response[:100] + "..." if len(response) > 100 else response)
                     else:
-                        LOGGER.error("Failed to arm alarm away via service")
+                        LOGGER.error("No response from AI via service")
                 except Exception as e:
-                    LOGGER.error("Error arming alarm away via service: %s", e)
+                    LOGGER.error("Error sending message to AI via service: %s", e)
                 break
-        else:
-            LOGGER.error("Installation %s not found", installation_id)
-
-    async def async_arm_home_service(call: ServiceCall) -> None:
-        """Service to arm the alarm home."""
-        installation_id = call.data["installation_id"]
-        
-        # Find the coordinator for this installation
-        for entry_id, coordinator in hass.data[DOMAIN].items():
-            if coordinator.config_entry.data.get("installation_id") == installation_id:
-                try:
-                    success = await coordinator.client.arm_alarm_home(installation_id)
-                    if success:
-                        LOGGER.info("Alarm armed home successfully via service")
-                    else:
-                        LOGGER.error("Failed to arm alarm home via service")
-                except Exception as e:
-                    LOGGER.error("Error arming alarm home via service: %s", e)
-                break
-        else:
-            LOGGER.error("Installation %s not found", installation_id)
-
-    async def async_arm_night_service(call: ServiceCall) -> None:
-        """Service to arm the alarm night."""
-        installation_id = call.data["installation_id"]
-        
-        # Find the coordinator for this installation
-        for entry_id, coordinator in hass.data[DOMAIN].items():
-            if coordinator.config_entry.data.get("installation_id") == installation_id:
-                try:
-                    success = await coordinator.client.arm_alarm_night(installation_id)
-                    if success:
-                        LOGGER.info("Alarm armed night successfully via service")
-                    else:
-                        LOGGER.error("Failed to arm alarm night via service")
-                except Exception as e:
-                    LOGGER.error("Error arming alarm night via service: %s", e)
-                break
-        else:
-            LOGGER.error("Installation %s not found", installation_id)
-
-    async def async_disarm_service(call: ServiceCall) -> None:
-        """Service to disarm the alarm."""
-        installation_id = call.data["installation_id"]
-        code = call.data.get("code")
-        
-        # Find the coordinator for this installation
-        for entry_id, coordinator in hass.data[DOMAIN].items():
-            if coordinator.config_entry.data.get("installation_id") == installation_id:
-                try:
-                    success = await coordinator.client.disarm_alarm(installation_id)
-                    if success:
-                        LOGGER.info("Alarm disarmed successfully via service")
-                    else:
-                        LOGGER.error("Failed to disarm alarm via service")
-                except Exception as e:
-                    LOGGER.error("Error disarming alarm via service: %s", e)
-                break
-        else:
-            LOGGER.error("Installation %s not found", installation_id)
 
     async def async_get_status_service(call: ServiceCall) -> None:
-        """Service to get alarm status."""
-        installation_id = call.data["installation_id"]
-        
-        # Find the coordinator for this installation
+        """Service to get AI status."""
+        # Find the coordinator
         for entry_id, coordinator in hass.data[DOMAIN].items():
-            if coordinator.config_entry.data.get("installation_id") == installation_id:
+            if entry_id != "services_setup":  # Skip the services setup flag
                 try:
-                    await coordinator.async_request_refresh()
-                    LOGGER.info("Alarm status refreshed via service")
+                    status = await coordinator.async_get_ai_status()
+                    LOGGER.info("AI status via service: %s", status)
                 except Exception as e:
-                    LOGGER.error("Error refreshing alarm status via service: %s", e)
+                    LOGGER.error("Error getting AI status via service: %s", e)
                 break
-        else:
-            LOGGER.error("Installation %s not found", installation_id)
 
-
+    async def async_list_models_service(call: ServiceCall) -> None:
+        """Service to list available AI models."""
+        # Find the coordinator
+        for entry_id, coordinator in hass.data[DOMAIN].items():
+            if entry_id != "services_setup":  # Skip the services setup flag
+                try:
+                    models = await coordinator.async_list_models()
+                    LOGGER.info("Available AI models via service: %s", models)
+                except Exception as e:
+                    LOGGER.error("Error listing AI models via service: %s", e)
+                break
 
     # Register services
     hass.services.async_register(
         DOMAIN,
-        "arm_away",
-        async_arm_away_service,
-        schema=SERVICE_ARM_AWAY_SCHEMA,
+        "send_message",
+        async_send_message_service,
+        schema=SERVICE_SEND_MESSAGE_SCHEMA,
     )
-    
-    hass.services.async_register(
-        DOMAIN,
-        "arm_home",
-        async_arm_home_service,
-        schema=SERVICE_ARM_HOME_SCHEMA,
-    )
-    
-    hass.services.async_register(
-        DOMAIN,
-        "arm_night",
-        async_arm_night_service,
-        schema=SERVICE_ARM_NIGHT_SCHEMA,
-    )
-    
-    hass.services.async_register(
-        DOMAIN,
-        "disarm",
-        async_disarm_service,
-        schema=SERVICE_DISARM_SCHEMA,
-    )
-    
+
     hass.services.async_register(
         DOMAIN,
         "get_status",
         async_get_status_service,
         schema=SERVICE_GET_STATUS_SCHEMA,
     )
-    
 
+    hass.services.async_register(
+        DOMAIN,
+        "list_models",
+        async_list_models_service,
+        schema=SERVICE_LIST_MODELS_SCHEMA,
+    )
+
+    LOGGER.info("Neural AI services registered")
 
 
 async def async_unload_services(hass: HomeAssistant) -> None:
-    """Unload services for My Verisure."""
-    hass.services.async_remove(DOMAIN, "arm_away")
-    hass.services.async_remove(DOMAIN, "arm_home")
-    hass.services.async_remove(DOMAIN, "arm_night")
-    hass.services.async_remove(DOMAIN, "disarm")
+    """Unload services for Neural AI."""
+    hass.services.async_remove(DOMAIN, "send_message")
     hass.services.async_remove(DOMAIN, "get_status")
- 
+    hass.services.async_remove(DOMAIN, "list_models")
+    
+    LOGGER.info("Neural AI services unloaded")

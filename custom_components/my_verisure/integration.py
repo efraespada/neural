@@ -1,4 +1,4 @@
-"""Home Assistant integration for My Verisure."""
+"""Home Assistant integration for Neural AI."""
 
 from __future__ import annotations
 
@@ -12,15 +12,13 @@ from .device import async_setup_device
 from .services import async_setup_services, async_unload_services
 
 PLATFORMS: list[Platform] = [
-    Platform.ALARM_CONTROL_PANEL,
-    Platform.BINARY_SENSOR,
     Platform.SENSOR,
 ]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up My Verisure from a config entry."""
-    LOGGER.warning("Setting up My Verisure integration")
+    """Set up Neural AI from a config entry."""
+    LOGGER.warning("Setting up Neural AI integration")
 
     coordinator = MyVerisureDataUpdateCoordinator(hass, entry=entry)
 
@@ -58,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
-    """Set up the My Verisure component."""
+    """Set up the Neural AI component."""
     hass.data.setdefault(DOMAIN, {})
     return True
 
@@ -85,8 +83,8 @@ async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload My Verisure config entry."""
-    LOGGER.warning("Unloading My Verisure integration")
+    """Unload Neural AI config entry."""
+    LOGGER.warning("Unloading Neural AI integration")
 
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if not unload_ok:

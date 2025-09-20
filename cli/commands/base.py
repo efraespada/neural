@@ -10,13 +10,11 @@ from typing import Optional
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "core"))
 
 from core.dependency_injection.providers import (
-    get_auth_use_case,
-    get_alarm_use_case,
-    get_installation_use_case,
-    get_session_use_case,
+    get_ai_use_case,
+    get_ha_use_case,
 )
 
-from ..utils.session_manager import session_manager
+# Session manager removed - no longer needed for Neural AI
 from ..utils.display import print_error, print_info
 
 logger = logging.getLogger(__name__)
@@ -26,23 +24,29 @@ class BaseCommand(ABC):
     """Base class for all CLI commands."""
 
     def __init__(self):
-        self.auth_use_case = None
-        self.alarm_use_case = None
-        self.installation_use_case = None
-        self.session_use_case = None
+        self.ai_use_case = None
+        self.ha_use_case = None
 
-    async def setup(self, interactive: bool = True) -> bool:
-        """Setup the command by ensuring authentication and getting use cases."""
+    async def setup(self, interactive: bool = True, ha_ip: str = None, ha_token: str = None) -> bool:
+        """Setup the command by getting use cases."""
         try:
-            # Ensure authentication
-            if not await session_manager.ensure_authenticated(interactive):
-                return False
-
+            # Setup dependencies first
+            from core.dependency_injection.providers import setup_dependencies
+            
+            # Use fixed URL for Home Assistant
+            ha_url = "http://homeassistant.local:8123"
+            
+            # Configure with provided values (dependency injection will handle stored token loading)
+            setup_dependencies(
+                ai_url="http://localhost:11434",
+                ai_model="llama3.2", 
+                ha_url=ha_url,
+                ha_token=ha_token
+            )
+            
             # Get use cases
-            self.auth_use_case = get_auth_use_case()
-            self.alarm_use_case = get_alarm_use_case()
-            self.installation_use_case = get_installation_use_case()
-            self.session_use_case = get_session_use_case()
+            self.ai_use_case = get_ai_use_case()
+            self.ha_use_case = get_ha_use_case()
 
             return True
 
@@ -57,55 +61,43 @@ class BaseCommand(ABC):
 
     async def cleanup(self):
         """Clean up resources."""
-        await session_manager.cleanup()
+        try:
+            # Clean up HTTP sessions if they exist
+            if hasattr(self, 'ai_use_case') and self.ai_use_case:
+                # Get the repository and close its client session
+                if hasattr(self.ai_use_case, '_ai_repository'):
+                    ai_repo = self.ai_use_case._ai_repository
+                    if hasattr(ai_repo, '_ai_client') and ai_repo._ai_client:
+                        await ai_repo._ai_client.disconnect()
+            
+            if hasattr(self, 'ha_use_case') and self.ha_use_case:
+                # Get the repository and close its client session
+                if hasattr(self.ha_use_case, '_ha_repository'):
+                    ha_repo = self.ha_use_case._ha_repository
+                    if hasattr(ha_repo, '_ha_client') and ha_repo._ha_client:
+                        await ha_repo._ha_client.disconnect()
+        except Exception as e:
+            # Don't fail cleanup if there are issues
+            pass
 
     def get_installation_id(
         self, installation_id: Optional[str] = None
     ) -> Optional[str]:
-        """Get installation ID, either from parameter or current session."""
-        if installation_id:
-            return installation_id
-
-        if session_manager.current_installation:
-            return session_manager.current_installation
-
+        """Get installation ID - not applicable for Neural AI."""
+        # Neural AI doesn't use installations
         return None
 
     async def select_installation_if_needed(
         self, installation_id: Optional[str] = None
     ) -> Optional[str]:
-        """Select installation if not provided and multiple are available."""
-        from ..utils.input_helpers import select_installation
+        """Select installation - not applicable for Neural AI."""
+        # Neural AI doesn't use installations
+        return None
 
-        if installation_id:
-            return installation_id
+    def get_ai_use_case(self):
+        """Get the AI use case."""
+        return self.ai_use_case
 
-        if session_manager.current_installation:
-            return session_manager.current_installation
-
-        # Get all installations and let user select
-        try:
-            installations = await session_manager.get_installations()
-            if not installations:
-                print_error("No hay instalaciones disponibles")
-                return None
-
-            if len(installations) == 1:
-                installation = installations[0]
-                print_info(
-                    f"Usando única instalación disponible: {installation.alias}"
-                )
-                session_manager.current_installation = installation.numinst
-                return installation.numinst
-
-            # Multiple installations, let user select
-            selected_id = select_installation(installations)
-            if selected_id:
-                session_manager.current_installation = selected_id
-                return selected_id
-
-            return None
-
-        except Exception as e:
-            print_error(f"Error obteniendo instalaciones: {e}")
-            return None
+    def get_ha_use_case(self):
+        """Get the Home Assistant use case."""
+        return self.ha_use_case

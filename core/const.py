@@ -1,43 +1,40 @@
-"""Constants for the My Verisure integration."""
+"""Constants for the Neural AI integration."""
 
 import logging
 
-DOMAIN = "my_verisure"
+DOMAIN = "neural"
 
 LOGGER = logging.getLogger(__package__)
 
 # Configuration keys
-CONF_USER = "user"
-CONF_PASSWORD = "password"
-CONF_INSTALLATION_ID = "installation_id"
-CONF_PHONE_ID = "phone_id"
-CONF_OTP_CODE = "otp_code"
 CONF_SCAN_INTERVAL = "scan_interval"
+CONF_AI_URL = "ai_url"
+CONF_AI_MODEL = "ai_model"
+CONF_HA_URL = "ha_url"
+CONF_HA_TOKEN = "ha_token"
 
 # Default values
 DEFAULT_SCAN_INTERVAL = 10  # minutes
+DEFAULT_AI_URL = "http://localhost:11434"  # Ollama default
+DEFAULT_AI_MODEL = "llama3.2"
+DEFAULT_HA_URL = "http://homeassistant.local:8123"  # Home Assistant default
 
 # Entity configuration
 ENTITY_NAMES = {
-    "alarm_control_panel": "My Verisure",
-    "sensor_alarm_status": "General Alarm Status",
-    "sensor_active_alarms": "Active Alarms",
-    "sensor_panel_state": "Panel State",
-    "sensor_last_updated": "Last Updated",
-    "binary_sensor_internal_day": "Internal Day Alarm",
-    "binary_sensor_internal_night": "Internal Night Alarm",
-    "binary_sensor_internal_total": "Internal Total Alarm",
-    "binary_sensor_external": "External Alarm",
+    "ai_chat": "Neural AI Chat",
+    "ai_status": "AI Status",
+    "ai_model": "AI Model",
+    "ai_last_response": "Last AI Response",
+    "ai_response_time": "AI Response Time",
+    "ai_tokens_used": "AI Tokens Used",
 }
-
 
 # Device configuration
 DEVICE_INFO = {
-    "manufacturer": "Verisure",
-    "model": "Alarm System",
+    "manufacturer": "Neural",
+    "model": "AI Assistant",
     "sw_version": "1.0.0",
-    "configuration_url": "https://github.com/efraespada/my_verisure",
+    "configuration_url": "https://github.com/efraespada/neural",
 }
 
-# API endpoints
-VERISURE_GRAPHQL_URL = "https://customers.securitasdirect.es/owa-api/graphql"
+# API endpoints - removed Verisure specific endpoints

@@ -1,4 +1,4 @@
-"""Config flow for My Verisure integration."""
+"""Config flow for Neural AI integration."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ from .const import (
 
 
 class MyVerisureConfigFlowHandler(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for My Verisure."""
+    """Handle a config flow for Neural AI."""
 
     VERSION = 1
 

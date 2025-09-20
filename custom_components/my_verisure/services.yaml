@@ -1,83 +1,41 @@
-# Services for My Verisure integration
+# Services for Neural AI integration
 
-# Arm the alarm in away mode
-arm_away:
-  name: "Arm Alarm Away"
-  description: "Arm the alarm in away mode (total)"
+# Send a message to AI
+send_message:
+  name: "Send Message to AI"
+  description: "Send a message to the AI and get a response"
   target:
     entity:
-      integration: my_verisure
-      domain: alarm_control_panel
+      integration: neural
+      domain: sensor
   fields:
-    installation_id:
-      name: "Installation ID"
-      description: "The installation ID to arm"
+    message:
+      name: "Message"
+      description: "The message to send to the AI"
       required: true
       selector:
         text:
-
-# Arm the alarm in home mode
-arm_home:
-  name: "Arm Alarm Home"
-  description: "Arm the alarm in home mode (perimeter)"
-  target:
-    entity:
-      integration: my_verisure
-      domain: alarm_control_panel
-  fields:
-    installation_id:
-      name: "Installation ID"
-      description: "The installation ID to arm"
-      required: true
+    model:
+      name: "AI Model"
+      description: "The AI model to use (optional)"
+      required: false
       selector:
         text:
 
-# Arm the alarm in night mode
-arm_night:
-  name: "Arm Alarm Night"
-  description: "Arm the alarm in night mode"
-  target:
-    entity:
-      integration: my_verisure
-      domain: alarm_control_panel
-  fields:
-    installation_id:
-      name: "Installation ID"
-      description: "The installation ID to arm"
-      required: true
-      selector:
-        text:
-
-# Disarm the alarm
-disarm:
-  name: "Disarm Alarm"
-  description: "Disarm the alarm"
-  target:
-    entity:
-      integration: my_verisure
-      domain: alarm_control_panel
-  fields:
-    installation_id:
-      name: "Installation ID"
-      description: "The installation ID to disarm"
-      required: true
-      selector:
-        text:
-
-# Get alarm status
+# Get AI status
 get_status:
-  name: "Get Alarm Status"
-  description: "Refresh the alarm status"
+  name: "Get AI Status"
+  description: "Get the current status of the AI service"
   target:
     entity:
-      integration: my_verisure
-      domain: alarm_control_panel
-  fields:
-    installation_id:
-      name: "Installation ID"
-      description: "The installation ID to get status for"
-      required: true
-      selector:
-        text:
+      integration: neural
+      domain: sensor
 
- 
+# List available AI models
+list_models:
+  name: "List AI Models"
+  description: "List all available AI models"
+  target:
+    entity:
+      integration: neural
+      domain: sensor
