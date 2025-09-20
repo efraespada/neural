@@ -155,28 +155,39 @@ class AICommand(BaseCommand):
             config_use_case = get_config_use_case()
             
             # Parse configuration parameters
-            ip = kwargs.get('ip')
+            url = kwargs.get('url')
             model = kwargs.get('model')
+            api_key = kwargs.get('api_key')
             
-            if ip and model:
-                # Update both IP and model
-                print_info(f"Actualizando configuración LLM: IP={ip}, Modelo={model}")
-                success = await config_use_case.update_llm_config(ip, model)
+            if url and model and api_key:
+                # Update all LLM configuration
+                print_info(f"Actualizando configuración LLM: URL={url}, Modelo={model}, API Key=***")
+                success = await config_use_case.update_llm_config(url, model, api_key)
                 if success:
                     print_success("✓ Configuración LLM actualizada correctamente")
                     return True
                 else:
                     print_error("✗ Error actualizando configuración LLM")
                     return False
-            elif ip:
-                # Update only IP
-                print_info(f"Actualizando IP del LLM: {ip}")
-                success = await config_use_case.update_llm_ip(ip)
+            elif url and model:
+                # Update URL and model
+                print_info(f"Actualizando configuración LLM: URL={url}, Modelo={model}")
+                success = await config_use_case.update_llm_config(url, model)
                 if success:
-                    print_success("✓ IP del LLM actualizada correctamente")
+                    print_success("✓ Configuración LLM actualizada correctamente")
                     return True
                 else:
-                    print_error("✗ Error actualizando IP del LLM")
+                    print_error("✗ Error actualizando configuración LLM")
+                    return False
+            elif url:
+                # Update only URL
+                print_info(f"Actualizando URL del LLM: {url}")
+                success = await config_use_case.update_llm_url(url)
+                if success:
+                    print_success("✓ URL del LLM actualizada correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando URL del LLM")
                     return False
             elif model:
                 # Update only model
@@ -188,6 +199,22 @@ class AICommand(BaseCommand):
                 else:
                     print_error("✗ Error actualizando modelo del LLM")
                     return False
+            elif api_key:
+                # Update only API key
+                print_info(f"Actualizando API key del LLM")
+                # Get current config first
+                current_config = await config_use_case.get_config()
+                success = await config_use_case.update_llm_config(
+                    current_config.llm.url,
+                    current_config.llm.model,
+                    api_key
+                )
+                if success:
+                    print_success("✓ API key del LLM actualizada correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando API key del LLM")
+                    return False
             else:
                 # Show current configuration
                 print_info("Mostrando configuración actual...")
@@ -195,7 +222,7 @@ class AICommand(BaseCommand):
                 
                 print_success("Configuración actual:")
                 print_info(f"  Modo: {summary['mode']}")
-                print_info(f"  LLM IP: {summary['llm']['ip']}")
+                print_info(f"  LLM URL: {summary['llm']['url']}")
                 print_info(f"  LLM Modelo: {summary['llm']['model']}")
                 print_info(f"  Archivo: {summary['config_file']}")
                 print_info(f"  Cargado: {'Sí' if summary['is_loaded'] else 'No'}")

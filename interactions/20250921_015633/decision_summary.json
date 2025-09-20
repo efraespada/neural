@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T01:56:37.857075",
+  "user_prompt": "Ajusta la temperatura a 22 grados",
+  "mode": "supervisor",
+  "ai_response": {
+    "message": "Lo siento, pero no veo ningún dispositivo de climatización (climate) en los datos proporcionados para poder ajustar la temperatura a 22 grados",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 10343,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_015633"
+  }
+}

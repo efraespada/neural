@@ -127,7 +127,7 @@ class ConfigManager:
         Actualizar configuración con nuevos valores.
         
         Args:
-            **kwargs: Valores a actualizar (mode, llm_ip, llm_model)
+            **kwargs: Valores a actualizar (mode, llm_url, llm_model, llm_api_key)
             
         Returns:
             True si se actualizó correctamente
@@ -141,14 +141,16 @@ class ConfigManager:
                 self._config.update_mode(kwargs["mode"])
             
             # Actualizar LLM si se proporciona
-            if "llm_ip" in kwargs or "llm_model" in kwargs:
-                current_ip = self._config.llm.ip
+            if "llm_url" in kwargs or "llm_model" in kwargs or "llm_api_key" in kwargs:
+                current_url = self._config.llm.url
                 current_model = self._config.llm.model
+                current_api_key = self._config.llm.api_key
                 
-                new_ip = kwargs.get("llm_ip", current_ip)
+                new_url = kwargs.get("llm_url", current_url)
                 new_model = kwargs.get("llm_model", current_model)
+                new_api_key = kwargs.get("llm_api_key", current_api_key)
                 
-                self._config.update_llm(new_ip, new_model)
+                self._config.update_llm(new_url, new_model, new_api_key)
             
             # Guardar cambios
             return await self.save_config()

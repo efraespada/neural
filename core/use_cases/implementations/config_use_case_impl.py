@@ -126,35 +126,35 @@ class ConfigUseCaseImpl(ConfigUseCase):
             _LOGGER.error("Error updating mode: %s", e)
             raise
 
-    async def update_llm_ip(self, ip: str) -> bool:
+    async def update_llm_url(self, url: str) -> bool:
         """
-        Actualizar IP del modelo LLM.
+        Actualizar URL del modelo LLM.
         
         Args:
-            ip: Nueva IP del modelo LLM
+            url: Nueva URL del modelo LLM
             
         Returns:
             True si se actualizó correctamente
             
         Raises:
-            ValueError: Si la IP no es válida
+            ValueError: Si la URL no es válida
             OSError: Si hay error actualizando la configuración
         """
         try:
-            _LOGGER.debug("Updating LLM IP to: %s", ip)
+            _LOGGER.debug("Updating LLM URL to: %s", url)
             
-            # Validar IP
-            if not ip or not ip.strip():
-                raise ValueError("LLM IP cannot be empty")
+            # Validar URL
+            if not url or not url.strip():
+                raise ValueError("LLM URL cannot be empty")
             
             # Ensure configuration is loaded
             await self.get_config()
             
             # Actualizar configuración
-            return await self._config_manager.update_config(llm_ip=ip.strip())
+            return await self._config_manager.update_config(llm_url=url.strip())
             
         except Exception as e:
-            _LOGGER.error("Error updating LLM IP: %s", e)
+            _LOGGER.error("Error updating LLM URL: %s", e)
             raise
 
     async def update_llm_model(self, model: str) -> bool:
@@ -188,27 +188,28 @@ class ConfigUseCaseImpl(ConfigUseCase):
             _LOGGER.error("Error updating LLM model: %s", e)
             raise
 
-    async def update_llm_config(self, ip: str, model: str) -> bool:
+    async def update_llm_config(self, url: str, model: str, api_key: Optional[str] = None) -> bool:
         """
         Actualizar configuración completa del LLM.
         
         Args:
-            ip: Nueva IP del modelo LLM
+            url: Nueva URL del modelo LLM
             model: Nuevo modelo LLM
+            api_key: Nueva API key (opcional)
             
         Returns:
             True si se actualizó correctamente
             
         Raises:
-            ValueError: Si la IP o modelo no son válidos
+            ValueError: Si la URL o modelo no son válidos
             OSError: Si hay error actualizando la configuración
         """
         try:
-            _LOGGER.debug("Updating LLM config - IP: %s, Model: %s", ip, model)
+            _LOGGER.debug("Updating LLM config - URL: %s, Model: %s", url, model)
             
             # Validar parámetros
-            if not ip or not ip.strip():
-                raise ValueError("LLM IP cannot be empty")
+            if not url or not url.strip():
+                raise ValueError("LLM URL cannot be empty")
             if not model or not model.strip():
                 raise ValueError("LLM model cannot be empty")
             
@@ -217,8 +218,9 @@ class ConfigUseCaseImpl(ConfigUseCase):
             
             # Actualizar configuración
             return await self._config_manager.update_config(
-                llm_ip=ip.strip(),
-                llm_model=model.strip()
+                llm_url=url.strip(),
+                llm_model=model.strip(),
+                llm_api_key=api_key.strip() if api_key else None
             )
             
         except Exception as e:
@@ -304,7 +306,7 @@ class ConfigUseCaseImpl(ConfigUseCase):
             summary = {
                 "mode": config.mode,
                 "llm": {
-                    "ip": config.llm.ip,
+                    "url": config.llm.url,
                     "model": config.llm.model
                 },
                 "created_at": config.created_at.isoformat(),

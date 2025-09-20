@@ -74,18 +74,18 @@ class ConfigUseCase(ABC):
         pass
 
     @abstractmethod
-    async def update_llm_ip(self, ip: str) -> bool:
+    async def update_llm_url(self, url: str) -> bool:
         """
-        Actualizar IP del modelo LLM.
+        Actualizar URL del modelo LLM.
         
         Args:
-            ip: Nueva IP del modelo LLM
+            url: Nueva URL del modelo LLM
             
         Returns:
             True si se actualizó correctamente
             
         Raises:
-            ValueError: Si la IP no es válida
+            ValueError: Si la URL no es válida
             OSError: Si hay error actualizando la configuración
         """
         pass
@@ -108,19 +108,20 @@ class ConfigUseCase(ABC):
         pass
 
     @abstractmethod
-    async def update_llm_config(self, ip: str, model: str) -> bool:
+    async def update_llm_config(self, url: str, model: str, api_key: Optional[str] = None) -> bool:
         """
         Actualizar configuración completa del LLM.
         
         Args:
-            ip: Nueva IP del modelo LLM
+            url: Nueva URL del modelo LLM
             model: Nuevo modelo LLM
+            api_key: Nueva API key (opcional)
             
         Returns:
             True si se actualizó correctamente
             
         Raises:
-            ValueError: Si la IP o modelo no son válidos
+            ValueError: Si la URL o modelo no son válidos
             OSError: Si hay error actualizando la configuración
         """
         pass

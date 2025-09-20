@@ -10,22 +10,25 @@ from datetime import datetime
 @dataclass
 class LLMConfig:
     """Configuración del modelo de lenguaje."""
-    ip: str
-    model: str
+    url: str = "https://openrouter.ai/api/v1"
+    model: str = "anthropic/claude-3.5-sonnet"
+    api_key: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
         """Convertir a diccionario."""
         return {
-            "ip": self.ip,
-            "model": self.model
+            "url": self.url,
+            "model": self.model,
+            "api_key": self.api_key
         }
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'LLMConfig':
         """Crear desde diccionario."""
         return cls(
-            ip=data.get("ip", ""),
-            model=data.get("model", "")
+            url=data.get("url", data.get("ip", "https://openrouter.ai/api/v1")),  # Backward compatibility
+            model=data.get("model", "anthropic/claude-3.5-sonnet"),
+            api_key=data.get("api_key")
         )
 
 
@@ -72,9 +75,9 @@ class AppConfig:
             updated_at=updated_at
         )
     
-    def update_llm(self, ip: str, model: str) -> None:
+    def update_llm(self, url: str, model: str, api_key: Optional[str] = None) -> None:
         """Actualizar configuración LLM."""
-        self.llm = LLMConfig(ip=ip, model=model)
+        self.llm = LLMConfig(url=url, model=model, api_key=api_key)
         self.updated_at = datetime.now()
     
     def update_mode(self, mode: str) -> None:

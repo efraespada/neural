@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-09-21T01:51:02.061023",
+  "user_prompt": "Enciende la despensa",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "De acuerdo, enciendo la luz de la despensa",
+    "actions": [
+      {
+        "entity": "light.hue_color_spot_6",
+        "action": "turn_on",
+        "parameters": {}
+      }
+    ],
+    "actions_count": 1
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 9296,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_015052"
+  }
+}

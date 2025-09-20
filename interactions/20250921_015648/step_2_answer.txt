@@ -1,0 +1,4 @@
+{
+  "message": "Lo siento, no puedo determinar si deberías poner la calefacción porque no tengo datos de temperatura ni de termostatos en la información proporcionada. Necesitaría sensores de temperatura interior/exterior o entidades de clima para poder aconsejarte.",
+  "actions": []
+}

@@ -45,18 +45,20 @@ async def setup_dependencies(ai_url: str = None,
             
             # Use configuration from file
             if ai_url is None:
-                ai_url = f"http://{config_data.llm.ip}:1234"
+                ai_url = config_data.llm.url
             if ai_model is None:
                 ai_model = config_data.llm.model
+            ai_api_key = config_data.llm.api_key
                 
             _LOGGER.info("Using configuration from file: AI URL=%s, Model=%s", ai_url, ai_model)
             
         except Exception as e:
             _LOGGER.warning("Could not load configuration from file, using defaults: %s", e)
             if ai_url is None:
-                ai_url = "http://localhost:1234"
+                ai_url = "https://openrouter.ai/api/v1"
             if ai_model is None:
-                ai_model = "openai/gpt-oss-20b"
+                ai_model = "anthropic/claude-3.5-sonnet"
+            ai_api_key = None
 
     # If no HA token provided, try to get it from credential manager
     if ha_token is None:
@@ -74,6 +76,7 @@ async def setup_dependencies(ai_url: str = None,
     config = Configuration(
         ai_url=ai_url,
         ai_model=ai_model,
+        ai_api_key=ai_api_key,
         ha_url=ha_url,
         ha_token=ha_token
     )

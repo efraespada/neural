@@ -41,9 +41,10 @@ Examples:
 
   # AI configuration
   neural ai config
-  neural ai config --ip 192.168.11.89
-  neural ai config --model openai/gpt-oss-20b
-  neural ai config --ip 192.168.11.89 --model openai/gpt-oss-20b
+  neural ai config --url https://openrouter.ai/api/v1
+  neural ai config --model anthropic/claude-3.5-sonnet
+  neural ai config --api-key sk-or-v1-your-api-key
+  neural ai config --url https://openrouter.ai/api/v1 --model anthropic/claude-3.5-sonnet --api-key sk-or-v1-your-api-key
 
   # AI decision making
   neural ai decide "Enciende las luces del salón"
@@ -115,8 +116,9 @@ Examples:
 
     # AI config command
     config_ai_parser = ai_subparsers.add_parser("config", help="Manage AI configuration")
-    config_ai_parser.add_argument("--ip", help="Set LLM IP address")
+    config_ai_parser.add_argument("--url", help="Set LLM URL")
     config_ai_parser.add_argument("--model", help="Set LLM model")
+    config_ai_parser.add_argument("--api-key", help="Set LLM API key")
     
     # AI decide command
     decide_parser = ai_subparsers.add_parser("decide", help="Make AI decisions based on Home Assistant state")
@@ -203,8 +205,9 @@ async def main():
             elif args.action == "config":
                 success = await command.execute(
                     args.action,
-                    ip=getattr(args, 'ip', None),
+                    url=getattr(args, 'url', None),
                     model=getattr(args, 'model', None),
+                    api_key=getattr(args, 'api_key', None),
                     interactive=not args.non_interactive,
                 )
             elif args.action == "decide":

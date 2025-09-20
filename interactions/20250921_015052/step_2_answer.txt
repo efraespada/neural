@@ -1,0 +1,15 @@
+{
+  "message": "OK",
+  "actions": [],
+  "data": {
+    "lights": [
+      {
+        "entity_id": "light.hue_color_spot_6",
+        "state": "off",
+        "friendly_name": "Despensa"
+      }
+    ]
+  }
+}
+
+Nota: He identificado la luz de la despensa como la única entidad relevante para esta solicitud, ya que el usuario quiere específicamente encender la luz de la despensa.

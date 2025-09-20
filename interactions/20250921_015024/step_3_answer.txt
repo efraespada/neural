@@ -1,0 +1,4 @@
+{
+  "message": "Sí, la luz de la despensa está apagada en este momento",
+  "actions": []
+}

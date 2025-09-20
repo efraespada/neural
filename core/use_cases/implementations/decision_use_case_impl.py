@@ -85,7 +85,7 @@ No incluyas explicaciones ni texto fuera del JSON.
     async def make_decision(self, user_prompt: str, mode: str = "assistant") -> DecisionResponse:
         """
         Make a decision based on user prompt and Home Assistant state.
-        Uses a two-step approach to avoid context length issues.
+        Uses a simplified two-step approach: context + direct action.
         
         Args:
             user_prompt: The user's request or instruction
@@ -129,28 +129,17 @@ No incluyas explicaciones ni texto fuera del JSON.
                 _LOGGER.info("Decision made without HA information: %s actions", len(step1_decision.actions))
                 return step1_decision
             
-            # Step 2: Send HA data for filtering
+            # Step 2: Send HA information directly with action prompt (skipping filtering)
             ha_info = await self.get_ha_information(user_prompt.strip())
-            step2_prompt = await self._build_step2_prompt(user_prompt.strip(), ha_info)
+            step2_prompt = await self._build_action_prompt(user_prompt.strip(), mode, ha_info)
             step2_response = await self._ai_use_case.send_message(step2_prompt)
             
             # Save step 2 interaction
             await self._save_interaction(interaction_timestamp, "step_2_request", step2_prompt)
             await self._save_interaction(interaction_timestamp, "step_2_answer", step2_response.response)
             
-            # Parse filtered entities from step 2
-            filtered_entities = await self._parse_filtered_entities(step2_response.response)
-            
-            # Step 3: Send final action prompt with filtered entities
-            step3_prompt = await self._build_step3_prompt(user_prompt.strip(), mode, filtered_entities)
-            step3_response = await self._ai_use_case.send_message(step3_prompt)
-            
-            # Save step 3 interaction
-            await self._save_interaction(interaction_timestamp, "step_3_request", step3_prompt)
-            await self._save_interaction(interaction_timestamp, "step_3_answer", step3_response.response)
-            
             # Parse final decision
-            final_decision = await self.validate_decision_response(step3_response.response)
+            final_decision = await self.validate_decision_response(step2_response.response)
             
             # Save final decision
             await self._save_final_decision(interaction_timestamp, user_prompt.strip(), mode, final_decision, ha_info)
@@ -757,12 +746,12 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.error("Error building step 2 prompt: %s", e)
             raise ValueError(f"Error building step 2 prompt: {e}")
     
-    async def _build_step3_prompt(self, user_prompt: str, mode: str, filtered_entities: str) -> str:
+    async def _build_action_prompt(self, user_prompt: str, mode: str, ha_info: str) -> str:
         """
-        Build step 3 prompt using request_action_prompt.md template.
+        Build action prompt using request_action_prompt.md template with full HA information.
         """
         try:
-            _LOGGER.debug("Building step 3 prompt")
+            _LOGGER.debug("Building action prompt")
             
             # Read the request_action_prompt.md template
             with open("request_action_prompt.md", "r", encoding="utf-8") as f:
@@ -770,13 +759,14 @@ No incluyas explicaciones ni texto fuera del JSON.
             
             # Replace placeholders
             prompt = template.replace("{{ original_prompt }}", user_prompt)
-            prompt = prompt.replace("{{ home assistant data }}", filtered_entities)
+            prompt = prompt.replace("{{ home assistant data }}", ha_info)  # Use full HA info instead of filtered
             
+            _LOGGER.debug("Action prompt built successfully")
             return prompt
             
         except Exception as e:
-            _LOGGER.error("Error building step 3 prompt: %s", e)
-            raise ValueError(f"Error building step 3 prompt: {e}")
+            _LOGGER.error("Error building action prompt: %s", e)
+            raise ValueError(f"Error building action prompt: {e}")
     
     async def build_initial_prompt(self, user_prompt: str, mode: str) -> str:
         """

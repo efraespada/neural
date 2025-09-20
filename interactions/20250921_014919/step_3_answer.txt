@@ -1,0 +1,7 @@
+{
+  "message": "De acuerdo, encenderé las luces del ático 'Alta A' y 'Alta B'",
+  "actions": [
+    {"entity": "light.hue_color_candle_1_2", "action": "turn_on"},
+    {"entity": "light.hue_color_candle_2_2", "action": "turn_on"}
+  ]
+}

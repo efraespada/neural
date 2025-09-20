@@ -2,8 +2,6 @@ Eres una inteligencia artificial que gestiona acciones de Home Assistant (HA).
 
 En base a la solicitud del usuario decide que acciones tomar sobre entidades de Home Assistant.
 
-**IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON válido, sin texto adicional antes o después.**
-
 Tu respuesta debe contener dos claves obligatorias:  
 
 - `"message"`: un texto breve y legible para el usuario.  
@@ -48,10 +46,24 @@ Tienes tres modos de operación, definidos en el prompt:
 
 # User request
 
-{{ original_prompt }}
+Enciende la despensa
 
 ------------
 
 # Home Assistant data
 
-{{ home assistant data }}
+{
+  "message": "OK",
+  "actions": [],
+  "data": {
+    "lights": [
+      {
+        "entity_id": "light.hue_color_spot_6",
+        "state": "off",
+        "friendly_name": "Despensa"
+      }
+    ]
+  }
+}
+
+Nota: He identificado la luz de la despensa como la única entidad relevante para esta solicitud, ya que el usuario quiere específicamente encender la luz de la despensa.

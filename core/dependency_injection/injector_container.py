@@ -30,8 +30,9 @@ class Configuration:
     """Configuration class for dependency injection."""
     
     def __init__(self, 
-                 ai_url: str = "http://localhost:1234",
-                 ai_model: str = "openai/gpt-oss-20b",
+                 ai_url: str = "https://openrouter.ai/api/v1",
+                 ai_model: str = "anthropic/claude-3.5-sonnet",
+                 ai_api_key: Optional[str] = None,
                  ha_url: str = "http://homeassistant.local:8123",
                  ha_token: Optional[str] = None,
                  file_base_path: str = ".",
@@ -39,6 +40,7 @@ class Configuration:
         """Initialize configuration."""
         self.ai_url = ai_url
         self.ai_model = ai_model
+        self.ai_api_key = ai_api_key
         self.ha_url = ha_url
         self.ha_token = ha_token
         self.file_base_path = file_base_path
@@ -59,7 +61,11 @@ class DependencyModule(Module):
         """Provide AI client as singleton."""
         _LOGGER.info("Creating AI client with URL: %s, Model: %s", 
                     self.config.ai_url, self.config.ai_model)
-        return AIClient(ai_url=self.config.ai_url, ai_model=self.config.ai_model)
+        return AIClient(
+            ai_url=self.config.ai_url, 
+            ai_model=self.config.ai_model,
+            api_key=getattr(self.config, 'ai_api_key', None)
+        )
     
     @provider
     @singleton

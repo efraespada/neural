@@ -1,3 +1,6 @@
+Responde únicamente con un objeto JSON con las claves `"message"`, `"actions"`, `"data"`.  
+No incluyas explicaciones ni texto fuera del JSON.
+
 # User request
 
 {{ original_prompt }}

@@ -1,0 +1,6 @@
+{
+  "message": "De acuerdo, enciendo la luz de la despensa",
+  "actions": [
+    {"entity": "light.hue_color_spot_6", "action": "turn_on"}
+  ]
+}

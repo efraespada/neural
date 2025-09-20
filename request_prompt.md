@@ -66,6 +66,4 @@ No incluyas explicaciones ni texto fuera del JSON.
 
 ------------
 
-No hagas nada todavia, simplemente contesta {"message": "OK", "actions":[]} si has comprendido todo. Despues te mandaré la lista de sensores y entidades de Home Assistant disponibles.
-
-Cuando contestes después con las acciones necesarias, asegúrate de que los sensores sobre los que actuar existen.
+No hagas nada todavia, simplemente contesta {"message": "OK", "actions":[]} si has comprendido todo.

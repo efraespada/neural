@@ -2,8 +2,6 @@ Eres una inteligencia artificial que gestiona acciones de Home Assistant (HA).
 
 En base a la solicitud del usuario decide que acciones tomar sobre entidades de Home Assistant.
 
-**IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON válido, sin texto adicional antes o después.**
-
 Tu respuesta debe contener dos claves obligatorias:  
 
 - `"message"`: un texto breve y legible para el usuario.  
@@ -48,10 +46,37 @@ Tienes tres modos de operación, definidos en el prompt:
 
 # User request
 
-{{ original_prompt }}
+Deberia poner la calefaccion?
 
 ------------
 
 # Home Assistant data
 
-{{ home assistant data }}
+{
+    "message": "OK",
+    "actions": [],
+    "data": {
+        "required_sensors": [
+            "sensor.temperatura_exterior",
+            "sensor.temperatura_interior",
+            "sensor.temperatura_habitaciones",
+            "sensor.humedad_exterior",
+            "sensor.humedad_interior",
+            "sensor.prediccion_temperatura",
+            "sensor.consumo_calefaccion"
+        ],
+        "required_entities": [
+            "climate.calefaccion",
+            "climate.termostato_salon",
+            "climate.termostato_habitaciones"
+        ]
+    }
+}
+
+Nota: Observo que en los datos proporcionados no aparecen los sensores y entidades que serían más relevantes para tomar una decisión sobre la calefacción (temperaturas interiores/exteriores, termostatos, etc.). Para dar una recomendación precisa sobre si activar la calefacción, necesitaría datos de:
+
+1. Temperaturas actuales (interior y exterior)
+2. Estado actual de los termostatos/sistema de calefacción
+3. Humedad relativa
+4. Predicción meteorológica
+5. Consumo energético
