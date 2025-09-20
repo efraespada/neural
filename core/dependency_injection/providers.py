@@ -15,6 +15,10 @@ from .injector_container import (
     get_ha_repository
 )
 
+from ..auth.credential_manager import CredentialManager
+from ..managers.config_manager import ConfigManager
+from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -28,9 +32,6 @@ async def setup_dependencies(ai_url: str = None,
     # Load configuration from file if not provided
     if ai_url is None or ai_model is None:
         try:
-            from ..managers.config_manager import ConfigManager
-            from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
-            
             # Create file repository and config manager
             file_repo = FileRepositoryImpl(base_path=".")
             config_manager = ConfigManager(file_repo, "config.json")
@@ -60,7 +61,6 @@ async def setup_dependencies(ai_url: str = None,
     # If no HA token provided, try to get it from credential manager
     if ha_token is None:
         try:
-            from ..auth.credential_manager import CredentialManager
             credential_manager = CredentialManager()
             if credential_manager.has_credentials():
                 stored_token = credential_manager.get_token()
