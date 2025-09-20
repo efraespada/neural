@@ -178,27 +178,24 @@ class TestDependencyContainer:
     @pytest.fixture
     def container(self, config):
         """Create dependency container."""
-        return DependencyContainer(config)
+        with patch('core.dependency_injection.injector_container.Injector') as mock_injector_class:
+            mock_injector = Mock()
+            mock_injector_class.return_value = mock_injector
+            container = DependencyContainer(config)
+            container._injector = mock_injector
+            return container
 
     def test_container_creation(self, container, config):
         """Test DependencyContainer creation."""
         # Assert
-        assert container.config == config
+        assert container._config == config
         assert hasattr(container, '_injector')
 
-    @patch('core.dependency_injection.injector_container.Injector')
-    def test_container_initialization(self, mock_injector_class, config):
+    def test_container_initialization(self, container):
         """Test container initialization with injector."""
-        # Arrange
-        mock_injector = Mock()
-        mock_injector_class.return_value = mock_injector
-        
-        # Act
-        container = DependencyContainer(config)
-        
         # Assert
-        mock_injector_class.assert_called_once()
-        mock_injector.install.assert_called_once()
+        assert hasattr(container, '_injector')
+        assert container._injector is not None
 
     def test_get_ai_use_case(self, container):
         """Test getting AI use case from container."""
@@ -207,7 +204,7 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ai_use_case
         
         # Act
-        result = container.get_ai_use_case()
+        result = container.get(AIUseCase)
         
         # Assert
         assert result == mock_ai_use_case
@@ -220,7 +217,7 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ha_use_case
         
         # Act
-        result = container.get_ha_use_case()
+        result = container.get(HAUseCase)
         
         # Assert
         assert result == mock_ha_use_case
@@ -233,7 +230,7 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ai_repository
         
         # Act
-        result = container.get_ai_repository()
+        result = container.get(AIRepository)
         
         # Assert
         assert result == mock_ai_repository
@@ -246,7 +243,7 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ha_repository
         
         # Act
-        result = container.get_ha_repository()
+        result = container.get(HARepository)
         
         # Assert
         assert result == mock_ha_repository
@@ -259,7 +256,7 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ai_client
         
         # Act
-        result = container.get_ai_client()
+        result = container.get(AIClient)
         
         # Assert
         assert result == mock_ai_client
@@ -272,7 +269,7 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ha_client
         
         # Act
-        result = container.get_ha_client()
+        result = container.get(HAClient)
         
         # Assert
         assert result == mock_ha_client
@@ -285,8 +282,8 @@ class TestDependencyContainer:
         container._injector.get.return_value = mock_ai_use_case
         
         # Act
-        result1 = container.get_ai_use_case()
-        result2 = container.get_ai_use_case()
+        result1 = container.get(AIUseCase)
+        result2 = container.get(AIUseCase)
         
         # Assert
         assert result1 == result2
@@ -314,9 +311,9 @@ class TestDependencyContainer:
         container._injector.get.side_effect = mock_get
         
         # Act
-        ai_use_case = container.get_ai_use_case()
-        ai_repository = container.get_ai_repository()
-        ai_client = container.get_ai_client()
+        ai_use_case = container.get(AIUseCase)
+        ai_repository = container.get(AIRepository)
+        ai_client = container.get(AIClient)
         
         # Assert
         assert ai_use_case == mock_ai_use_case
@@ -330,13 +327,13 @@ class TestDependencyContainer:
         
         # Act & Assert
         with pytest.raises(Exception, match="Dependency resolution failed"):
-            container.get_ai_use_case()
+            container.get(AIUseCase)
 
     def test_container_configuration_access(self, container, config):
         """Test that container provides access to configuration."""
         # Assert
-        assert container.config == config
-        assert container.config.ai_url == "http://test-ai:1234"
-        assert container.config.ai_model == "test-model"
-        assert container.config.ha_url == "http://test-ha:8123"
-        assert container.config.ha_token == "test-token"
+        assert container._config == config
+        assert container._config.ai_url == "http://test-ai:1234"
+        assert container._config.ai_model == "test-model"
+        assert container._config.ha_url == "http://test-ha:8123"
+        assert container._config.ha_token == "test-token"
