@@ -14,8 +14,11 @@ from ..repositories.implementations.ha_repository_impl import HARepositoryImpl
 from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
 from ..use_cases.interfaces.ai_use_case import AIUseCase
 from ..use_cases.interfaces.ha_use_case import HAUseCase
+from ..use_cases.interfaces.config_use_case import ConfigUseCase
 from ..use_cases.implementations.ai_use_case_impl import AIUseCaseImpl
 from ..use_cases.implementations.ha_use_case_impl import HAUseCaseImpl
+from ..use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
+from ..managers.config_manager import ConfigManager
 
 T = TypeVar("T")
 _LOGGER = logging.getLogger(__name__)
@@ -29,13 +32,15 @@ class Configuration:
                  ai_model: str = "openai/gpt-oss-20b",
                  ha_url: str = "http://homeassistant.local:8123",
                  ha_token: Optional[str] = None,
-                 file_base_path: str = "."):
+                 file_base_path: str = ".",
+                 config_file_path: str = "config.json"):
         """Initialize configuration."""
         self.ai_url = ai_url
         self.ai_model = ai_model
         self.ha_url = ha_url
         self.ha_token = ha_token
         self.file_base_path = file_base_path
+        self.config_file_path = config_file_path
 
 
 class DependencyModule(Module):
@@ -95,6 +100,20 @@ class DependencyModule(Module):
         """Provide File repository as singleton."""
         _LOGGER.debug("Creating File repository with base path: %s", self.config.file_base_path)
         return FileRepositoryImpl(base_path=self.config.file_base_path)
+    
+    @provider
+    @singleton
+    def provide_config_manager(self, file_repository: FileRepository) -> ConfigManager:
+        """Provide Config manager as singleton."""
+        _LOGGER.debug("Creating Config manager with file: %s", self.config.config_file_path)
+        return ConfigManager(file_repository, self.config.config_file_path)
+    
+    @provider
+    @singleton
+    def provide_config_use_case(self, config_manager: ConfigManager) -> ConfigUseCase:
+        """Provide Config use case as singleton."""
+        _LOGGER.debug("Creating Config use case")
+        return ConfigUseCaseImpl(config_manager)
 
 
 class DependencyContainer:
@@ -203,3 +222,13 @@ def get_ha_repository() -> HARepository:
 def get_file_repository() -> FileRepository:
     """Get the File repository."""
     return get(FileRepository)
+
+
+def get_config_manager() -> ConfigManager:
+    """Get the Config manager."""
+    return get(ConfigManager)
+
+
+def get_config_use_case() -> ConfigUseCase:
+    """Get the Config use case."""
+    return get(ConfigUseCase)

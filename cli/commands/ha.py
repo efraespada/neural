@@ -42,6 +42,8 @@ class HACommand(BaseCommand):
             return await self._get_complete_info(ha_token=ha_token, **kwargs)
         elif action == "info":
             return await self._show_info(ha_token=ha_token, **kwargs)
+        elif action == "config":
+            return await self._config(**kwargs)
         else:
             print_error(f"Acción de Home Assistant desconocida: {action}")
             return False
@@ -424,6 +426,51 @@ class HACommand(BaseCommand):
 
         except Exception as e:
             print_error(f"Error obteniendo información: {e}")
+            return False
+
+    async def _config(self, **kwargs) -> bool:
+        """Manage HA configuration."""
+        print_header("CONFIGURACIÓN DE HOME ASSISTANT")
+        
+        try:
+            if not await self.setup():
+                return False
+
+            # Get config use case
+            from core.dependency_injection.injector_container import get_config_use_case
+            config_use_case = get_config_use_case()
+            
+            # Parse configuration parameters
+            mode = kwargs.get('mode')
+            
+            if mode:
+                # Update mode
+                print_info(f"Actualizando modo de la aplicación: {mode}")
+                success = await config_use_case.update_mode(mode)
+                if success:
+                    print_success("✓ Modo de la aplicación actualizado correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando modo de la aplicación")
+                    return False
+            else:
+                # Show current configuration
+                print_info("Mostrando configuración actual...")
+                summary = await config_use_case.get_config_summary()
+                
+                print_success("Configuración actual:")
+                print_info(f"  Modo: {summary['mode']}")
+                print_info(f"  LLM IP: {summary['llm']['ip']}")
+                print_info(f"  LLM Modelo: {summary['llm']['model']}")
+                print_info(f"  Archivo: {summary['config_file']}")
+                print_info(f"  Cargado: {'Sí' if summary['is_loaded'] else 'No'}")
+                print_info(f"  Creado: {summary['created_at']}")
+                print_info(f"  Actualizado: {summary['updated_at']}")
+                
+                return True
+
+        except Exception as e:
+            print_error(f"Error en configuración de Home Assistant: {e}")
             return False
 
     def get_ha_use_case(self):

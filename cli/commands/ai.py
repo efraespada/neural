@@ -28,6 +28,8 @@ class AICommand(BaseCommand):
             return await self._show_status(**kwargs)
         elif action == "models":
             return await self._list_models(**kwargs)
+        elif action == "config":
+            return await self._config(**kwargs)
         else:
             print_error(f"Acción de AI desconocida: {action}")
             return False
@@ -136,4 +138,70 @@ class AICommand(BaseCommand):
 
         except Exception as e:
             print_error(f"Error obteniendo modelos: {e}")
+            return False
+
+    async def _config(self, **kwargs) -> bool:
+        """Manage AI configuration."""
+        print_header("CONFIGURACIÓN DE AI")
+        
+        try:
+            if not await self.setup():
+                return False
+
+            # Get config use case
+            from core.dependency_injection.injector_container import get_config_use_case
+            config_use_case = get_config_use_case()
+            
+            # Parse configuration parameters
+            ip = kwargs.get('ip')
+            model = kwargs.get('model')
+            
+            if ip and model:
+                # Update both IP and model
+                print_info(f"Actualizando configuración LLM: IP={ip}, Modelo={model}")
+                success = await config_use_case.update_llm_config(ip, model)
+                if success:
+                    print_success("✓ Configuración LLM actualizada correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando configuración LLM")
+                    return False
+            elif ip:
+                # Update only IP
+                print_info(f"Actualizando IP del LLM: {ip}")
+                success = await config_use_case.update_llm_ip(ip)
+                if success:
+                    print_success("✓ IP del LLM actualizada correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando IP del LLM")
+                    return False
+            elif model:
+                # Update only model
+                print_info(f"Actualizando modelo del LLM: {model}")
+                success = await config_use_case.update_llm_model(model)
+                if success:
+                    print_success("✓ Modelo del LLM actualizado correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando modelo del LLM")
+                    return False
+            else:
+                # Show current configuration
+                print_info("Mostrando configuración actual...")
+                summary = await config_use_case.get_config_summary()
+                
+                print_success("Configuración actual:")
+                print_info(f"  Modo: {summary['mode']}")
+                print_info(f"  LLM IP: {summary['llm']['ip']}")
+                print_info(f"  LLM Modelo: {summary['llm']['model']}")
+                print_info(f"  Archivo: {summary['config_file']}")
+                print_info(f"  Cargado: {'Sí' if summary['is_loaded'] else 'No'}")
+                print_info(f"  Creado: {summary['created_at']}")
+                print_info(f"  Actualizado: {summary['updated_at']}")
+                
+                return True
+
+        except Exception as e:
+            print_error(f"Error en configuración de AI: {e}")
             return False

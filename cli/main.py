@@ -39,6 +39,12 @@ Examples:
   neural ai status
   neural ai models
 
+  # AI configuration
+  neural ai config
+  neural ai config --ip 192.168.11.89
+  neural ai config --model openai/gpt-oss-20b
+  neural ai config --ip 192.168.11.89 --model openai/gpt-oss-20b
+
   # Home Assistant integration
   neural ha entities
   neural ha sensors
@@ -46,6 +52,12 @@ Examples:
   neural ha entity sensor.temperature
   neural ha test
   neural ha complete
+  
+  # Home Assistant configuration
+  neural ha config
+  neural ha config --mode supervisor
+  neural ha config --mode client
+  neural ha config --mode standalone
   
   # Home Assistant with custom token
   neural ha --ha-token YOUR_TOKEN test
@@ -96,6 +108,11 @@ Examples:
         "models", help="List available AI models"
     )
 
+    # AI config command
+    config_ai_parser = ai_subparsers.add_parser("config", help="Manage AI configuration")
+    config_ai_parser.add_argument("--ip", help="Set LLM IP address")
+    config_ai_parser.add_argument("--model", help="Set LLM model")
+
     # Home Assistant command
     ha_parser = subparsers.add_parser("ha", help="Home Assistant integration")
     ha_parser.add_argument("--ha-token", help="Home Assistant API token")
@@ -118,6 +135,10 @@ Examples:
     ha_subparsers.add_parser("complete", help="Get complete Home Assistant information")
     
     ha_subparsers.add_parser("info", help="Show Home Assistant connection information")
+
+    # HA config command
+    config_ha_parser = ha_subparsers.add_parser("config", help="Manage HA configuration")
+    config_ha_parser.add_argument("--mode", help="Set application mode (supervisor, client, standalone)")
 
     # Authentication command
     auth_parser = subparsers.add_parser("auth", help="Home Assistant authentication")
@@ -166,6 +187,13 @@ async def main():
             elif args.action == "models":
                 success = await command.execute(
                     args.action,
+                    interactive=not args.non_interactive,
+                )
+            elif args.action == "config":
+                success = await command.execute(
+                    args.action,
+                    ip=getattr(args, 'ip', None),
+                    model=getattr(args, 'model', None),
                     interactive=not args.non_interactive,
                 )
             else:
@@ -219,6 +247,13 @@ async def main():
             elif args.action == "info":
                 success = await command.execute(
                     args.action,
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "config":
+                success = await command.execute(
+                    args.action,
+                    mode=getattr(args, 'mode', None),
                     interactive=not args.non_interactive,
                     **ha_params
                 )
