@@ -36,10 +36,10 @@ class BaseCommand(ABC):
             # Use fixed URL for Home Assistant
             ha_url = "http://homeassistant.local:8123"
             
-            # Configure with provided values (dependency injection will handle stored token loading)
-            setup_dependencies(
-                ai_url="http://localhost:1234",
-                ai_model="openai/gpt-oss-20b", 
+            # Configure with dynamic values (will load from config file)
+            await setup_dependencies(
+                ai_url=None,  # Will load from config file
+                ai_model=None,  # Will load from config file
                 ha_url=ha_url,
                 ha_token=ha_token
             )

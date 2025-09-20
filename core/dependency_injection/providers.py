@@ -18,12 +18,44 @@ from .injector_container import (
 _LOGGER = logging.getLogger(__name__)
 
 
-def setup_dependencies(ai_url: str = "http://localhost:1234", 
-                       ai_model: str = "openai/gpt-oss-20b", 
+async def setup_dependencies(ai_url: str = None, 
+                       ai_model: str = None, 
                        ha_url: str = "http://homeassistant.local:8123", 
                        ha_token: Optional[str] = None) -> None:
     """Set up all dependencies for the Neural AI integration using injector."""
     _LOGGER.info("Setting up Neural AI dependencies with injector")
+
+    # Load configuration from file if not provided
+    if ai_url is None or ai_model is None:
+        try:
+            from ..managers.config_manager import ConfigManager
+            from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
+            
+            # Create file repository and config manager
+            file_repo = FileRepositoryImpl(base_path=".")
+            config_manager = ConfigManager(file_repo, "config.json")
+            
+            # Load configuration
+            try:
+                config_data = await config_manager.get_config()
+            except ValueError:
+                # Configuration not loaded, load it
+                config_data = await config_manager.load_config()
+            
+            # Use configuration from file
+            if ai_url is None:
+                ai_url = f"http://{config_data.llm.ip}:1234"
+            if ai_model is None:
+                ai_model = config_data.llm.model
+                
+            _LOGGER.info("Using configuration from file: AI URL=%s, Model=%s", ai_url, ai_model)
+            
+        except Exception as e:
+            _LOGGER.warning("Could not load configuration from file, using defaults: %s", e)
+            if ai_url is None:
+                ai_url = "http://localhost:1234"
+            if ai_model is None:
+                ai_model = "openai/gpt-oss-20b"
 
     # If no HA token provided, try to get it from credential manager
     if ha_token is None:
