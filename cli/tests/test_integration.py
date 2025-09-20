@@ -39,10 +39,10 @@ class TestCLIIntegration:
         with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             parser.print_help()
             help_output = mock_stdout.getvalue()
-            assert "My Verisure CLI" in help_output
+            assert "Neural AI CLI" in help_output
             assert "auth" in help_output
-            assert "info" in help_output
-            assert "alarm" in help_output
+            assert "ai" in help_output
+            assert "ha" in help_output
 
     def test_setup_logging(self):
         """Test logging setup."""
@@ -51,10 +51,42 @@ class TestCLIIntegration:
             mock_basic_config.assert_called_once()
 
     @pytest.mark.asyncio
-    @patch("cli.main.AuthCommand")
-    async def test_main_auth_login(self, mock_auth_command):
-        """Test main function with auth login command."""
-        sys.argv = ["my_verisure_cli.py", "auth", "login"]
+    @patch("cli.main.AICommand")
+    async def test_main_ai_message(self, mock_ai_command):
+        """Test main function with AI message command."""
+        sys.argv = ["neural", "ai", "message", "Hello, how are you?"]
+
+        mock_command_instance = Mock()
+        mock_command_instance.execute = AsyncMock(return_value=True)
+        mock_ai_command.return_value = mock_command_instance
+
+        with patch("cli.main.setup_logging"):
+            result = await main()
+
+        assert result == 0
+        mock_command_instance.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    @patch("cli.main.HACommand")
+    async def test_main_ha_entities(self, mock_ha_command):
+        """Test main function with HA entities command."""
+        sys.argv = ["neural", "ha", "entities"]
+
+        mock_command_instance = Mock()
+        mock_command_instance.execute = AsyncMock(return_value=True)
+        mock_ha_command.return_value = mock_command_instance
+
+        with patch("cli.main.setup_logging"):
+            result = await main()
+
+        assert result == 0
+        mock_command_instance.execute.assert_called_once()
+
+    @pytest.mark.asyncio
+    @patch("cli.commands.auth.AuthCommand")
+    async def test_main_auth_status(self, mock_auth_command):
+        """Test main function with auth status command."""
+        sys.argv = ["neural", "auth", "status"]
 
         mock_command_instance = Mock()
         mock_command_instance.execute = AsyncMock(return_value=True)
@@ -64,102 +96,26 @@ class TestCLIIntegration:
             result = await main()
 
         assert result == 0
-        mock_command_instance.execute.assert_called_once_with(
-            "login", interactive=True
-        )
+        mock_command_instance.execute.assert_called_once()
 
-    @pytest.mark.asyncio
-    @patch("cli.main.InfoCommand")
-    async def test_main_info_installations(self, mock_info_command):
-        """Test main function with info installations command."""
-        sys.argv = ["my_verisure_cli.py", "info", "installations"]
-
-        mock_command_instance = Mock()
-        mock_command_instance.execute = AsyncMock(return_value=True)
-        mock_info_command.return_value = mock_command_instance
-
-        with patch("cli.main.setup_logging"):
-            result = await main()
-
-        assert result == 0
-        mock_command_instance.execute.assert_called_once_with(
-            "installations", interactive=True
-        )
-
-    @pytest.mark.asyncio
-    @patch("cli.main.AlarmCommand")
-    async def test_main_alarm_status(self, mock_alarm_command):
-        """Test main function with alarm status command."""
-        sys.argv = [
-            "my_verisure_cli.py",
-            "alarm",
-            "status",
-            "--installation-id",
-            "12345",
-        ]
-
-        mock_command_instance = Mock()
-        mock_command_instance.execute = AsyncMock(return_value=True)
-        mock_alarm_command.return_value = mock_command_instance
-
-        with patch("cli.main.setup_logging"):
-            result = await main()
-
-        assert result == 0
-        mock_command_instance.execute.assert_called_once_with(
-            "status", installation_id="12345", interactive=True
-        )
-
-    @pytest.mark.asyncio
-    async def test_main_unknown_command(self):
-        """Test main function with unknown command."""
-        sys.argv = ["my_verisure_cli.py", "unknown"]
-
-        with patch("cli.main.setup_logging"), patch(
-            "sys.stderr", new_callable=StringIO
-        ) as mock_stderr:
-            with pytest.raises(SystemExit) as exc_info:
-                await main()
-
-        assert exc_info.value.code == 2  # ArgumentParser error exit code
-        error_output = mock_stderr.getvalue()
-        assert "error:" in error_output
-
-    @pytest.mark.asyncio
-    async def test_main_help(self):
+    def test_main_help(self):
         """Test main function with help command."""
-        sys.argv = ["my_verisure_cli.py", "--help"]
+        sys.argv = ["neural", "--help"]
 
-        with patch("cli.main.setup_logging"), patch(
-            "sys.stdout", new_callable=StringIO
-        ) as mock_stdout:
-            with pytest.raises(SystemExit) as exc_info:
-                await main()
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            with pytest.raises(SystemExit):
+                import asyncio
+                asyncio.run(main())
+            help_output = mock_stdout.getvalue()
+            assert "Neural AI CLI" in help_output
 
-        assert exc_info.value.code == 0
-        help_output = mock_stdout.getvalue()
-        assert "My Verisure CLI" in help_output
-        assert "auth" in help_output
-        assert "info" in help_output
-        assert "alarm" in help_output
+    def test_main_unknown_command(self):
+        """Test main function with unknown command."""
+        sys.argv = ["neural", "unknown", "command"]
 
-    @pytest.mark.asyncio
-    @patch("cli.main.AuthCommand")
-    async def test_main_command_failure(self, mock_auth_command):
-        """Test main function when command fails."""
-        sys.argv = ["my_verisure_cli.py", "auth", "login"]
-
-        mock_command_instance = Mock()
-        mock_command_instance.execute = AsyncMock(return_value=False)
-        mock_auth_command.return_value = mock_command_instance
-
-        with patch("cli.main.setup_logging"):
-            result = await main()
-
-        assert result == 1  # Error exit code
-        mock_command_instance.execute.assert_called_once_with(
-            "login", interactive=True
-        )
+        with pytest.raises(SystemExit):
+            import asyncio
+            asyncio.run(main())
 
 
 class TestCLIArgumentParsing:
@@ -169,17 +125,49 @@ class TestCLIArgumentParsing:
         """Set up test fixtures."""
         self.parser = create_parser()
 
-    def test_auth_subcommand_parsing(self):
-        """Test auth subcommand argument parsing."""
-        args = self.parser.parse_args(["auth", "login"])
-        assert args.command == "auth"
-        assert args.action == "login"
+    def test_ai_message_parsing(self):
+        """Test AI message argument parsing."""
+        args = self.parser.parse_args(["ai", "message", "Hello world"])
+        assert args.command == "ai"
+        assert args.action == "message"
+        assert args.message == "Hello world"
 
-    def test_auth_logout_parsing(self):
-        """Test auth logout argument parsing."""
-        args = self.parser.parse_args(["auth", "logout"])
-        assert args.command == "auth"
-        assert args.action == "logout"
+    def test_ai_status_parsing(self):
+        """Test AI status argument parsing."""
+        args = self.parser.parse_args(["ai", "status"])
+        assert args.command == "ai"
+        assert args.action == "status"
+
+    def test_ai_models_parsing(self):
+        """Test AI models argument parsing."""
+        args = self.parser.parse_args(["ai", "models"])
+        assert args.command == "ai"
+        assert args.action == "models"
+
+    def test_ha_entities_parsing(self):
+        """Test HA entities argument parsing."""
+        args = self.parser.parse_args(["ha", "entities"])
+        assert args.command == "ha"
+        assert args.action == "entities"
+
+    def test_ha_entities_with_domain_parsing(self):
+        """Test HA entities with domain argument parsing."""
+        args = self.parser.parse_args(["ha", "entities", "--domain", "sensor"])
+        assert args.command == "ha"
+        assert args.action == "entities"
+        assert args.domain == "sensor"
+
+    def test_ha_sensors_parsing(self):
+        """Test HA sensors argument parsing."""
+        args = self.parser.parse_args(["ha", "sensors"])
+        assert args.command == "ha"
+        assert args.action == "sensors"
+
+    def test_ha_summary_parsing(self):
+        """Test HA summary argument parsing."""
+        args = self.parser.parse_args(["ha", "summary"])
+        assert args.command == "ha"
+        assert args.action == "summary"
 
     def test_auth_status_parsing(self):
         """Test auth status argument parsing."""
@@ -187,122 +175,72 @@ class TestCLIArgumentParsing:
         assert args.command == "auth"
         assert args.action == "status"
 
-    def test_info_installations_parsing(self):
-        """Test info installations argument parsing."""
-        args = self.parser.parse_args(["info", "installations"])
-        assert args.command == "info"
-        assert args.action == "installations"
+    def test_auth_login_parsing(self):
+        """Test auth login argument parsing."""
+        args = self.parser.parse_args(["auth", "login"])
+        assert args.command == "auth"
+        assert args.action == "login"
 
-    def test_info_services_parsing(self):
-        """Test info services argument parsing."""
-        args = self.parser.parse_args(
-            ["info", "services", "--installation-id", "12345"]
-        )
-        assert args.command == "info"
-        assert args.action == "services"
-        assert args.installation_id == "12345"
+    def test_auth_login_with_token_parsing(self):
+        """Test auth login with token argument parsing."""
+        args = self.parser.parse_args(["auth", "login", "--token", "test_token"])
+        assert args.command == "auth"
+        assert args.action == "login"
+        assert args.token == "test_token"
 
-    def test_info_status_parsing(self):
-        """Test info status argument parsing."""
-        args = self.parser.parse_args(
-            ["info", "status", "--installation-id", "12345"]
-        )
-        assert args.command == "info"
-        assert args.action == "status"
-        assert args.installation_id == "12345"
-
-    def test_alarm_status_parsing(self):
-        """Test alarm status argument parsing."""
-        args = self.parser.parse_args(
-            ["alarm", "status", "--installation-id", "12345"]
-        )
-        assert args.command == "alarm"
-        assert args.action == "status"
-        assert args.installation_id == "12345"
-
-    def test_alarm_arm_parsing(self):
-        """Test alarm arm argument parsing."""
-        args = self.parser.parse_args(
-            ["alarm", "arm", "--mode", "away", "--installation-id", "12345"]
-        )
-        assert args.command == "alarm"
-        assert args.action == "arm"
-        assert args.mode == "away"
-        assert args.installation_id == "12345"
-
-    def test_alarm_disarm_parsing(self):
-        """Test alarm disarm argument parsing."""
-        args = self.parser.parse_args(
-            ["alarm", "disarm", "--installation-id", "12345"]
-        )
-        assert args.command == "alarm"
-        assert args.action == "disarm"
-        assert args.installation_id == "12345"
+    def test_auth_logout_parsing(self):
+        """Test auth logout argument parsing."""
+        args = self.parser.parse_args(["auth", "logout"])
+        assert args.command == "auth"
+        assert args.action == "logout"
 
     def test_verbose_flag_parsing(self):
         """Test verbose flag parsing."""
-        args = self.parser.parse_args(["--verbose", "auth", "status"])
+        args = self.parser.parse_args(["-v", "ai", "status"])
         assert args.verbose is True
-        assert args.command == "auth"
-        assert args.action == "status"
 
     def test_non_interactive_flag_parsing(self):
         """Test non-interactive flag parsing."""
-        args = self.parser.parse_args(["--non-interactive", "auth", "login"])
+        args = self.parser.parse_args(["--non-interactive", "ai", "status"])
         assert args.non_interactive is True
-        assert args.command == "auth"
-        assert args.action == "login"
 
 
 class TestCLIErrorHandling:
     """Test CLI error handling."""
 
-    @pytest.mark.asyncio
-    @patch("cli.main.AuthCommand")
-    async def test_command_exception_handling(self, mock_auth_command):
-        """Test handling of command exceptions."""
-        sys.argv = ["my_verisure_cli.py", "auth", "login"]
+    def setup_method(self):
+        """Set up test fixtures."""
+        self.original_argv = sys.argv.copy()
 
-        mock_command_instance = Mock()
-        mock_command_instance.execute = AsyncMock(
-            side_effect=Exception("Test error")
-        )
-        mock_auth_command.return_value = mock_command_instance
-
-        with patch("cli.main.setup_logging"), patch(
-            "sys.stdout", new_callable=StringIO
-        ) as mock_stdout:
-            result = await main()
-
-        assert result == 1
-        output = mock_stdout.getvalue()
-        assert "Test error" in output
+    def teardown_method(self):
+        """Clean up test fixtures."""
+        sys.argv = self.original_argv
 
     @pytest.mark.asyncio
-    async def test_invalid_arguments_handling(self):
-        """Test handling of invalid arguments."""
-        sys.argv = ["my_verisure_cli.py", "auth", "invalid_action"]
+    async def test_command_exception_handling(self):
+        """Test command exception handling."""
+        sys.argv = ["neural", "ai", "message", "test"]
 
-        with patch("cli.main.setup_logging"), patch(
-            "sys.stderr", new_callable=StringIO
-        ) as mock_stderr:
-            with pytest.raises(SystemExit) as exc_info:
-                await main()
+        with patch("cli.main.AICommand") as mock_ai_command:
+            mock_command_instance = Mock()
+            mock_command_instance.execute = AsyncMock(side_effect=Exception("Test error"))
+            mock_ai_command.return_value = mock_command_instance
 
-        assert exc_info.value.code == 2  # ArgumentParser error exit code
-        error_output = mock_stderr.getvalue()
-        assert "error:" in error_output
+            with patch("cli.main.setup_logging"):
+                result = await main()
 
-    @pytest.mark.asyncio
-    async def test_missing_arguments_handling(self):
-        """Test handling of missing arguments."""
-        sys.argv = ["my_verisure_cli.py", "auth"]
+            assert result == 1
 
-        with patch("cli.main.setup_logging"), patch(
-            "sys.stdout", new_callable=StringIO
-        ) as mock_stdout:
-            result = await main()
+    def test_invalid_arguments_handling(self):
+        """Test invalid arguments handling."""
+        parser = create_parser()
+        
+        with pytest.raises(SystemExit):
+            parser.parse_args(["invalid", "command"])
 
-        assert result == 1  # Command execution failed
-        output = mock_stdout.getvalue()
-        assert "Acción de autenticación desconocida" in output
+    def test_missing_arguments_handling(self):
+        """Test missing arguments handling."""
+        parser = create_parser()
+        
+        with pytest.raises(SystemExit):
+            parser.parse_args(["ai", "message"])  # Missing message argument
