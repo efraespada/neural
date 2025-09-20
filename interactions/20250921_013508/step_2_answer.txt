@@ -1,0 +1,1 @@
+{"message":"OK","actions":[],"data":{"relevant_entities":[{"entity_id":"light.hue_color_spot_6","friendly_name":"Despensa"},{"entity_id":"light.despensa","friendly_name":"Despensa"},{"...":""}]} }

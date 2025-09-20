@@ -45,6 +45,11 @@ Examples:
   neural ai config --model openai/gpt-oss-20b
   neural ai config --ip 192.168.11.89 --model openai/gpt-oss-20b
 
+  # AI decision making
+  neural ai decide "Enciende las luces del salón"
+  neural ai decide "Ajusta la temperatura a 22 grados" --mode supervisor
+  neural ai decide "Optimiza el consumo energético" --mode autonomic
+
   # Home Assistant integration
   neural ha entities
   neural ha sensors
@@ -112,6 +117,12 @@ Examples:
     config_ai_parser = ai_subparsers.add_parser("config", help="Manage AI configuration")
     config_ai_parser.add_argument("--ip", help="Set LLM IP address")
     config_ai_parser.add_argument("--model", help="Set LLM model")
+    
+    # AI decide command
+    decide_parser = ai_subparsers.add_parser("decide", help="Make AI decisions based on Home Assistant state")
+    decide_parser.add_argument("prompt", help="User prompt or instruction")
+    decide_parser.add_argument("--mode", choices=["assistant", "supervisor", "autonomic"], 
+                              default="assistant", help="Decision mode")
 
     # Home Assistant command
     ha_parser = subparsers.add_parser("ha", help="Home Assistant integration")
@@ -194,6 +205,13 @@ async def main():
                     args.action,
                     ip=getattr(args, 'ip', None),
                     model=getattr(args, 'model', None),
+                    interactive=not args.non_interactive,
+                )
+            elif args.action == "decide":
+                success = await command.execute(
+                    args.action,
+                    prompt=args.prompt,
+                    mode=args.mode,
                     interactive=not args.non_interactive,
                 )
             else:

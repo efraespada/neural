@@ -15,9 +15,11 @@ from ..repositories.implementations.file_repository_impl import FileRepositoryIm
 from ..use_cases.interfaces.ai_use_case import AIUseCase
 from ..use_cases.interfaces.ha_use_case import HAUseCase
 from ..use_cases.interfaces.config_use_case import ConfigUseCase
+from ..use_cases.interfaces.decision_use_case import DecisionUseCase
 from ..use_cases.implementations.ai_use_case_impl import AIUseCaseImpl
 from ..use_cases.implementations.ha_use_case_impl import HAUseCaseImpl
 from ..use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
+from ..use_cases.implementations.decision_use_case_impl import DecisionUseCaseImpl
 from ..managers.config_manager import ConfigManager
 
 T = TypeVar("T")
@@ -114,6 +116,13 @@ class DependencyModule(Module):
         """Provide Config use case as singleton."""
         _LOGGER.debug("Creating Config use case")
         return ConfigUseCaseImpl(config_manager)
+    
+    @provider
+    @singleton
+    def provide_decision_use_case(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase) -> DecisionUseCase:
+        """Provide Decision use case as singleton."""
+        _LOGGER.debug("Creating Decision use case")
+        return DecisionUseCaseImpl(ai_use_case, ha_use_case)
 
 
 class DependencyContainer:
@@ -232,3 +241,8 @@ def get_config_manager() -> ConfigManager:
 def get_config_use_case() -> ConfigUseCase:
     """Get the Config use case."""
     return get(ConfigUseCase)
+
+
+def get_decision_use_case() -> DecisionUseCase:
+    """Get the Decision use case."""
+    return get(DecisionUseCase)

@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T01:35:26.201887",
+  "user_prompt": "Quiero luz en el atico",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "No puedo hacer eso, las condiciones lumínicas son aceptables y no hay ninguna entidad que corresponda a \"luz del ático\".",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 9161,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_013508"
+  }
+}

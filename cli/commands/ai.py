@@ -30,6 +30,8 @@ class AICommand(BaseCommand):
             return await self._list_models(**kwargs)
         elif action == "config":
             return await self._config(**kwargs)
+        elif action == "decide":
+            return await self._decide(**kwargs)
         else:
             print_error(f"Acción de AI desconocida: {action}")
             return False
@@ -204,4 +206,42 @@ class AICommand(BaseCommand):
 
         except Exception as e:
             print_error(f"Error en configuración de AI: {e}")
+            return False
+
+    async def _decide(self, prompt: str, mode: str = "assistant", **kwargs) -> bool:
+        """Make a decision based on user prompt and Home Assistant state."""
+        print_header("TOMA DE DECISIONES CON AI")
+        
+        try:
+            if not await self.setup():
+                return False
+
+            # Get decision use case
+            from core.dependency_injection.injector_container import get_decision_use_case
+            decision_use_case = get_decision_use_case()
+            
+            print_info(f"Prompt del usuario: {prompt}")
+            print_info(f"Modo de decisión: {mode}")
+            print_info("Obteniendo información de Home Assistant...")
+            
+            # Make decision
+            decision = await decision_use_case.make_decision(prompt, mode)
+            
+            print_success("✓ Decisión tomada correctamente")
+            print_info(f"Mensaje: {decision.message}")
+            
+            if decision.actions:
+                print_info("Acciones a ejecutar:")
+                for i, action in enumerate(decision.actions, 1):
+                    print_info(f"  {i}. Entidad: {action.entity}")
+                    print_info(f"     Acción: {action.action}")
+                    if action.parameters:
+                        print_info(f"     Parámetros: {action.parameters}")
+            else:
+                print_info("No se requieren acciones")
+            
+            return True
+
+        except Exception as e:
+            print_error(f"Error en toma de decisiones: {e}")
             return False

@@ -17,8 +17,8 @@ class AIUseCaseImpl(AIUseCase):
         """Initialize the AI use case."""
         self._ai_repository = ai_repository
 
-    async def send_message(self, message: str, model: Optional[str] = None) -> str:
-        """Send a message to AI and get response text."""
+    async def send_message(self, message: str, model: Optional[str] = None) -> AIResponse:
+        """Send a message to AI and get response."""
         try:
             _LOGGER.info("Sending message to AI: %s", message[:50] + "..." if len(message) > 50 else message)
             
@@ -27,7 +27,7 @@ class AIUseCaseImpl(AIUseCase):
             
             _LOGGER.info("Received AI response: %s", response.response[:50] + "..." if len(response.response) > 50 else response.response)
             
-            return response.response
+            return response
             
         except Exception as e:
             _LOGGER.error("Failed to send message to AI: %s", e)

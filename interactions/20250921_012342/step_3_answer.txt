@@ -1,0 +1,1 @@
+{"message":"Lo siento, no puedo enciender las luces del salón porque el usuario y...","actions":[],"data":{"…":"…"} }

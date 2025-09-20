@@ -62,7 +62,7 @@ No incluyas explicaciones ni texto fuera del JSON.
 
 # User request
 
-{{ original_prompt }}
+Enciende las luces del salón
 
 ------------
 

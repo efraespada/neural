@@ -1,0 +1,372 @@
+# User request
+
+Apaga todas las luces
+
+------------
+
+# Home Assistant data
+
+Filtra por las entidades que consideres relevantes para la toma de decisiones que has encontrado.
+
+No hagas nada todavia, simplemente contesta {"message": "OK", "actions":[], data: {...}} con los sensores o entidades que consideres relevantes para la accion que ha pedido el usuario. Despues te mandaré la lista filtrada de sensores y entidades de Home Assistant disponibles con el prompt del usuario para que decidas.
+
+{
+  "entities": [
+    {
+      "entity_id": "script.alerta_luces",
+      "state": "off",
+      "friendly_name": "Luces peligro",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "script.luces_informativas",
+      "state": "off",
+      "friendly_name": "Luces Informativas",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_6",
+      "state": "off",
+      "friendly_name": "Despensa",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.led_tv",
+      "state": "on",
+      "friendly_name": "LED TV",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_2",
+      "state": "on",
+      "friendly_name": "Intermedia B",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_2",
+      "state": "on",
+      "friendly_name": "Hue color spot 2",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_3",
+      "state": "on",
+      "friendly_name": "Hue color spot 3",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_1",
+      "state": "on",
+      "friendly_name": "Hue color spot 1",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.tv_alta_a",
+      "state": "unavailable",
+      "friendly_name": "Principal",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.lampara_sofa",
+      "state": "on",
+      "friendly_name": "Lámpara Vitrina",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_lamp_1_2",
+      "state": "off",
+      "friendly_name": "Sensor Agua",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_5",
+      "state": "on",
+      "friendly_name": "Hue color spot 5",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_lamp_1",
+      "state": "off",
+      "friendly_name": "Lámpara Frigorífico ",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_1_4",
+      "state": "on",
+      "friendly_name": "Sótano A",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_1",
+      "state": "on",
+      "friendly_name": "Intermedia A",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_4",
+      "state": "on",
+      "friendly_name": "Hue color spot 4",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_2_4",
+      "state": "on",
+      "friendly_name": "Sótano B",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_8",
+      "state": "off",
+      "friendly_name": "Distribuidor C",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_lamp_2",
+      "state": "off",
+      "friendly_name": "Lámpara Mesa",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_6_2",
+      "state": "off",
+      "friendly_name": "Distribuidor A",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_1_2",
+      "state": "on",
+      "friendly_name": "Alta A",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.lampara_acuario",
+      "state": "on",
+      "friendly_name": "Lámpara despacho",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_spot_7",
+      "state": "off",
+      "friendly_name": "Distribuidor B",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_1_3",
+      "state": "on",
+      "friendly_name": "Baja A",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_2_3",
+      "state": "on",
+      "friendly_name": "Baja B",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.hue_color_candle_2_2",
+      "state": "on",
+      "friendly_name": "Alta B",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "light.escalera",
+      "state": "on",
+      "friendly_name": "Escalera",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "switch.sync_box_sincronizacion_de_luces",
+      "state": "on",
+      "friendly_name": "Sync Box Sincronización de luces",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "automation.aviso_sistema_fotovoltaico_apagado",
+      "state": "on",
+      "friendly_name": "Sistema Fotovoltaico - Apagado",
+      "device_class": null,
+      "unit_of_measurement": null
+    },
+    {
+      "entity_id": "automation.climatizacion_automatica_habitaciones_apagado",
+      "state": "on",
+      "friendly_name": "Climatización automática - Habitaciones apagado",
+      "device_class": null,
+      "unit_of_measurement": null
+    }
+  ],
+  "sensors": [
+    {
+      "entity_id": "sensor.foxess_pv1_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV1 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_pv2_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_pv3_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV3 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_pv4_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV4 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_pv5_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV5 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_pv6_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV6 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_pv_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_r_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - R Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_meter2_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Meter2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_s_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - S Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_t_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - T Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW"
+    },
+    {
+      "entity_id": "sensor.foxess_reactive_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Reactive Power",
+      "device_class": "reactive_power",
+      "unit_of_measurement": "var"
+    },
+    {
+      "entity_id": "sensor.foxess_power_factor",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Power Factor",
+      "device_class": "power_factor",
+      "unit_of_measurement": "%"
+    },
+    {
+      "entity_id": "sensor.foxess_bat_temperature",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C"
+    },
+    {
+      "entity_id": "sensor.foxess_bat_temperature2",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Bat Temperature2",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C"
+    }
+  ],
+  "services": {
+    "available_services": {
+      "light": [
+        "turn_on",
+        "turn_off",
+        "toggle"
+      ],
+      "switch": [
+        "turn_on",
+        "turn_off",
+        "toggle"
+      ],
+      "cover": [
+        "open_cover",
+        "close_cover",
+        "stop_cover"
+      ],
+      "climate": [
+        "set_temperature",
+        "set_hvac_mode"
+      ],
+      "fan": [
+        "turn_on",
+        "turn_off",
+        "set_speed"
+      ],
+      "media_player": [
+        "play_media",
+        "pause",
+        "stop",
+        "volume_set"
+      ]
+    },
+    "note": "This is a sample of common services. Full service discovery would require additional API calls."
+  },
+  "total_entities": 731,
+  "total_sensors": 412,
+  "relevant_entities_count": 30,
+  "relevant_sensors_count": 15
+}
