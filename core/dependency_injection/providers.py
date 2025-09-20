@@ -22,7 +22,7 @@ from use_cases.implementations.ha_use_case_impl import HAUseCaseImpl
 _LOGGER = logging.getLogger(__name__)
 
 
-def setup_dependencies(ai_url: str = "http://localhost:11434", ai_model: str = "llama3.2", 
+def setup_dependencies(ai_url: str = "http://localhost:1234", ai_model: str = "openai/gpt-oss-20b", 
                        ha_url: str = "http://homeassistant.local:8123", ha_token: str = None) -> None:
     """Set up all dependencies for the Neural AI integration."""
     _LOGGER.info("Setting up Neural AI dependencies")

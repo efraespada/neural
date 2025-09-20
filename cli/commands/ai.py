@@ -22,8 +22,8 @@ class AICommand(BaseCommand):
         """Execute AI command."""
         print_command_header("AI", "AI Interaction")
 
-        if action == "chat":
-            return await self._chat(**kwargs)
+        if action == "message":
+            return await self._message(**kwargs)
         elif action == "status":
             return await self._show_status(**kwargs)
         elif action == "models":
@@ -32,36 +32,47 @@ class AICommand(BaseCommand):
             print_error(f"Acción de AI desconocida: {action}")
             return False
 
-    async def _chat(
+    async def _message(
         self, message: str, model: Optional[str] = None, interactive: bool = True
     ) -> bool:
-        """Chat with AI."""
-        print_header("CHAT CON AI")
+        """Send a message to AI and get response - direct API test."""
+        print_header("ENVIAR MENSAJE A AI")
 
         try:
             if not await self.setup():
                 return False
 
-            print_info(f"Enviando mensaje: {message}")
+            print_info(f"Probando API AI con mensaje: {message}")
             if model:
                 print_info(f"Usando modelo: {model}")
 
-            # Get AI use case
+            # Get AI use case (this consumes the repository and use case)
             ai_use_case = self.get_ai_use_case()
             
-            # Send message to AI
+            # Check if model is ready first
+            print_info("Verificando si el modelo está listo...")
+            is_ready = await ai_use_case.is_model_ready()
+            
+            if not is_ready:
+                print_error("El modelo AI no está listo. Verifica que el servicio esté ejecutándose.")
+                return False
+            
+            print_success("✓ Modelo AI está listo")
+            
+            # Send message to AI using the repository/use case pattern
+            print_info("Enviando mensaje a la API AI...")
             response = await ai_use_case.send_message(message, model=model)
             
             if response:
-                print_success("Respuesta de AI:")
+                print_success("✓ Respuesta recibida de la API AI:")
                 print_info(f"  {response}")
                 return True
             else:
-                print_error("No se recibió respuesta de AI")
+                print_error("✗ No se recibió respuesta de la API AI")
                 return False
 
         except Exception as e:
-            print_error(f"Error enviando mensaje a AI: {e}")
+            print_error(f"✗ Error probando la API AI: {e}")
             return False
 
     async def _show_status(self, interactive: bool = True) -> bool:
@@ -82,9 +93,13 @@ class AICommand(BaseCommand):
             
             if status:
                 print_success("Estado de AI:")
-                print_info(f"  Modelo: {status.get('model', 'Unknown')}")
-                print_info(f"  Estado: {status.get('status', 'Unknown')}")
-                print_info(f"  URL: {status.get('url', 'Unknown')}")
+                print_info(f"  Modelo: {status.model}")
+                print_info(f"  Estado: {status.status}")
+                print_info(f"  URL: {status.url}")
+                if status.available_models:
+                    print_info(f"  Modelos disponibles: {', '.join(status.available_models)}")
+                if status.error:
+                    print_info(f"  Error: {status.error}")
                 return True
             else:
                 print_error("No se pudo obtener el estado de AI")

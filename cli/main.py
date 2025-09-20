@@ -35,7 +35,7 @@ def create_parser() -> argparse.ArgumentParser:
         epilog="""
 Examples:
   # AI interaction
-  neural ai chat "Hello, how are you?"
+  neural ai message "hola, que tal?"
   neural ai status
   neural ai models
 
@@ -57,7 +57,7 @@ Examples:
   neural auth logout
 
   # Non-interactive mode (for scripts)
-  neural ai chat "Hello" --non-interactive
+  neural ai message "Hello" --non-interactive
   neural ha entities --domain sensor
         """,
     )
@@ -84,9 +84,9 @@ Examples:
         dest="action", help="AI actions"
     )
 
-    chat_parser = ai_subparsers.add_parser("chat", help="Chat with AI")
-    chat_parser.add_argument("message", help="Message to send to AI")
-    chat_parser.add_argument("--model", help="AI model to use")
+    message_parser = ai_subparsers.add_parser("message", help="Send message to AI")
+    message_parser.add_argument("message", help="Message to send to AI")
+    message_parser.add_argument("--model", help="AI model to use")
 
     status_ai_parser = ai_subparsers.add_parser(
         "status", help="Show AI status"
@@ -151,7 +151,7 @@ async def main():
     try:
         if args.command == "ai":
             command = AICommand()
-            if args.action == "chat":
+            if args.action == "message":
                 success = await command.execute(
                     args.action,
                     message=args.message,

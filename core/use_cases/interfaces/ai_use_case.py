@@ -28,3 +28,8 @@ class AIUseCase(ABC):
     async def test_connection(self) -> bool:
         """Test connection to AI service."""
         pass
+
+    @abstractmethod
+    async def is_model_ready(self) -> bool:
+        """Check if the AI model is ready for use."""
+        pass

@@ -38,8 +38,8 @@ class BaseCommand(ABC):
             
             # Configure with provided values (dependency injection will handle stored token loading)
             setup_dependencies(
-                ai_url="http://localhost:11434",
-                ai_model="llama3.2", 
+                ai_url="http://localhost:1234",
+                ai_model="openai/gpt-oss-20b", 
                 ha_url=ha_url,
                 ha_token=ha_token
             )

@@ -81,3 +81,19 @@ class AIUseCaseImpl(AIUseCase):
         except Exception as e:
             _LOGGER.error("Failed to test AI connection: %s", e)
             return False
+
+    async def is_model_ready(self) -> bool:
+        """Check if the AI model is ready for use."""
+        try:
+            _LOGGER.info("Checking if AI model is ready")
+            
+            # Check if model is ready through repository
+            is_ready = await self._ai_repository.is_model_ready()
+            
+            _LOGGER.info("AI model ready status: %s", "ready" if is_ready else "not ready")
+            
+            return is_ready
+            
+        except Exception as e:
+            _LOGGER.error("Failed to check if model is ready: %s", e)
+            return False

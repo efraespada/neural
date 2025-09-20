@@ -104,3 +104,17 @@ class AIRepositoryImpl(AIRepository):
         except Exception as e:
             _LOGGER.error("Failed to test AI connection: %s", e)
             return False
+
+    async def is_model_ready(self) -> bool:
+        """Check if the AI model is ready for use."""
+        try:
+            # Ensure client is connected
+            if not self._ai_client._session:
+                await self._ai_client.connect()
+            
+            # Check if model is ready
+            return await self._ai_client.is_model_ready()
+            
+        except Exception as e:
+            _LOGGER.error("Failed to check if model is ready: %s", e)
+            return False
