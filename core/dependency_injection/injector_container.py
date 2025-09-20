@@ -8,8 +8,10 @@ from ..api.ai_client import AIClient
 from ..api.ha_client import HAClient
 from ..repositories.interfaces.ai_repository import AIRepository
 from ..repositories.interfaces.ha_repository import HARepository
+from ..repositories.interfaces.file_repository import FileRepository
 from ..repositories.implementations.ai_repository_impl import AIRepositoryImpl
 from ..repositories.implementations.ha_repository_impl import HARepositoryImpl
+from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
 from ..use_cases.interfaces.ai_use_case import AIUseCase
 from ..use_cases.interfaces.ha_use_case import HAUseCase
 from ..use_cases.implementations.ai_use_case_impl import AIUseCaseImpl
@@ -26,12 +28,14 @@ class Configuration:
                  ai_url: str = "http://localhost:1234",
                  ai_model: str = "openai/gpt-oss-20b",
                  ha_url: str = "http://homeassistant.local:8123",
-                 ha_token: Optional[str] = None):
+                 ha_token: Optional[str] = None,
+                 file_base_path: str = "."):
         """Initialize configuration."""
         self.ai_url = ai_url
         self.ai_model = ai_model
         self.ha_url = ha_url
         self.ha_token = ha_token
+        self.file_base_path = file_base_path
 
 
 class DependencyModule(Module):
@@ -84,6 +88,13 @@ class DependencyModule(Module):
         """Provide HA use case as singleton."""
         _LOGGER.debug("Creating HA use case")
         return HAUseCaseImpl(ha_repository)
+    
+    @provider
+    @singleton
+    def provide_file_repository(self) -> FileRepository:
+        """Provide File repository as singleton."""
+        _LOGGER.debug("Creating File repository with base path: %s", self.config.file_base_path)
+        return FileRepositoryImpl(base_path=self.config.file_base_path)
 
 
 class DependencyContainer:
@@ -187,3 +198,8 @@ def get_ai_repository() -> AIRepository:
 def get_ha_repository() -> HARepository:
     """Get the HA repository."""
     return get(HARepository)
+
+
+def get_file_repository() -> FileRepository:
+    """Get the File repository."""
+    return get(FileRepository)
