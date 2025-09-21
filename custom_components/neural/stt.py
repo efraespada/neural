@@ -182,17 +182,19 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_get_engine(
     hass: HomeAssistant, config: dict[str, Any] | None = None
 ) -> NeuralSTTProvider:
-    """Set up Neural STT provider."""
-    model = config.get(CONF_STT_MODEL, DEFAULT_STT_MODEL)
-    api_key = config.get(CONF_STT_API_KEY, "")
+    """Create the Neural STT provider, merging stored config."""
+    # Start with stored config from hass.data
+    stored = hass.data.get("neural", {}).get("stt_config", {})
+    # Merge with provided config (UI may pass some values)
+    merged: dict[str, Any] = {**stored, **(config or {})}
 
-    stt_config = {
-        CONF_STT_API_KEY: api_key,
-        CONF_STT_MODEL: model,
-    }
-    if stt_config is None:
-        stt_config = {}
-    
-    _LOGGER.warning("Creating Neural STT provider with config: %s", stt_config)
-    return NeuralSTTProvider(hass, stt_config)
+    # Build safe config for logs
+    safe = dict(merged)
+    if safe.get("ai_api_key"):
+        safe["ai_api_key"] = "***"
+    if safe.get("stt_api_key"):
+        safe["stt_api_key"] = "***"
+    _LOGGER.warning("Creating Neural STT provider with config: %s", safe)
+
+    return NeuralSTTProvider(hass, merged)
 
