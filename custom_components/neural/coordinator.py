@@ -14,7 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 # Add core path to sys.path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
 
 from core.dependency_injection.providers import setup_dependencies, get_decision_use_case, get_do_actions_use_case, get_ha_use_case, clear_dependencies
 from .const import DOMAIN
