@@ -18,11 +18,12 @@ from .injector_container import (
 from ..auth.credential_manager import CredentialManager
 from ..managers.config_manager import ConfigManager
 from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
-from ..api.models.domain.config import AppConfig, LLMConfig, HAConfig
+from ..api.models.domain.config import AppConfig, LLMConfig, HAConfig, STTConfig
 
 from ..const import (
     DEFAULT_AI_URL,
     DEFAULT_AI_MODEL,
+    DEFAULT_STT_MODEL,
     DEFAULT_CONFIG_FILE_PATH,
     DEFAULT_WORK_MODE,
     DEFAULT_PERSONALITY,
@@ -130,6 +131,10 @@ async def create_default_config() -> None:
                 url=DEFAULT_HA_URL,
                 token=""  # Will be set by config flow or credential manager
             ),
+            stt=STTConfig(
+                model=DEFAULT_STT_MODEL,
+                api_key=""
+            ),
             work_mode=DEFAULT_WORK_MODE,
             personality=DEFAULT_PERSONALITY,
             microphone_enabled=DEFAULT_MICROPHONE_ENABLED,
@@ -164,8 +169,27 @@ async def _migrate_existing_config(config_manager: ConfigManager) -> None:
     # Ensure all required fields exist
     if 'ha' not in raw_config:
         raw_config['ha'] = {
-            "url": "http://homeassistant.local:8123",
+            "url": DEFAULT_HA_URL,
             "token": ""
+        }
+
+    if 'llm' not in raw_config:
+        raw_config['llm'] = {
+            "url": DEFAULT_AI_URL,
+            "model": DEFAULT_AI_MODEL,
+            "api_key": ""
+        }
+
+    if 'stt' not in raw_config:
+        raw_config['stt'] = {
+            "model": DEFAULT_STT_MODEL,
+            "api_key": ""
+        }
+
+    if 'stt' not in raw_config:
+        raw_config['stt'] = {
+            "model": DEFAULT_STT_MODEL,
+            "api_key": ""
         }
     
     if 'work_mode' not in raw_config:

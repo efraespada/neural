@@ -98,8 +98,6 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "ha_token_required"
             elif not ai_api_key:
                 errors["base"] = "ai_api_key_required"
-            elif not stt_api_key:
-                errors["base"] = "stt_api_key_required"
             else:
                 # Test tokens (basic validation)
                 if await self._check_configuration(
@@ -191,10 +189,28 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             ha_entities = await ha_use_case.get_all_entities()
             ha_connected = len(ha_entities) >= 0  # If we can get entities, HA is connected
             
+            # Test STT connection only if API key is provided
+            stt_connected = True  # Default to True (STT is optional)
+            if stt_api_key and stt_api_key.strip():
+                try:
+                    from .core.api.ai_client import AIClient
+                    stt_client = AIClient(
+                        ai_url=ai_url,
+                        ai_model=ai_model,
+                        api_key=ai_api_key,
+                        stt_api_key=stt_api_key
+                    )
+                    # Test STT connection by checking if Whisper is available
+                    stt_connected = await stt_client.is_whisper_available()
+                    _LOGGER.info("STT connection test: %s", stt_connected)
+                except Exception as stt_e:
+                    _LOGGER.warning("STT connection test failed: %s", stt_e)
+                    stt_connected = False
+            
             # Clean up dependencies
             clear_dependencies()
             
-            return ai_connected and ha_connected
+            return ai_connected and ha_connected and stt_connected
             
         except Exception as e:
             _LOGGER.error("Error testing tokens: %s", e)

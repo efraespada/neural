@@ -33,19 +33,3 @@ class AIRepository(ABC):
     async def is_model_ready(self) -> bool:
         """Check if the AI model is ready for use."""
         pass
-
-    # Whisper methods
-    @abstractmethod
-    async def transcribe_audio(self, audio_data: bytes, language: str = "es") -> str:
-        """Transcribe audio using Whisper."""
-        pass
-
-    @abstractmethod
-    async def is_whisper_available(self) -> bool:
-        """Check if Whisper is available."""
-        pass
-
-    @abstractmethod
-    async def get_whisper_supported_languages(self) -> List[str]:
-        """Get supported languages for Whisper."""
-        pass

@@ -21,7 +21,6 @@
     "error": {
       "ha_token_required": "Home Assistant token is required",
       "ai_api_key_required": "OpenRouter token is required",
-      "stt_api_key_required": "OpenAI API token is required for Speech-to-Text",
       "invalid_tokens": "Invalid tokens provided. Please check your credentials.",
       "cannot_connect": "Cannot connect to services",
       "unknown": "Unknown error occurred"
