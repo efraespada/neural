@@ -20,7 +20,7 @@ from ..managers.config_manager import ConfigManager
 from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
 from ..api.models.domain.config import AppConfig, LLMConfig, HAConfig
 
-from core.const import (
+from ..const import (
     DEFAULT_AI_URL,
     DEFAULT_AI_MODEL,
     DEFAULT_CONFIG_FILE_PATH,
