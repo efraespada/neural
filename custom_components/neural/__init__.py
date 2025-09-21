@@ -6,8 +6,8 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from neural.const import DOMAIN, PLATFORMS
-from neural.coordinator import NeuralDataUpdateCoordinator
+from .const import DOMAIN, PLATFORMS
+from .coordinator import NeuralDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

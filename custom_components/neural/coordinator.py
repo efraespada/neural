@@ -10,8 +10,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from neural.core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_decision_use_case, get_do_actions_use_case
-from neural.const import DOMAIN
+from .core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_decision_use_case, get_do_actions_use_case
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 

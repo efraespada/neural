@@ -10,7 +10,7 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import callback
 
-from neural.core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_ai_use_case, get_ha_use_case
+from .core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_ai_use_case, get_ha_use_case
 
 from .const import (
     DOMAIN,
