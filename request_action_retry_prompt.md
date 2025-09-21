@@ -100,6 +100,10 @@ Efra
 
 ------------
 
+{{ home info }}
+
+------------
+
 # Home Assistant data
 
 {{ home assistant data }}

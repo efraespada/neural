@@ -95,4 +95,4 @@ Cualquier consulta de presencia general (o sobre quier está en casa) puede ser 
 
 ------------
 
-No hagas nada todavia, simplemente contesta {"message": "OK", "actions":[]} si has comprendido todo.
+No hagas nada todavia, simplemente contesta {"message": "OK", "actions":[]} si has comprendido todo. No tomes decisiones sin tener información del estado de entidades y sensores de Home Assistant.

@@ -44,6 +44,8 @@ class HACommand(BaseCommand):
             return await self._show_info(ha_token=ha_token, **kwargs)
         elif action == "config":
             return await self._config(**kwargs)
+        elif action == "update-home-info":
+            return await self._update_home_info(**kwargs)
         else:
             print_error(f"Acción de Home Assistant desconocida: {action}")
             return False
@@ -471,6 +473,54 @@ class HACommand(BaseCommand):
 
         except Exception as e:
             print_error(f"Error en configuración de Home Assistant: {e}")
+            return False
+
+    async def _update_home_info(self, home_info: str = None, **kwargs) -> bool:
+        """Update home information."""
+        print_header("ACTUALIZAR INFORMACIÓN DEL HOGAR")
+        
+        try:
+            if not await self.setup():
+                return False
+            
+            # Get update home info use case
+            from core.dependency_injection.injector_container import get_container
+            container = get_container()
+            from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
+            update_home_info_use_case = container.get(UpdateHomeInfoUseCase)
+            
+            if home_info:
+                # Update home information
+                print_info("Actualizando información del hogar...")
+                success = await update_home_info_use_case.update_home_info(home_info)
+                
+                if success:
+                    print_success("✓ Información del hogar actualizada correctamente")
+                    print_info(f"Contenido guardado en: home_info.md")
+                    print_info(f"Longitud: {len(home_info)} caracteres")
+                    return True
+                else:
+                    print_error("✗ Error actualizando información del hogar")
+                    return False
+            else:
+                # Show current home information
+                print_info("Mostrando información actual del hogar...")
+                current_info = await update_home_info_use_case.get_home_info()
+                
+                if current_info:
+                    print_success("Información actual del hogar:")
+                    print_info("=" * 50)
+                    print(current_info)
+                    print_info("=" * 50)
+                    print_info(f"Longitud: {len(current_info)} caracteres")
+                else:
+                    print_info("No hay información del hogar configurada")
+                    print_info("Usa: neural ha update-home-info \"Tu información aquí\"")
+                
+                return True
+                
+        except Exception as e:
+            print_error(f"Error en actualización de información del hogar: {e}")
             return False
 
     def get_ha_use_case(self):

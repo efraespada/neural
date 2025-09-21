@@ -6,6 +6,7 @@ from pathlib import Path
 from core.use_cases.interfaces.decision_use_case import DecisionUseCase, DecisionResponse, DecisionAction
 from core.use_cases.interfaces.ai_use_case import AIUseCase
 from core.use_cases.interfaces.ha_use_case import HAUseCase
+from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
 from core.api.models.domain.ha_entity import HAEntity
 from core.constants import RELEVANT_DOMAINS
 
@@ -18,16 +19,18 @@ class DecisionUseCaseImpl(DecisionUseCase):
     Combines Home Assistant state with AI decision-making capabilities.
     """
     
-    def __init__(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase):
+    def __init__(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase, update_home_info_use_case: UpdateHomeInfoUseCase):
         """
         Initialize the DecisionUseCaseImpl.
         
         Args:
             ai_use_case: AI use case for sending prompts
             ha_use_case: Home Assistant use case for getting state
+            update_home_info_use_case: Update home info use case for getting home information
         """
         self._ai_use_case = ai_use_case
         self._ha_use_case = ha_use_case
+        self._update_home_info_use_case = update_home_info_use_case
         self._prompt_template = self._load_prompt_template()
     
     def _load_prompt_template(self) -> str:
@@ -735,9 +738,13 @@ No incluyas explicaciones ni texto fuera del JSON.
             # Get AI personality from configuration
             personality_instruction = await self._get_personality_instruction()
             
+            # Get home information
+            home_info = await self._get_home_info()
+            
             # Replace placeholders
             prompt = template.replace("{{ original_prompt }}", user_prompt)
-            prompt = prompt.replace("{{ home assistant data }}", ha_info)  # Use full HA info instead of filtered
+            prompt = prompt.replace("{{ home assistant data }}", ha_info)  # Include home info
+            prompt = prompt.replace("{{ home info }}", home_info)  # Include home info
             prompt = prompt.replace("{{ operation mode }}", mode)
             prompt = prompt.replace("{{ personality }}", personality_instruction)
             
@@ -1092,9 +1099,12 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
             # Get AI personality from configuration
             personality_instruction = await self._get_personality_instruction()
             
+            # Get home information
+            home_info = await self._get_home_info()
+            
             # Replace placeholders
             prompt = template.replace("{{ original_prompt }}", user_prompt)
-            prompt = prompt.replace("{{ home assistant data }}", ha_info)
+            prompt = prompt.replace("{{ home assistant data }}", ha_info + home_info)  # Include home info
             prompt = prompt.replace("{{ operation mode }}", mode)
             prompt = prompt.replace("{{ personality }}", personality_instruction)
             prompt = prompt.replace("{{ previous_error }}", previous_error)
@@ -1164,3 +1174,17 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
         except Exception as e:
             _LOGGER.error("Error in validate and retry: %s", e)
             return decision
+    
+    async def _get_home_info(self) -> str:
+        """Get home information for AI context."""
+        try:
+            home_info = await self._update_home_info_use_case.get_home_info()
+            
+            if home_info:
+                return f"\n\n# Información del Hogar\n\n{home_info}"
+            else:
+                return "\n\n# Información del Hogar\n\nNo hay información específica del hogar configurada."
+                
+        except Exception as e:
+            _LOGGER.warning("Could not get home information: %s", e)
+            return "\n\n# Información del Hogar\n\nInformación del hogar no disponible."

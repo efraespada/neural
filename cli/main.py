@@ -156,6 +156,10 @@ Examples:
     # HA config command
     config_ha_parser = ha_subparsers.add_parser("config", help="Manage HA configuration")
     config_ha_parser.add_argument("--mode", help="Set application mode (supervisor, client, standalone)")
+    
+    # HA update-home-info command
+    update_home_info_parser = ha_subparsers.add_parser("update-home-info", help="Update home information")
+    update_home_info_parser.add_argument("home_info", nargs="?", help="Home information in markdown format")
 
     # Authentication command
     auth_parser = subparsers.add_parser("auth", help="Home Assistant authentication")
@@ -280,6 +284,13 @@ async def main():
                 success = await command.execute(
                     args.action,
                     mode=getattr(args, 'mode', None),
+                    interactive=not args.non_interactive,
+                    **ha_params
+                )
+            elif args.action == "update-home-info":
+                success = await command.execute(
+                    args.action,
+                    home_info=getattr(args, 'home_info', None),
                     interactive=not args.non_interactive,
                     **ha_params
                 )

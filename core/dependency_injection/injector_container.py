@@ -16,10 +16,12 @@ from ..use_cases.interfaces.ai_use_case import AIUseCase
 from ..use_cases.interfaces.ha_use_case import HAUseCase
 from ..use_cases.interfaces.config_use_case import ConfigUseCase
 from ..use_cases.interfaces.decision_use_case import DecisionUseCase
+from ..use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
 from ..use_cases.implementations.ai_use_case_impl import AIUseCaseImpl
 from ..use_cases.implementations.ha_use_case_impl import HAUseCaseImpl
 from ..use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
 from ..use_cases.implementations.decision_use_case_impl import DecisionUseCaseImpl
+from ..use_cases.implementations.update_home_info_use_case_impl import UpdateHomeInfoUseCaseImpl
 from ..managers.config_manager import ConfigManager
 
 T = TypeVar("T")
@@ -125,10 +127,17 @@ class DependencyModule(Module):
     
     @provider
     @singleton
-    def provide_decision_use_case(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase) -> DecisionUseCase:
+    def provide_decision_use_case(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase, update_home_info_use_case: UpdateHomeInfoUseCase) -> DecisionUseCase:
         """Provide Decision use case as singleton."""
         _LOGGER.debug("Creating Decision use case")
-        return DecisionUseCaseImpl(ai_use_case, ha_use_case)
+        return DecisionUseCaseImpl(ai_use_case, ha_use_case, update_home_info_use_case)
+    
+    @provider
+    @singleton
+    def provide_update_home_info_use_case(self) -> UpdateHomeInfoUseCase:
+        """Provide Update Home Info use case as singleton."""
+        _LOGGER.debug("Creating Update Home Info use case")
+        return UpdateHomeInfoUseCaseImpl()
 
 
 class DependencyContainer:
