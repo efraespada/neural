@@ -343,6 +343,7 @@ class AIClient(BaseClient):
                 audio_file.name = "audio.wav"
             
             # Transcribe using OpenAI Whisper in executor
+            import asyncio
             transcription = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: self._whisper_client.audio.transcriptions.create(
