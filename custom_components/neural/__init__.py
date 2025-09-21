@@ -42,18 +42,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Set up STT engine (only once)
     if not hass.data[DOMAIN].get("stt_setup"):
-        from .stt import async_get_engine
-        # Register STT engine with configuration
-        from homeassistant.components.stt import async_register_engine
-        stt_config = {
-            "ai_url": entry.data.get("ai_url", "https://openrouter.ai/api/v1"),
-            "ai_api_key": entry.data.get("ai_api_key", ""),
-            "ai_model": entry.data.get("ai_model", "openai/gpt-oss-20b"),
-            "stt_model": entry.data.get("stt_model", "whisper-1"),
-            "stt_api_key": entry.data.get("stt_api_key", "")
-        }
-        await async_register_engine(hass, DOMAIN, async_get_engine, stt_config)
-        hass.data[DOMAIN]["stt_setup"] = True
+        try:
+            # Store STT configuration for later use
+            stt_config = {
+                "ai_url": entry.data.get("ai_url", "https://openrouter.ai/api/v1"),
+                "ai_api_key": entry.data.get("ai_api_key", ""),
+                "ai_model": entry.data.get("ai_model", "openai/gpt-oss-20b"),
+                "stt_model": entry.data.get("stt_model", "whisper-1"),
+                "stt_api_key": entry.data.get("stt_api_key", "")
+            }
+            hass.data[DOMAIN]["stt_config"] = stt_config
+            hass.data[DOMAIN]["stt_setup"] = True
+            _LOGGER.info("STT configuration stored successfully")
+        except Exception as e:
+            _LOGGER.error("Error setting up STT configuration: %s", e)
+            # Continue without STT if setup fails
 
     return True
 

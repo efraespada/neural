@@ -19,6 +19,7 @@ from homeassistant.components.stt import (
     SpeechResult,
     SpeechResultState,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -145,6 +146,16 @@ class NeuralSTTProvider(Provider):
         if self._session:
             await self._session.close()
             self._session = None
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up STT from a config entry."""
+    return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload STT config entry."""
+    return True
 
 
 async def async_get_engine(

@@ -18,8 +18,8 @@ class NeuralIntentHandler(IntentHandler):
 
     def __init__(self, coordinator) -> None:
         """Initialize the intent handler."""
-        self.coordinator = coordinator
         super().__init__(INTENT_NEURAL_COMMAND)
+        self.coordinator = coordinator
 
     async def async_handle(self, intent_obj: intent.Intent) -> IntentResponse:
         """Handle the intent."""
