@@ -20,7 +20,8 @@ _LOGGER.warning("Package file: %s", pathlib.Path(__file__).resolve())
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import callback
 
-from custom_components.neural.core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_ai_use_case, get_ha_use_case
+from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
+from .core import get_ai_use_case, get_ha_use_case
 
 from .const import (
     DOMAIN,
