@@ -18,17 +18,24 @@ from homeassistant.components.stt import (
     SpeechMetadata,
     SpeechResult,
     SpeechResultState,
-    async_register_provider,
     async_unregister_provider,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN
 from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
 from .core.dependency_injection.injector_container import get_audio_use_case
 
 _LOGGER = logging.getLogger(__name__)
+
+from .const import (
+    CONF_STT_MODEL,
+    CONF_STT_API_KEY,
+)
+
+from .core.const import (
+    DEFAULT_STT_MODEL,
+)
 
 
 class NeuralSTTProvider(Provider):
@@ -141,23 +148,20 @@ class NeuralSTTProvider(Provider):
             self._session = None
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities) -> bool:
+async def async_get_engine(
+    hass: HomeAssistant, config: dict, discovery_info: dict | None = None
+) -> NeuralSTTProvider:
     """Set up STT from a config entry."""
-    stt_config = hass.data.get(DOMAIN, {}).get("stt_config", {})
-    
-    # Create and register the STT provider
-    provider = await async_get_engine(hass, stt_config)
-    async_register_provider(hass, provider)
-    
-    return True
+    model = config.get(CONF_STT_MODEL, DEFAULT_STT_MODEL)
+    api_key = config.get(CONF_STT_API_KEY, "")
 
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload STT config entry."""
-    # Unregister the STT provider
-    async_unregister_provider(hass, DOMAIN)
+    stt_config = {
+        CONF_STT_API_KEY: api_key,
+        CONF_STT_MODEL: model,
+    }
     
-    return True
+    # Create and register the STT provider    
+    return await async_get_engine(hass, stt_config)
 
 
 async def async_get_engine(
