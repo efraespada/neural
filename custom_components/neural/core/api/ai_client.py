@@ -1,11 +1,12 @@
 """AI client for OpenRouter integration."""
 
 import asyncio
-import json
 import logging
 from typing import Any, Dict, List, Optional
+from io import BytesIO
 
 import aiohttp
+import openai
 
 from .base_client import BaseClient
 
@@ -15,12 +16,14 @@ _LOGGER = logging.getLogger(__name__)
 class AIClient(BaseClient):
     """AI client for OpenRouter integration."""
 
-    def __init__(self, ai_url: str = "https://openrouter.ai/api/v1", ai_model: str = "anthropic/claude-3.5-sonnet", api_key: str = None) -> None:
+    def __init__(self, ai_url: str, ai_model: str, api_key: str, stt_api_key: str) -> None:
         """Initialize the AI client."""
         super().__init__()
         self._ai_url = ai_url
         self._ai_model = ai_model
         self._api_key = api_key
+        self._stt_api_key = stt_api_key
+        self._whisper_client: Optional[openai.OpenAI] = None
         self._headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}" if api_key else None
@@ -284,4 +287,78 @@ class AIClient(BaseClient):
         if self._session:
             await self._session.close()
             self._session = None
+        if self._whisper_client:
+            self._whisper_client = None
         _LOGGER.info("Disconnected from OpenRouter service")
+
+    # Whisper methods
+    async def transcribe_audio(self, audio_data: bytes, language: str = "es") -> str:
+        """Transcribe audio using OpenAI Whisper."""
+        try:
+            if not self._whisper_client:
+                if not self._stt_api_key:
+                    raise ValueError("STT API key is required for audio transcription")
+                self._whisper_client = openai.OpenAI(api_key=self._stt_api_key)
+            
+            _LOGGER.info("Transcribing audio with Whisper, language: %s", language)
+            
+            # Create a file-like object from audio data
+            audio_file = BytesIO(audio_data)
+            audio_file.name = "audio.wav"
+            
+            # Transcribe using OpenAI Whisper
+            transcription = self._whisper_client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file,
+                language=language,
+                response_format="json"
+            )
+            
+            result_text = transcription.text
+            _LOGGER.info("Whisper transcription successful: %s", result_text[:50] + "..." if len(result_text) > 50 else result_text)
+            
+            return result_text
+            
+        except Exception as e:
+            _LOGGER.error("Failed to transcribe audio with Whisper: %s", e)
+            raise
+
+    async def is_whisper_available(self) -> bool:
+        """Check if Whisper service is available."""
+        try:
+            if not self._stt_api_key:
+                return False
+            
+            if not self._whisper_client:
+                self._whisper_client = openai.OpenAI(api_key=self._stt_api_key)
+            
+            return self._whisper_client is not None
+            
+        except Exception as e:
+            _LOGGER.error("Whisper service not available: %s", e)
+            return False
+
+    async def get_whisper_supported_languages(self) -> List[str]:
+        """Get list of supported languages for Whisper."""
+        return [
+            "es",  # Spanish
+            "en",  # English
+            "fr",  # French
+            "de",  # German
+            "it",  # Italian
+            "pt",  # Portuguese
+            "ru",  # Russian
+            "ja",  # Japanese
+            "ko",  # Korean
+            "zh",  # Chinese
+            "ar",  # Arabic
+            "hi",  # Hindi
+            "nl",  # Dutch
+            "sv",  # Swedish
+            "no",  # Norwegian
+            "da",  # Danish
+            "fi",  # Finnish
+            "pl",  # Polish
+            "tr",  # Turkish
+            "he",  # Hebrew
+        ]

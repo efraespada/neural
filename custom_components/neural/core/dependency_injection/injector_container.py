@@ -9,21 +9,25 @@ from ..api.ha_client import HAClient
 from ..repositories.interfaces.ai_repository import AIRepository
 from ..repositories.interfaces.ha_repository import HARepository
 from ..repositories.interfaces.file_repository import FileRepository
+from ..repositories.interfaces.audio_repository import AudioRepository
 from ..repositories.implementations.ai_repository_impl import AIRepositoryImpl
 from ..repositories.implementations.ha_repository_impl import HARepositoryImpl
 from ..repositories.implementations.file_repository_impl import FileRepositoryImpl
+from ..repositories.implementations.audio_repository_impl import AudioRepositoryImpl
 from ..use_cases.interfaces.ai_use_case import AIUseCase
 from ..use_cases.interfaces.ha_use_case import HAUseCase
 from ..use_cases.interfaces.config_use_case import ConfigUseCase
 from ..use_cases.interfaces.decision_use_case import DecisionUseCase
 from ..use_cases.interfaces.do_actions_use_case import DoActionsUseCase
 from ..use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
+from ..use_cases.interfaces.audio_use_case import AudioUseCase
 from ..use_cases.implementations.ai_use_case_impl import AIUseCaseImpl
 from ..use_cases.implementations.ha_use_case_impl import HAUseCaseImpl
 from ..use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
 from ..use_cases.implementations.decision_use_case_impl import DecisionUseCaseImpl
 from ..use_cases.implementations.do_actions_use_case_impl import DoActionsUseCaseImpl
 from ..use_cases.implementations.update_home_info_use_case_impl import UpdateHomeInfoUseCaseImpl
+from ..use_cases.implementations.audio_use_case_impl import AudioUseCaseImpl
 from ..managers.config_manager import ConfigManager
 
 T = TypeVar("T")
@@ -42,15 +46,17 @@ class Configuration:
     def __init__(self, 
                  ai_url: str = DEFAULT_AI_URL,
                  ai_model: str = DEFAULT_AI_MODEL,
-                 ai_api_key: Optional[str] = None,
+                 ai_api_key: str = "",
+                 stt_api_key: str = "",
                  ha_url: str = DEFAULT_HA_URL,
-                 ha_token: Optional[str] = None,
+                 ha_token: str = "",
                  file_base_path: str = ".",
                  config_file_path: str = DEFAULT_CONFIG_FILE_PATH):
         """Initialize configuration."""
         self.ai_url = ai_url
         self.ai_model = ai_model
         self.ai_api_key = ai_api_key
+        self.stt_api_key = stt_api_key
         self.ha_url = ha_url
         self.ha_token = ha_token
         self.file_base_path = file_base_path
@@ -74,7 +80,8 @@ class DependencyModule(Module):
         return AIClient(
             ai_url=self.config.ai_url, 
             ai_model=self.config.ai_model,
-            api_key=getattr(self.config, 'ai_api_key', None)
+            api_key=self.config.ai_api_key,
+            stt_api_key=self.config.stt_api_key
         )
     
     @provider
@@ -97,6 +104,13 @@ class DependencyModule(Module):
         """Provide HA repository as singleton."""
         _LOGGER.debug("Creating HA repository")
         return HARepositoryImpl(ha_client)
+    
+    @provider
+    @singleton
+    def provide_audio_repository(self, ai_client: AIClient) -> AudioRepository:
+        """Provide Audio repository as singleton."""
+        _LOGGER.debug("Creating Audio repository")
+        return AudioRepositoryImpl(ai_client)
     
     @provider
     @singleton
@@ -153,6 +167,13 @@ class DependencyModule(Module):
         """Provide Update Home Info use case as singleton."""
         _LOGGER.debug("Creating Update Home Info use case")
         return UpdateHomeInfoUseCaseImpl()
+    
+    @provider
+    @singleton
+    def provide_audio_use_case(self, audio_repository: AudioRepository) -> AudioUseCase:
+        """Provide Audio use case as singleton."""
+        _LOGGER.debug("Creating Audio use case")
+        return AudioUseCaseImpl(audio_repository)
 
 
 class DependencyContainer:
@@ -281,3 +302,8 @@ def get_decision_use_case() -> DecisionUseCase:
 def get_do_actions_use_case() -> DoActionsUseCase:
     """Get the Do Actions use case."""
     return get(DoActionsUseCase)
+
+
+def get_audio_use_case() -> AudioUseCase:
+    """Get the Audio use case."""
+    return get(AudioUseCase)

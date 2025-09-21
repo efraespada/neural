@@ -5,25 +5,43 @@
 # Example configuration for Assist pipeline
 # Add this to your configuration.yaml:
 
+assist_pipeline:
+  - name: "Neural AI"
+    language: "es"
+    conversation_engine: "conversation"
+    conversation_language: "es"
+    stt_engine: "neural"
+    stt_language: "es"
+    tts_engine: "cloud"
+    tts_language: "es"
+    tts_voice: "es-ES-Standard-A"
+    wake_word_engine: "openwakeword"
+    wake_word_id: "neural"
+
+# Alternative configuration for local TTS only:
 # assist_pipeline:
-#   - name: "Neural AI"
+#   - name: "Neural AI Local TTS"
 #     language: "es"
 #     conversation_engine: "conversation"
 #     conversation_language: "es"
-#     stt_engine: "cloud"
+#     stt_engine: "neural"  # Still uses Neural STT with OpenRouter
 #     stt_language: "es"
-#     tts_engine: "cloud"
+#     tts_engine: "piper"    # Local TTS
 #     tts_language: "es"
-#     tts_voice: "es-ES-Standard-A"
+#     tts_voice: "es-carlfm-x-low"
 #     wake_word_engine: "openwakeword"
-#     wake_word_id: "neural_ai"
+#     wake_word_id: "neural"
 
-# Or use the UI to configure the pipeline with these settings:
-# - Language: Spanish (es)
-# - STT Engine: Cloud (or local if available)
-# - TTS Engine: Cloud (or local if available)
-# - Wake Word: openWakeWord (if installed)
-# - Conversation Engine: conversation (default)
-
-# The Neural AI integration will automatically register as an intent handler
-# and will process commands through the Assist pipeline.
+# Configuration steps:
+# 1. Install required integrations:
+#    - Whisper (for local STT)
+#    - Piper (for local TTS)
+#    - OpenWakeWord (for wake word detection)
+#
+# 2. Configure the pipeline in Home Assistant UI:
+#    - Go to Settings > Assistants
+#    - Create a new assistant named "Hal"
+#    - Configure with the settings above
+#
+# 3. The Neural AI integration will automatically register as an intent handler
+#    and will process commands through the Assist pipeline.

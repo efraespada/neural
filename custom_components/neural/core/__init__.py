@@ -10,6 +10,7 @@ from .dependency_injection.injector_container import (
     get_decision_use_case,
     get_do_actions_use_case,
     get_config_use_case,
+    get_audio_use_case,
 )
 
 __all__ = [
@@ -21,4 +22,5 @@ __all__ = [
     "get_decision_use_case",
     "get_do_actions_use_case",
     "get_config_use_case",
+    "get_audio_use_case",
 ]

@@ -6,13 +6,6 @@ DOMAIN = "neural"
 
 LOGGER = logging.getLogger(__package__)
 
-# Configuration keys
-CONF_SCAN_INTERVAL = "scan_interval"
-CONF_AI_URL = "ai_url"
-CONF_AI_MODEL = "ai_model"
-CONF_HA_URL = "ha_url"
-CONF_HA_TOKEN = "ha_token"
-
 # Entity configuration
 ENTITY_NAMES = {
     "ai_chat": "Neural AI Chat",
@@ -58,6 +51,7 @@ PERSONALITIES = [
 # Default values
 DEFAULT_WORK_MODE = WORK_MODE_ASSISTANT
 DEFAULT_PERSONALITY = PERSONALITY_HAL9000
+DEFAULT_STT_MODEL = "whisper-1"
 DEFAULT_AI_MODEL = "openai/gpt-oss-20b"
 DEFAULT_AI_URL = "https://openrouter.ai/api/v1"
 DEFAULT_MICROPHONE_ENABLED = True

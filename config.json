@@ -2,8 +2,12 @@
   "llm": {
     "url": "https://openrouter.ai/api/v1",
     "model": "openai/gpt-oss-20b",
-    "api_key": "sk-or-v1-",
+    "api_key": "sk-or-v1-23626ad797",
     "personality": "hal9000"
+  },
+  "stt": {
+    "model": "whisper",
+    "api_key": ""
   },
   "ha": {
     "url": "http://homeassistant.local:8123",

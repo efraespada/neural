@@ -24,13 +24,15 @@ from .core.dependency_injection.providers import setup_dependencies, clear_depen
 from .core import get_ai_use_case, get_ha_use_case
 from .core.managers.config_manager import ConfigManager
 from .core.repositories.implementations.file_repository_impl import FileRepositoryImpl
-from .core.api.models.domain.config import AppConfig, LLMConfig, HAConfig
+from .core.api.models.domain.config import AppConfig, LLMConfig, HAConfig, STTConfig
 from .core.const import (
     DEFAULT_CONFIG_FILE_PATH,
     DEFAULT_WORK_MODE,
     DEFAULT_PERSONALITY,
+    DEFAULT_HA_URL,
     DEFAULT_AI_URL,
     DEFAULT_AI_MODEL,
+    DEFAULT_STT_MODEL,
     DEFAULT_MICROPHONE_ENABLED,
     DEFAULT_VOICE_LANGUAGE,
     DEFAULT_VOICE_TIMEOUT,
@@ -46,10 +48,13 @@ from .const import (
     CONF_AI_MODEL,
     CONF_AI_URL,
     CONF_HA_URL,
+    CONF_STT_MODEL,
+    CONF_STT_API_KEY,
     CONF_MICROPHONE_ENABLED,
     CONF_VOICE_LANGUAGE,
     CONF_VOICE_TIMEOUT,
     AI_MODELS, 
+    STT_MODELS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -81,6 +86,8 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             ai_api_key = user_input[CONF_AI_API_KEY].strip()
             ha_url = user_input[CONF_HA_URL].strip()
             ha_token = user_input[CONF_HA_TOKEN].strip()
+            stt_model = user_input[CONF_STT_MODEL].strip()
+            stt_api_key = user_input[CONF_STT_API_KEY].strip()
             work_mode = user_input[CONF_WORK_MODE].strip()
             personality = user_input[CONF_PERSONALITY].strip()
             microphone_enabled = user_input[CONF_MICROPHONE_ENABLED]
@@ -91,6 +98,8 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "ha_token_required"
             elif not ai_api_key:
                 errors["base"] = "ai_api_key_required"
+            elif not stt_api_key:
+                errors["base"] = "stt_api_key_required"
             else:
                 # Test tokens (basic validation)
                 if await self._check_configuration(
@@ -99,6 +108,8 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                     ai_api_key,
                     ha_url,
                     ha_token,
+                    stt_model,
+                    stt_api_key,
                     work_mode,
                     personality,
                     microphone_enabled,
@@ -119,11 +130,13 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_HA_URL): str,
+                    vol.Required(CONF_HA_URL, default=DEFAULT_HA_URL): str,
                     vol.Required(CONF_HA_TOKEN): str,
                     vol.Required(CONF_AI_URL, default=DEFAULT_AI_URL): str,
                     vol.Required(CONF_AI_MODEL, default=DEFAULT_AI_MODEL): vol.In(AI_MODELS),
                     vol.Required(CONF_AI_API_KEY): str,
+                    vol.Required(CONF_STT_MODEL, default=DEFAULT_STT_MODEL): vol.In(STT_MODELS),
+                    vol.Required(CONF_STT_API_KEY): str,
                     vol.Required(CONF_WORK_MODE, default=DEFAULT_WORK_MODE): vol.In(WORK_MODES),
                     vol.Required(CONF_PERSONALITY, default=DEFAULT_PERSONALITY): vol.In(PERSONALITIES),
                     vol.Required(CONF_MICROPHONE_ENABLED, default=DEFAULT_MICROPHONE_ENABLED): bool,
@@ -136,7 +149,7 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def _check_configuration(self, ai_url: str, ai_model: str, ai_api_key: str, ha_url: str, ha_token: str, work_mode: str, personality: str, microphone_enabled: bool, voice_language: str, voice_timeout: int) -> bool:
+    async def _check_configuration(self, ai_url: str, ai_model: str, ai_api_key: str, ha_url: str, ha_token: str, stt_model: str, stt_api_key: str, work_mode: str, personality: str, microphone_enabled: bool, voice_language: str, voice_timeout: int) -> bool:
         """Test if the provided tokens are valid using core use cases."""
         try:
             # Create temporary config
@@ -149,6 +162,10 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                 ha=HAConfig(
                     url=ha_url,
                     token=ha_token
+                ),
+                stt=STTConfig(
+                    model=stt_model,
+                    api_key=stt_api_key
                 ),
                 work_mode=work_mode,
                 personality=personality,
@@ -197,13 +214,17 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             # Create configuration from user input
             config = AppConfig(
                 llm=LLMConfig(
-                    url="https://openrouter.ai/api/v1",
+                    url=user_input.get(CONF_AI_URL, DEFAULT_AI_URL),
                     model=user_input.get(CONF_AI_MODEL, DEFAULT_AI_MODEL),
                     api_key=user_input.get(CONF_AI_API_KEY, "")
                 ),
                 ha=HAConfig(
-                    url="http://homeassistant.local:8123",
+                    url=user_input.get(CONF_HA_URL, DEFAULT_HA_URL),
                     token=user_input.get(CONF_HA_TOKEN, "")
+                ),
+                stt=STTConfig(
+                    model=user_input.get(CONF_STT_MODEL, DEFAULT_STT_MODEL),
+                    api_key=user_input.get(CONF_STT_API_KEY, "")
                 ),
                 work_mode=user_input.get(CONF_WORK_MODE, DEFAULT_WORK_MODE),
                 personality=user_input.get(CONF_PERSONALITY, DEFAULT_PERSONALITY),
@@ -239,6 +260,41 @@ class NeuralOptionsFlowHandler(OptionsFlow):
             step_id="init",
             data_schema=vol.Schema(
                 {
+                    # Home Assistant Configuration
+                    vol.Required(
+                        CONF_HA_URL,
+                        default=self.config_entry.data.get(CONF_HA_URL, DEFAULT_HA_URL),
+                    ): str,
+                    vol.Required(
+                        CONF_HA_TOKEN,
+                        default=self.config_entry.data.get(CONF_HA_TOKEN, ""),
+                    ): str,
+                    
+                    # LLM/AI Configuration
+                    vol.Required(
+                        CONF_AI_URL,
+                        default=self.config_entry.data.get(CONF_AI_URL, DEFAULT_AI_URL),
+                    ): str,
+                    vol.Required(
+                        CONF_AI_MODEL,
+                        default=self.config_entry.data.get(CONF_AI_MODEL, DEFAULT_AI_MODEL),
+                    ): vol.In(AI_MODELS),
+                    vol.Required(
+                        CONF_AI_API_KEY,
+                        default=self.config_entry.data.get(CONF_AI_API_KEY, ""),
+                    ): str,
+                    
+                    # STT Configuration
+                    vol.Required(
+                        CONF_STT_MODEL,
+                        default=self.config_entry.data.get(CONF_STT_MODEL, DEFAULT_STT_MODEL),
+                    ): vol.In(STT_MODELS),
+                    vol.Required(
+                        CONF_STT_API_KEY,
+                        default=self.config_entry.data.get(CONF_STT_API_KEY, ""),
+                    ): str,
+                    
+                    # AI Behavior Configuration
                     vol.Required(
                         CONF_WORK_MODE,
                         default=self.config_entry.data.get(CONF_WORK_MODE, DEFAULT_WORK_MODE),
@@ -247,10 +303,8 @@ class NeuralOptionsFlowHandler(OptionsFlow):
                         CONF_PERSONALITY,
                         default=self.config_entry.data.get(CONF_PERSONALITY, DEFAULT_PERSONALITY),
                     ): vol.In(PERSONALITIES),
-                    vol.Required(
-                        CONF_AI_MODEL,
-                        default=self.config_entry.data.get(CONF_AI_MODEL, DEFAULT_AI_MODEL),
-                    ): vol.In(AI_MODELS),
+                    
+                    # Voice Configuration
                     vol.Required(
                         CONF_MICROPHONE_ENABLED,
                         default=self.config_entry.data.get(CONF_MICROPHONE_ENABLED, DEFAULT_MICROPHONE_ENABLED),

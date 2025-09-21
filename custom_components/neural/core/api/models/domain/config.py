@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
 from datetime import datetime
 from ....const import DEFAULT_HA_URL
+from .stt import STTConfig
 
 
 @dataclass
@@ -63,6 +64,7 @@ class AppConfig:
     """Configuración principal de la aplicación."""
     llm: LLMConfig
     ha: HAConfig
+    stt: STTConfig
     work_mode: str = "assistant"
     personality: str = "jarvis"
     microphone_enabled: bool = True
@@ -76,6 +78,7 @@ class AppConfig:
         return {
             "llm": self.llm.to_dict(),
             "ha": self.ha.to_dict(),
+            "stt": self.stt.to_dict(),
             "work_mode": self.work_mode,
             "personality": self.personality,
             "microphone_enabled": self.microphone_enabled,
@@ -107,6 +110,7 @@ class AppConfig:
         return cls(
             llm=LLMConfig.from_dict(data.get("llm", {})),
             ha=HAConfig.from_dict(data.get("ha", {})),
+            stt=STTConfig.from_dict(data.get("stt", {})),
             work_mode=data.get("work_mode", "assistant"),
             personality=data.get("personality", "jarvis"),
             microphone_enabled=data.get("microphone_enabled", True),

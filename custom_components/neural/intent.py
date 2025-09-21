@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.intent import IntentHandler, IntentResponse
 from homeassistant.helpers import intent
 
-from .const import DOMAIN
+from .const import DOMAIN, INTENT_NEURAL_COMMAND
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class NeuralIntentHandler(IntentHandler):
     def __init__(self, coordinator) -> None:
         """Initialize the intent handler."""
         self.coordinator = coordinator
-        super().__init__(intent.INTENT_NEURAL_COMMAND)
+        super().__init__(INTENT_NEURAL_COMMAND)
 
     async def async_handle(self, intent_obj: intent.Intent) -> IntentResponse:
         """Handle the intent."""
@@ -63,7 +63,7 @@ async def async_unload_intents(hass: HomeAssistant) -> None:
     """Unload Neural AI intents."""
     try:
         # Unregister the intent handler
-        intent.async_unregister(hass, intent.INTENT_NEURAL_COMMAND)
+        intent.async_unregister(hass, INTENT_NEURAL_COMMAND)
         
         _LOGGER.info("Neural AI intents unloaded successfully")
         
