@@ -7,6 +7,16 @@ from typing import Any
 
 import voluptuous as vol
 
+import os
+import sys
+import pathlib
+import logging
+
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.warning("PWD: %s", os.getcwd())
+_LOGGER.warning("sys.path: %s", sys.path)
+_LOGGER.warning("Package file: %s", pathlib.Path(__file__).resolve())
+
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import callback
 
