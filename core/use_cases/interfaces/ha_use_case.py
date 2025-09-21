@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
+from core.api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
 
 
 class HAUseCase(ABC):

@@ -6,10 +6,10 @@ import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock
 
-from use_cases.interfaces.config_use_case import ConfigUseCase
-from use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
-from managers.config_manager import ConfigManager
-from api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
+from core.use_cases.interfaces.config_use_case import ConfigUseCase
+from core.use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
+from core.managers.config_manager import ConfigManager
+from core.api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
 
 
 class TestConfigUseCaseInterface:
@@ -25,7 +25,7 @@ class TestConfigUseCaseInterface:
         """Fixture para AppConfig de ejemplo."""
         return AppConfig(
             mode="supervisor",
-            llm=LLMConfig(ip="192.168.11.89", model="openai/gpt-oss-20b"),
+            llm=LLMConfig(url="https://openrouter.ai/api/v1", model="openai/gpt-oss-20b"),
             created_at=datetime.now(),
             updated_at=datetime.now()
         )
@@ -83,17 +83,17 @@ class TestConfigUseCaseInterface:
         mock_config_use_case.update_mode.assert_called_once_with("client")
 
     @pytest.mark.asyncio
-    async def test_update_llm_ip_success(self, mock_config_use_case):
-        """Test update_llm_ip exitoso."""
+    async def test_update_llm_url_success(self, mock_config_use_case):
+        """Test update_llm_url exitoso."""
         # Arrange
-        mock_config_use_case.update_llm_ip.return_value = True
+        mock_config_use_case.update_llm_url.return_value = True
         
         # Act
-        result = await mock_config_use_case.update_llm_ip("192.168.1.100")
+        result = await mock_config_use_case.update_llm_url("192.168.1.100")
         
         # Assert
         assert result is True
-        mock_config_use_case.update_llm_ip.assert_called_once_with("192.168.1.100")
+        mock_config_use_case.update_llm_url.assert_called_once_with("192.168.1.100")
 
     @pytest.mark.asyncio
     async def test_update_llm_model_success(self, mock_config_use_case):
@@ -178,7 +178,7 @@ class TestConfigUseCaseInterface:
     async def test_get_config_summary_success(self, mock_config_use_case):
         """Test get_config_summary exitoso."""
         # Arrange
-        summary = {"mode": "supervisor", "llm": {"ip": "192.168.11.89", "model": "openai/gpt-oss-20b"}}
+        summary = {"mode": "supervisor", "llm": {"ip": "https://openrouter.ai/api/v1", "model": "openai/gpt-oss-20b"}}
         mock_config_use_case.get_config_summary.return_value = summary
         
         # Act
@@ -207,7 +207,7 @@ class TestConfigUseCaseImpl:
         """Fixture para AppConfig de ejemplo."""
         return AppConfig(
             mode="supervisor",
-            llm=LLMConfig(ip="192.168.11.89", model="openai/gpt-oss-20b"),
+            llm=LLMConfig(url="https://openrouter.ai/api/v1", model="openai/gpt-oss-20b"),
             created_at=datetime.now(),
             updated_at=datetime.now()
         )
@@ -279,24 +279,24 @@ class TestConfigUseCaseImpl:
             await config_use_case.update_mode("   ")
 
     @pytest.mark.asyncio
-    async def test_update_llm_ip_success(self, config_use_case, mock_config_manager):
-        """Test update_llm_ip exitoso."""
+    async def test_update_llm_url_success(self, config_use_case, mock_config_manager):
+        """Test update_llm_url exitoso."""
         # Arrange
         mock_config_manager.update_config.return_value = True
         
         # Act
-        result = await config_use_case.update_llm_ip("192.168.1.100")
+        result = await config_use_case.update_llm_url("192.168.1.100")
         
         # Assert
         assert result is True
-        mock_config_manager.update_config.assert_called_once_with(llm_ip="192.168.1.100")
+        mock_config_manager.update_config.assert_called_once_with(llm_url="192.168.1.100")
 
     @pytest.mark.asyncio
-    async def test_update_llm_ip_empty(self, config_use_case):
-        """Test update_llm_ip con IP vacía."""
+    async def test_update_llm_url_empty(self, config_use_case):
+        """Test update_llm_url con IP vacía."""
         # Act & Assert
-        with pytest.raises(ValueError, match="LLM IP cannot be empty"):
-            await config_use_case.update_llm_ip("")
+        with pytest.raises(ValueError, match="LLM URL cannot be empty"):
+            await config_use_case.update_llm_url("")
 
     @pytest.mark.asyncio
     async def test_update_llm_model_success(self, config_use_case, mock_config_manager):
@@ -329,13 +329,13 @@ class TestConfigUseCaseImpl:
         
         # Assert
         assert result is True
-        mock_config_manager.update_config.assert_called_once_with(llm_ip="192.168.1.100", llm_model="new-model")
+        mock_config_manager.update_config.assert_called_once_with(llm_url="192.168.1.100", llm_model="new-model", llm_api_key=None, llm_personality=None)
 
     @pytest.mark.asyncio
     async def test_update_llm_config_empty_ip(self, config_use_case):
         """Test update_llm_config con IP vacía."""
         # Act & Assert
-        with pytest.raises(ValueError, match="LLM IP cannot be empty"):
+        with pytest.raises(ValueError, match="LLM URL cannot be empty"):
             await config_use_case.update_llm_config("", "new-model")
 
     @pytest.mark.asyncio
@@ -411,7 +411,7 @@ class TestConfigUseCaseImpl:
         
         # Assert
         assert result["mode"] == "supervisor"
-        assert result["llm"]["ip"] == "192.168.11.89"
+        assert result["llm"]["url"] == "https://openrouter.ai/api/v1"
         assert result["llm"]["model"] == "openai/gpt-oss-20b"
         assert result["is_loaded"] is True
         assert result["config_file"] == "config.json"
@@ -426,12 +426,12 @@ class TestConfigUseCaseImpl:
         
         # Act
         await config_use_case.update_mode("  client  ")
-        await config_use_case.update_llm_ip("  192.168.1.100  ")
+        await config_use_case.update_llm_url("  192.168.1.100  ")
         await config_use_case.update_llm_model("  new-model  ")
         
         # Assert
         mock_config_manager.update_config.assert_any_call(mode="client")
-        mock_config_manager.update_config.assert_any_call(llm_ip="192.168.1.100")
+        mock_config_manager.update_config.assert_any_call(llm_url="192.168.1.100")
         mock_config_manager.update_config.assert_any_call(llm_model="new-model")
 
     @pytest.mark.asyncio

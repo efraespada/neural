@@ -22,8 +22,8 @@ class TestConfiguration:
         config = Configuration()
         
         # Assert
-        assert config.ai_url == "http://localhost:1234"
-        assert config.ai_model == "openai/gpt-oss-20b"
+        assert config.ai_url == "https://openrouter.ai/api/v1"
+        assert config.ai_model == "anthropic/claude-3.5-sonnet"
         assert config.ha_url == "http://homeassistant.local:8123"
         assert config.ha_token is None
 
@@ -81,7 +81,8 @@ class TestDependencyModule:
         assert result == mock_ai_client
         mock_ai_client_class.assert_called_once_with(
             ai_url="http://test-ai:1234",
-            ai_model="test-model"
+            ai_model="test-model",
+            api_key=None
         )
 
     @patch('core.dependency_injection.injector_container.HAClient')

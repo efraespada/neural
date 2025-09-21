@@ -5,9 +5,9 @@ Implementación del caso de uso de configuración.
 import logging
 from typing import Optional, Dict, Any
 
-from use_cases.interfaces.config_use_case import ConfigUseCase
-from managers.config_manager import ConfigManager
-from api.models.domain.config import AppConfig, ConfigValidationResult
+from core.use_cases.interfaces.config_use_case import ConfigUseCase
+from core.managers.config_manager import ConfigManager
+from core.api.models.domain.config import AppConfig, ConfigValidationResult
 
 _LOGGER = logging.getLogger(__name__)
 

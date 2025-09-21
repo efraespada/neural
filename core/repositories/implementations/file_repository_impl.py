@@ -7,7 +7,7 @@ import aiofiles
 from pathlib import Path
 from typing import Optional
 
-from repositories.interfaces.file_repository import FileRepository
+from core.repositories.interfaces.file_repository import FileRepository
 
 
 class FileRepositoryImpl(FileRepository):

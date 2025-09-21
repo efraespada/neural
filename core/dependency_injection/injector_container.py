@@ -127,10 +127,10 @@ class DependencyModule(Module):
     
     @provider
     @singleton
-    def provide_decision_use_case(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase, update_home_info_use_case: UpdateHomeInfoUseCase) -> DecisionUseCase:
+    def provide_decision_use_case(self, ai_repository: AIRepository, ha_repository: HARepository, file_repository: FileRepository) -> DecisionUseCase:
         """Provide Decision use case as singleton."""
         _LOGGER.debug("Creating Decision use case")
-        return DecisionUseCaseImpl(ai_use_case, ha_use_case, update_home_info_use_case)
+        return DecisionUseCaseImpl(ai_repository, ha_repository, file_repository)
     
     @provider
     @singleton

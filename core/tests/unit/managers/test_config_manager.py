@@ -8,9 +8,9 @@ from datetime import datetime
 from unittest.mock import AsyncMock, patch
 from pathlib import Path
 
-from managers.config_manager import ConfigManager
-from repositories.interfaces.file_repository import FileRepository
-from api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
+from core.managers.config_manager import ConfigManager
+from core.repositories.interfaces.file_repository import FileRepository
+from core.api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
 
 
 class TestConfigManager:
@@ -32,7 +32,7 @@ class TestConfigManager:
         return {
             "mode": "supervisor",
             "llm": {
-                "ip": "192.168.11.89",
+                "ip": "https://openrouter.ai/api/v1",
                 "model": "openai/gpt-oss-20b"
             },
             "created_at": "2024-01-01T00:00:00",
@@ -68,7 +68,7 @@ class TestConfigManager:
         
         # Assert
         assert result.mode == "supervisor"
-        assert result.llm.ip == "192.168.11.89"
+        assert result.llm.url == "https://openrouter.ai/api/v1"
         assert result.llm.model == "openai/gpt-oss-20b"
         assert config_manager._is_loaded
         assert config_manager._config == result
@@ -167,11 +167,11 @@ class TestConfigManager:
         mock_file_repository.save_file.return_value = True
         
         # Act
-        result = await config_manager.update_config(llm_ip="192.168.1.100", llm_model="new-model")
+        result = await config_manager.update_config(llm_url="192.168.1.100", llm_model="new-model")
         
         # Assert
         assert result is True
-        assert config_manager._config.llm.ip == "192.168.1.100"
+        assert config_manager._config.llm.url == "192.168.1.100"
         assert config_manager._config.llm.model == "new-model"
         mock_file_repository.save_file.assert_called_once()
 
@@ -193,7 +193,7 @@ class TestConfigManager:
         
         # Assert
         assert result.mode == "supervisor"
-        assert result.llm.ip == "192.168.11.89"
+        assert result.llm.url == "https://openrouter.ai/api/v1"
         assert result.llm.model == "openai/gpt-oss-20b"
         assert config_manager._config == result
         assert config_manager._is_loaded
@@ -215,7 +215,7 @@ class TestConfigManager:
         # Arrange
         invalid_config = AppConfig(
             mode="",  # Modo vacío
-            llm=LLMConfig(ip="192.168.11.89", model="openai/gpt-oss-20b")
+            llm=LLMConfig(url="https://openrouter.ai/api/v1", model="openai/gpt-oss-20b")
         )
         
         # Act
@@ -232,7 +232,7 @@ class TestConfigManager:
         # Arrange
         invalid_config = AppConfig(
             mode="supervisor",
-            llm=LLMConfig(ip="invalid-ip", model="openai/gpt-oss-20b")
+            llm=LLMConfig(url="invalid-ip", model="openai/gpt-oss-20b")
         )
         
         # Act
@@ -241,7 +241,7 @@ class TestConfigManager:
         # Assert
         assert result.is_valid is False
         assert len(result.errors) > 0
-        assert "Invalid IP address" in result.errors[0]
+        assert "Invalid URL" in result.errors[0]
 
     @pytest.mark.asyncio
     async def test_validate_config_empty_llm_model(self, config_manager):
@@ -249,7 +249,7 @@ class TestConfigManager:
         # Arrange
         invalid_config = AppConfig(
             mode="supervisor",
-            llm=LLMConfig(ip="192.168.11.89", model="")
+            llm=LLMConfig(url="https://openrouter.ai/api/v1", model="")
         )
         
         # Act
@@ -266,7 +266,7 @@ class TestConfigManager:
         # Arrange
         config_with_unknown_mode = AppConfig(
             mode="unknown_mode",
-            llm=LLMConfig(ip="192.168.11.89", model="openai/gpt-oss-20b")
+            llm=LLMConfig(url="https://openrouter.ai/api/v1", model="openai/gpt-oss-20b")
         )
         
         # Act
@@ -288,7 +288,7 @@ class TestConfigManager:
         
         # Assert
         assert result.mode == "supervisor"
-        assert result.llm.ip == "192.168.11.89"
+        assert result.llm.url == "https://openrouter.ai/api/v1"
         assert result.llm.model == "openai/gpt-oss-20b"
         assert config_manager._config == result
         assert config_manager._is_loaded
@@ -346,7 +346,7 @@ class TestConfigManager:
         config_data = {
             "mode": "supervisor",
             "llm": {
-                "ip": "192.168.11.89",
+                "ip": "https://openrouter.ai/api/v1",
                 "model": "openai/gpt-oss-20b"
             },
             "created_at": "2024-01-01T12:00:00",

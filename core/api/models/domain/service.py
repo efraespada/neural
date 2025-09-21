@@ -46,7 +46,7 @@ class Service:
 
     def to_dto(self):
         """Convert to DTO."""
-        from api.models.dto.service_dto import ServiceDTO
+        from core.api.models.dto.service_dto import ServiceDTO
 
         return ServiceDTO(
             id_service=self.id_service,

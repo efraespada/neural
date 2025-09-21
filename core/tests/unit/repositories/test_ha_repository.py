@@ -4,9 +4,9 @@ import pytest
 from unittest.mock import AsyncMock, Mock
 from datetime import datetime
 
-from api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
-from repositories.interfaces.ha_repository import HARepository
-from repositories.implementations.ha_repository_impl import HARepositoryImpl
+from core.api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
+from core.repositories.interfaces.ha_repository import HARepository
+from core.repositories.implementations.ha_repository_impl import HARepositoryImpl
 
 
 class TestHARepositoryInterface:

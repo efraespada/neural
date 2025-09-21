@@ -3,9 +3,9 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from api.ha_client import HAClient
-from api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
-from repositories.interfaces.ha_repository import HARepository
+from core.api.ha_client import HAClient
+from core.api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
+from core.repositories.interfaces.ha_repository import HARepository
 
 _LOGGER = logging.getLogger(__name__)
 

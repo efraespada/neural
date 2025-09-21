@@ -41,7 +41,7 @@ class TestAIUseCaseInterface:
         result = await ai_use_case.send_message(message, model)
 
         # Assert
-        assert result == "Test response"
+        assert result == expected_response
         mock_ai_repository.send_message.assert_called_once_with(message, model)
 
     @pytest.mark.asyncio
@@ -62,7 +62,7 @@ class TestAIUseCaseInterface:
         result = await ai_use_case.send_message(message)
 
         # Assert
-        assert result == "Test response"
+        assert result == expected_response
         mock_ai_repository.send_message.assert_called_once_with(message, None)
 
     @pytest.mark.asyncio

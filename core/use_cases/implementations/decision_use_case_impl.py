@@ -4,9 +4,9 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 
 from core.use_cases.interfaces.decision_use_case import DecisionUseCase, DecisionResponse, DecisionAction
-from core.use_cases.interfaces.ai_use_case import AIUseCase
-from core.use_cases.interfaces.ha_use_case import HAUseCase
-from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
+from core.repositories.interfaces.ai_repository import AIRepository
+from core.repositories.interfaces.ha_repository import HARepository
+from core.repositories.interfaces.file_repository import FileRepository
 from core.api.models.domain.ha_entity import HAEntity
 from core.constants import RELEVANT_DOMAINS
 
@@ -19,18 +19,18 @@ class DecisionUseCaseImpl(DecisionUseCase):
     Combines Home Assistant state with AI decision-making capabilities.
     """
     
-    def __init__(self, ai_use_case: AIUseCase, ha_use_case: HAUseCase, update_home_info_use_case: UpdateHomeInfoUseCase):
+    def __init__(self, ai_repository: AIRepository, ha_repository: HARepository, file_repository: FileRepository):
         """
         Initialize the DecisionUseCaseImpl.
         
         Args:
-            ai_use_case: AI use case for sending prompts
-            ha_use_case: Home Assistant use case for getting state
-            update_home_info_use_case: Update home info use case for getting home information
+            ai_repository: AI repository for sending prompts
+            ha_repository: Home Assistant repository for getting state
+            file_repository: File repository for handling files and home info
         """
-        self._ai_use_case = ai_use_case
-        self._ha_use_case = ha_use_case
-        self._update_home_info_use_case = update_home_info_use_case
+        self._ai_repository = ai_repository
+        self._ha_repository = ha_repository
+        self._file_repository = file_repository
         self._prompt_template = self._load_prompt_template()
     
     def _load_prompt_template(self) -> str:
@@ -118,7 +118,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             
             # Step 1: Send initial context prompt
             step1_prompt = await self._build_step1_prompt(user_prompt.strip(), mode)
-            step1_response = await self._ai_use_case.send_message(step1_prompt)
+            step1_response = await self._ai_repository.send_message(step1_prompt)
             
             # Save step 1 interaction
             await self._save_interaction(interaction_timestamp, "step_1_request", step1_prompt)
@@ -138,7 +138,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             # Get mode from configuration instead of parameter
             config_mode = await self._get_config_mode()
             step2_prompt = await self._build_action_prompt(user_prompt.strip(), config_mode, ha_info)
-            step2_response = await self._ai_use_case.send_message(step2_prompt)
+            step2_response = await self._ai_repository.send_message(step2_prompt)
             
             # Save step 2 interaction
             await self._save_interaction(interaction_timestamp, "step_2_request", step2_prompt)
@@ -179,10 +179,10 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.debug("Getting relevant Home Assistant information for prompt: %s", user_prompt)
             
             # Get all entities
-            entities = await self._ha_use_case.get_all_entities()
+            entities = await self._ha_repository.get_all_entities()
             
             # Get sensors
-            sensors = await self._ha_use_case.get_sensors()
+            sensors = await self._ha_repository.get_sensors()
             
             # Get services (we'll get a sample of common services)
             services_info = await self._get_services_info()
@@ -239,8 +239,8 @@ No incluyas explicaciones ni texto fuera del JSON.
             optimized_info = await self._optimize_ha_information(entities, sensors, services_info, user_prompt)
             
             # Save to file
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(optimized_info, f, indent=2, ensure_ascii=False)
+            optimized_json = json.dumps(optimized_info, indent=2, ensure_ascii=False)
+            await self._file_repository.save_file(file_path, optimized_json)
             
             _LOGGER.info("Optimized HA information saved to: %s", file_path)
             _LOGGER.info("Saved %d optimized entities and %d optimized sensors", 
@@ -455,16 +455,12 @@ No incluyas explicaciones ni texto fuera del JSON.
         Save interaction (request or response) to interactions directory.
         """
         try:
-            import os
-            
             # Create interactions directory structure
             interactions_dir = f"interactions/{timestamp}"
-            os.makedirs(interactions_dir, exist_ok=True)
+            file_path = f"{interactions_dir}/{step}.txt"
             
-            # Save content to file
-            file_path = os.path.join(interactions_dir, f"{step}.txt")
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write(content)
+            # Save content using file repository
+            await self._file_repository.save_file(file_path, content)
             
             _LOGGER.debug("Interaction saved to: %s", file_path)
             
@@ -516,9 +512,9 @@ No incluyas explicaciones ni texto fuera del JSON.
             }
             
             # Save decision summary
-            file_path = os.path.join(interactions_dir, "decision_summary.json")
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(decision_summary, f, indent=2, ensure_ascii=False)
+            file_path = f"{interactions_dir}/decision_summary.json"
+            decision_json = json.dumps(decision_summary, indent=2, ensure_ascii=False)
+            await self._file_repository.save_file(file_path, decision_json)
             
             _LOGGER.info("Final decision saved to: %s", file_path)
             _LOGGER.info("Decision: %s actions for prompt: %s", len(decision.actions), user_prompt[:50])
@@ -573,8 +569,8 @@ No incluyas explicaciones ni texto fuera del JSON.
             }
             
             # Save to file
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(decision_info, f, indent=2, ensure_ascii=False)
+            decision_json = json.dumps(decision_info, indent=2, ensure_ascii=False)
+            await self._file_repository.save_file(file_path, decision_json)
             
             _LOGGER.info("AI decision saved to: %s", file_path)
             _LOGGER.info("Decision: %s actions for prompt: %s", len(decision.actions), user_prompt[:50])
@@ -621,7 +617,7 @@ No incluyas explicaciones ni texto fuera del JSON.
         """Get information about available services from Home Assistant."""
         try:
             # Get real services from Home Assistant
-            services = await self._ha_use_case.get_services()
+            services = await self._ha_repository.get_services()
             
             # Filter services to only include relevant domains
             filtered_services = self._filter_services_by_domains(services)
@@ -1150,7 +1146,7 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
                 retry_prompt = await self._build_retry_prompt(user_prompt, mode, ha_info, previous_error)
                 
                 # Send retry prompt to AI
-                retry_response = await self._ai_use_case.send_message(retry_prompt)
+                retry_response = await self._ai_repository.send_message(retry_prompt)
                 
                 # Save retry interaction
                 step_name = f"step_{3 + retry_count}_retry_request"
@@ -1178,10 +1174,11 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
     async def _get_home_info(self) -> str:
         """Get home information for AI context."""
         try:
-            home_info = await self._update_home_info_use_case.get_home_info()
+            # Try to read home info from file
+            home_info_content = await self._file_repository.get_file("home_info.md")
             
-            if home_info:
-                return f"\n\n# Información del Hogar\n\n{home_info}"
+            if home_info_content and home_info_content.strip():
+                return f"\n\n# Información del Hogar\n\n{home_info_content}"
             else:
                 return "\n\n# Información del Hogar\n\nNo hay información específica del hogar configurada."
                 

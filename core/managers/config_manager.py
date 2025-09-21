@@ -7,8 +7,8 @@ import logging
 from typing import Optional, Dict, Any
 from pathlib import Path
 
-from repositories.interfaces.file_repository import FileRepository
-from api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
+from core.repositories.interfaces.file_repository import FileRepository
+from core.api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -173,7 +173,7 @@ class ConfigManager:
         default_config = AppConfig(
             mode="supervisor",
             llm=LLMConfig(
-                ip="192.168.11.89",
+                url="https://openrouter.ai/api/v1",
                 model="openai/gpt-oss-20b"
             )
         )
@@ -208,17 +208,26 @@ class ConfigManager:
         elif config_to_validate.mode not in ["supervisor", "client", "standalone"]:
             result.add_warning(f"Unknown mode: {config_to_validate.mode}")
         
-        # Validar LLM IP
-        if not config_to_validate.llm.ip:
-            result.add_error("LLM IP cannot be empty")
-        elif not self._is_valid_ip(config_to_validate.llm.ip):
-            result.add_error(f"Invalid IP address: {config_to_validate.llm.ip}")
+        # Validar LLM URL
+        if not config_to_validate.llm.url:
+            result.add_error("LLM URL cannot be empty")
+        elif not self._is_valid_url(config_to_validate.llm.url):
+            result.add_error(f"Invalid URL: {config_to_validate.llm.url}")
         
         # Validar LLM modelo
         if not config_to_validate.llm.model:
             result.add_error("LLM model cannot be empty")
         
         return result
+    
+    def _is_valid_url(self, url: str) -> bool:
+        """Validar formato de URL."""
+        try:
+            from urllib.parse import urlparse
+            parsed = urlparse(url)
+            return bool(parsed.scheme and parsed.netloc)
+        except (ValueError, AttributeError):
+            return False
     
     def _is_valid_ip(self, ip: str) -> bool:
         """Validar formato de IP."""

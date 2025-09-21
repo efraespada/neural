@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from api.models.domain.ai import AIStatus, AIResponse, AIModel
+from core.api.models.domain.ai import AIStatus, AIResponse, AIModel
 
 
 class AIRepository(ABC):

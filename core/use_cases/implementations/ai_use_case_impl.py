@@ -3,9 +3,9 @@
 import logging
 from typing import List, Optional
 
-from api.models.domain.ai import AIStatus, AIResponse, AIModel
-from repositories.interfaces.ai_repository import AIRepository
-from use_cases.interfaces.ai_use_case import AIUseCase
+from core.api.models.domain.ai import AIStatus, AIResponse, AIModel
+from core.repositories.interfaces.ai_repository import AIRepository
+from core.use_cases.interfaces.ai_use_case import AIUseCase
 
 _LOGGER = logging.getLogger(__name__)
 

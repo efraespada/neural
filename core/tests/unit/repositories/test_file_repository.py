@@ -7,8 +7,8 @@ import tempfile
 import os
 from pathlib import Path
 from unittest.mock import AsyncMock, patch, mock_open
-from repositories.interfaces.file_repository import FileRepository
-from repositories.implementations.file_repository_impl import FileRepositoryImpl
+from core.repositories.interfaces.file_repository import FileRepository
+from core.repositories.implementations.file_repository_impl import FileRepositoryImpl
 
 
 class TestFileRepositoryInterface:

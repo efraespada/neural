@@ -4,9 +4,9 @@ import pytest
 from unittest.mock import AsyncMock, Mock
 from datetime import datetime
 
-from api.models.domain.ai import AIStatus, AIResponse, AIModel
-from repositories.interfaces.ai_repository import AIRepository
-from repositories.implementations.ai_repository_impl import AIRepositoryImpl
+from core.api.models.domain.ai import AIStatus, AIResponse, AIModel
+from core.repositories.interfaces.ai_repository import AIRepository
+from core.repositories.implementations.ai_repository_impl import AIRepositoryImpl
 
 
 class TestAIRepositoryInterface:
