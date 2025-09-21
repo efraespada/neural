@@ -1,0 +1,6 @@
+```json
+{
+  "message": "Lo siento Efra, no puedo encontrar información sobre la batería de la aspiradora en los datos disponibles.",
+  "actions": []
+}
+```

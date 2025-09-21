@@ -181,20 +181,20 @@ No incluyas explicaciones ni texto fuera del JSON.
             # Save complete HA information locally
             await self._save_complete_ha_information(entities, sensors, services_info, user_prompt)
             
-            # Filter entities based on user prompt (keep filtering for entities to avoid too many lights/switches)
-            relevant_entities = self._filter_relevant_entities(entities, user_prompt)
+            # Include ALL entities - no filtering to avoid losing important information
+            relevant_entities = entities
             
             # Include ALL sensors without filtering - they contain valuable information
             all_sensors = [self._create_entity_summary(sensor) for sensor in sensors]
             
-            # Build information with all sensors
+            # Build information with all entities and sensors
             ha_info = {
                 "entities": [self._create_entity_summary(entity) for entity in relevant_entities],
                 "sensors": all_sensors,  # Include all sensors
                 "services": services_info,
                 "total_entities": len(entities),
                 "total_sensors": len(sensors),
-                "relevant_entities_count": len(relevant_entities),
+                "all_entities_count": len(relevant_entities),
                 "all_sensors_count": len(sensors)
             }
             
@@ -207,113 +207,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.error("Error getting Home Assistant information: %s", e)
             raise OSError(f"Error getting Home Assistant information: {e}")
     
-    def _filter_relevant_entities(self, entities: List[HAEntity], user_prompt: str) -> List[HAEntity]:
-        """Filter entities based on user prompt keywords."""
-        prompt_lower = user_prompt.lower()
-        
-        # Define keyword mappings
-        keyword_mappings = {
-            'luz': ['light'],
-            'luces': ['light'],
-            'lámpara': ['light'],
-            'lámparas': ['light'],
-            'interruptor': ['switch'],
-            'interruptores': ['switch'],
-            'switch': ['switch'],
-            'temperatura': ['climate', 'sensor'],
-            'calefacción': ['climate', 'sensor'],
-            'calefaccion': ['climate', 'sensor'],
-            'clima': ['climate'],
-            'frío': ['climate', 'sensor'],
-            'frio': ['climate', 'sensor'],
-            'calor': ['climate', 'sensor'],
-            'heating': ['climate', 'sensor'],
-            'cooling': ['climate', 'sensor'],
-            'thermostat': ['climate', 'sensor'],
-            'ventilador': ['fan'],
-            'ventiladores': ['fan'],
-            'fan': ['fan'],
-            'cortina': ['cover'],
-            'cortinas': ['cover'],
-            'persiana': ['cover'],
-            'persianas': ['cover'],
-            'cover': ['cover'],
-            'música': ['media_player'],
-            'música': ['media_player'],
-            'altavoz': ['media_player'],
-            'altavoces': ['media_player'],
-            'televisor': ['media_player'],
-            'tv': ['media_player'],
-            'salón': ['living', 'room'],
-            'sala': ['living', 'room'],
-            'cocina': ['kitchen'],
-            'dormitorio': ['bedroom'],
-            'habitación': ['bedroom', 'room'],
-            'baño': ['bathroom'],
-            'garaje': ['garage'],
-            'ático': ['attic'],
-            'jardín': ['garden'],
-            'exterior': ['outdoor', 'garden']
-        }
-        
-        # Find relevant domains based on prompt
-        relevant_domains = set()
-        for keyword, domains in keyword_mappings.items():
-            if keyword in prompt_lower:
-                relevant_domains.update(domains)
-        
-        # If no specific keywords found, include common controllable entities
-        if not relevant_domains:
-            relevant_domains = {'light', 'switch', 'cover', 'climate', 'fan', 'media_player'}
-        
-        # Filter entities
-        filtered_entities = []
-        for entity in entities:
-            # Check if entity domain matches
-            if any(entity.entity_id.startswith(domain + '.') for domain in relevant_domains):
-                filtered_entities.append(entity)
-            # Also include entities with friendly names that match prompt keywords
-            elif any(keyword in entity.attributes.get('friendly_name', '').lower() 
-                    for keyword in prompt_lower.split() if len(keyword) > 3):
-                filtered_entities.append(entity)
-        
-        # Limit to prevent context overflow
-        return filtered_entities[:30]
     
-    def _filter_relevant_sensors(self, sensors: List[HAEntity], user_prompt: str) -> List[HAEntity]:
-        """Filter sensors based on user prompt keywords."""
-        prompt_lower = user_prompt.lower()
-        
-        # Define sensor keywords - expanded for better coverage
-        sensor_keywords = [
-            'temperature', 'temp', 'humidity', 'light', 'motion', 'presence', 
-            'door', 'window', 'battery', 'power', 'energy', 'climate',
-            'heating', 'cooling', 'thermostat', 'calefaccion', 'calefacción'
-        ]
-        
-        # Special handling for temperature/climate related prompts
-        temperature_related = any(word in prompt_lower for word in [
-            'temperatura', 'calefacción', 'calefaccion', 'frío', 'frio', 'calor',
-            'clima', 'heating', 'cooling', 'thermostat'
-        ])
-        
-        # Filter sensors
-        filtered_sensors = []
-        for sensor in sensors:
-            # Always include temperature sensors for climate-related prompts
-            if temperature_related and 'temperature' in sensor.entity_id.lower():
-                filtered_sensors.append(sensor)
-            # Check if sensor has relevant keywords
-            elif any(keyword in sensor.entity_id.lower() for keyword in sensor_keywords):
-                filtered_sensors.append(sensor)
-            # Also include sensors with friendly names that match prompt
-            elif any(keyword in sensor.attributes.get('friendly_name', '').lower() 
-                    for keyword in prompt_lower.split() if len(keyword) > 3):
-                filtered_sensors.append(sensor)
-        
-        # Increase limit for temperature-related queries
-        limit = 25 if temperature_related else 15
-        return filtered_sensors[:limit]
     
     async def _save_complete_ha_information(self, entities: List[HAEntity], sensors: List[HAEntity], 
                                           services_info: Dict[str, Any], user_prompt: str) -> None:

@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T03:27:45.659034",
+  "user_prompt": "Tiene batería la aspiradora?",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "Lo siento Efra, no puedo encontrar información sobre la batería de la aspiradora en los datos disponibles.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 250978,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_032736"
+  }
+}
