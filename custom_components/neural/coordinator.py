@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import sys
-import os
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -13,11 +11,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-# Add core path to sys.path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
-
-from core.dependency_injection.providers import setup_dependencies, clear_dependencies
-from core.dependency_injection.injector_container import get_decision_use_case, get_do_actions_use_case, get_ha_use_case
+from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
+from .core.dependency_injection.injector_container import get_decision_use_case, get_do_actions_use_case, get_ha_use_case
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)

@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import logging
-import sys
-import os
 from typing import Any
 
 import voluptuous as vol
@@ -14,12 +12,9 @@ from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResu
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
-# Add core path to sys.path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
-
-# Import core dependencies
-from core.dependency_injection.providers import setup_dependencies, clear_dependencies
-from core.dependency_injection.injector_container import get_ai_use_case, get_ha_use_case
+# Import core dependencies using relative imports
+from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
+from .core.dependency_injection.injector_container import get_ai_use_case, get_ha_use_case
 
 from .const import (
     DOMAIN,
