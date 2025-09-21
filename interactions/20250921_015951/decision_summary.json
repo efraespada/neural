@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T01:59:57.750818",
+  "user_prompt": "¿Qué temperatura hace en casa?",
+  "mode": "supervisor",
+  "ai_response": {
+    "message": "La temperatura ambiente es de 37.2°C según el sensor ambiental del sistema fotovoltaico (FoxESS). La temperatura del inversor es de 28.2°C.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 12437,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_015951"
+  }
+}

@@ -179,19 +179,21 @@ No incluyas explicaciones ni texto fuera del JSON.
             # Save complete HA information locally
             await self._save_complete_ha_information(entities, sensors, services_info, user_prompt)
             
-            # Filter entities based on user prompt
+            # Filter entities based on user prompt (keep filtering for entities to avoid too many lights/switches)
             relevant_entities = self._filter_relevant_entities(entities, user_prompt)
-            relevant_sensors = self._filter_relevant_sensors(sensors, user_prompt)
             
-            # Build minimal information to avoid context overflow
+            # Include ALL sensors without filtering - they contain valuable information
+            all_sensors = [self._create_entity_summary(sensor) for sensor in sensors]
+            
+            # Build information with all sensors
             ha_info = {
                 "entities": [self._create_entity_summary(entity) for entity in relevant_entities],
-                "sensors": [self._create_entity_summary(sensor) for sensor in relevant_sensors],
+                "sensors": all_sensors,  # Include all sensors
                 "services": services_info,
                 "total_entities": len(entities),
                 "total_sensors": len(sensors),
                 "relevant_entities_count": len(relevant_entities),
-                "relevant_sensors_count": len(relevant_sensors)
+                "all_sensors_count": len(sensors)
             }
             
             ha_info_json = json.dumps(ha_info, indent=2, ensure_ascii=False)
@@ -217,7 +219,15 @@ No incluyas explicaciones ni texto fuera del JSON.
             'interruptores': ['switch'],
             'switch': ['switch'],
             'temperatura': ['climate', 'sensor'],
+            'calefacción': ['climate', 'sensor'],
+            'calefaccion': ['climate', 'sensor'],
             'clima': ['climate'],
+            'frío': ['climate', 'sensor'],
+            'frio': ['climate', 'sensor'],
+            'calor': ['climate', 'sensor'],
+            'heating': ['climate', 'sensor'],
+            'cooling': ['climate', 'sensor'],
+            'thermostat': ['climate', 'sensor'],
             'ventilador': ['fan'],
             'ventiladores': ['fan'],
             'fan': ['fan'],
@@ -272,25 +282,36 @@ No incluyas explicaciones ni texto fuera del JSON.
         """Filter sensors based on user prompt keywords."""
         prompt_lower = user_prompt.lower()
         
-        # Define sensor keywords
+        # Define sensor keywords - expanded for better coverage
         sensor_keywords = [
-            'temperature', 'humidity', 'light', 'motion', 'presence', 
-            'door', 'window', 'battery', 'power', 'energy'
+            'temperature', 'temp', 'humidity', 'light', 'motion', 'presence', 
+            'door', 'window', 'battery', 'power', 'energy', 'climate',
+            'heating', 'cooling', 'thermostat', 'calefaccion', 'calefacción'
         ]
+        
+        # Special handling for temperature/climate related prompts
+        temperature_related = any(word in prompt_lower for word in [
+            'temperatura', 'calefacción', 'calefaccion', 'frío', 'frio', 'calor',
+            'clima', 'heating', 'cooling', 'thermostat'
+        ])
         
         # Filter sensors
         filtered_sensors = []
         for sensor in sensors:
+            # Always include temperature sensors for climate-related prompts
+            if temperature_related and 'temperature' in sensor.entity_id.lower():
+                filtered_sensors.append(sensor)
             # Check if sensor has relevant keywords
-            if any(keyword in sensor.entity_id.lower() for keyword in sensor_keywords):
+            elif any(keyword in sensor.entity_id.lower() for keyword in sensor_keywords):
                 filtered_sensors.append(sensor)
             # Also include sensors with friendly names that match prompt
             elif any(keyword in sensor.attributes.get('friendly_name', '').lower() 
                     for keyword in prompt_lower.split() if len(keyword) > 3):
                 filtered_sensors.append(sensor)
         
-        # Limit to prevent context overflow
-        return filtered_sensors[:15]
+        # Increase limit for temperature-related queries
+        limit = 25 if temperature_related else 15
+        return filtered_sensors[:limit]
     
     async def _save_complete_ha_information(self, entities: List[HAEntity], sensors: List[HAEntity], 
                                           services_info: Dict[str, Any], user_prompt: str) -> None:
@@ -665,14 +686,28 @@ No incluyas explicaciones ni texto fuera del JSON.
             # Don't raise exception to avoid breaking the main flow
     
     def _create_entity_summary(self, entity: HAEntity) -> Dict[str, Any]:
-        """Create a minimal summary of an entity for AI context."""
-        return {
+        """Create a summary of an entity for AI context, including relevant attributes."""
+        summary = {
             "entity_id": entity.entity_id,
             "state": entity.state,
             "friendly_name": entity.attributes.get("friendly_name", entity.entity_id),
             "device_class": entity.attributes.get("device_class"),
             "unit_of_measurement": entity.attributes.get("unit_of_measurement")
         }
+        
+        # Add additional useful attributes for sensors
+        if entity.entity_id.startswith('sensor.'):
+            # Include temperature, humidity, and other important sensor data
+            if entity.attributes.get("device_class") in ["temperature", "humidity", "pressure", "illuminance"]:
+                summary["value"] = entity.state
+                summary["unit"] = entity.attributes.get("unit_of_measurement")
+            
+            # Include battery level for battery-powered sensors
+            if "battery" in entity.entity_id.lower() or "battery" in entity.attributes.get("friendly_name", "").lower():
+                summary["battery_level"] = entity.state
+                summary["battery_unit"] = entity.attributes.get("unit_of_measurement")
+        
+        return summary
     
     def _simplify_entity(self, entity: HAEntity) -> Dict[str, Any]:
         """Simplify entity data for AI context."""

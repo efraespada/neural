@@ -2,8 +2,8 @@
   "mode": "supervisor",
   "llm": {
     "url": "https://openrouter.ai/api/v1",
-    "model": "anthropic/claude-3.5-sonnet",
-    "api_key": "sk-or-v1-08230eddad0fdf26a780a18d626ad797"
+    "model": "deepseek/deepseek-chat",
+    "api_key": "sk-or-v1-082626ad797"
   },
   "created_at": "2025-09-21T01:30:00",
   "updated_at": "2025-09-21T01:48:24.146305"

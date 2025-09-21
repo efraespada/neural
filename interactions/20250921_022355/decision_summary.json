@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T02:24:06.178376",
+  "user_prompt": "Deberia poner la calefaccion?",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "La temperatura ambiente en las habitaciones es de 28.5°C y en la planta principal es de 28.0°C. No parece necesario encender la calefacción ya que las temperaturas son bastante altas.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 99859,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_022355"
+  }
+}

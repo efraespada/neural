@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T02:00:15.228968",
+  "user_prompt": "Deberia poner la calefaccion?",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "No tengo suficiente información sobre la temperatura interior de las habitaciones, sólo veo temperatura ambiente exterior de 37.2°C. Por favor, especifica la zona donde quieres poner la calefacción y necesitaría sensores de temperatura interior para darte una recomendación adecuada. Con la temperatura exterior actual, es probable que no necesites calefacción.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 12270,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_020007"
+  }
+}

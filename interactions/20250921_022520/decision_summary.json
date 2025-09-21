@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-09-21T02:25:29.741307",
+  "user_prompt": "Deberia poner la el aire acondicionado?",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "La temperatura ambiente en las habitaciones es de 28.5°C y en la planta principal es de 28.0°C. Recomiendo encender el aire acondicionado para alcanzar una temperatura más confortable.",
+    "actions": [
+      {
+        "entity": "climate.ac_habitaciones",
+        "action": "set_temperature",
+        "parameters": {
+          "temperature": 25
+        }
+      },
+      {
+        "entity": "climate.ac_planta_principal",
+        "action": "set_temperature",
+        "parameters": {
+          "temperature": 25
+        }
+      }
+    ],
+    "actions_count": 2
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 98972,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_022520"
+  }
+}

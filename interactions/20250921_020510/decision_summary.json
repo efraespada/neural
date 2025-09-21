@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T02:05:19.044982",
+  "user_prompt": "¿Qué temperatura hace en casa?",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "La temperatura actual en las diferentes zonas de la casa es:\n- Planta principal: 28.0°C\n- Habitaciones: 28.5°C\n- Exterior: 24.5°C\n- Ambiente interior (sensor Ecowitt): 29.4°C",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 100031,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_020510"
+  }
+}

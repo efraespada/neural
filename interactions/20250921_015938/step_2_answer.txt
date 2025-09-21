@@ -1,0 +1,4 @@
+{
+  "message": "Lo siento, no puedo hacer una recomendación precisa sobre la calefacción sin tener acceso a sensores de temperatura interior de las habitaciones. Aunque veo que la temperatura ambiente exterior es de 37.2°C, lo cual sugiere que probablemente no sea necesario encender la calefacción en este momento.",
+  "actions": []
+}

@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T01:59:23.331229",
+  "user_prompt": "Debería poner la calefacción?",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "No tengo suficiente información sobre la temperatura interior ni exterior para tomar una decisión sobre la calefacción. Necesitaría datos de sensores de temperatura ambiente interior y/o termostato para dar una recomendación adecuada.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 12270,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_015917"
+  }
+}

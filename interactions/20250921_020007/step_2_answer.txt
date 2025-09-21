@@ -1,0 +1,4 @@
+{
+  "message": "No tengo suficiente información sobre la temperatura interior de las habitaciones, sólo veo temperatura ambiente exterior de 37.2°C. Por favor, especifica la zona donde quieres poner la calefacción y necesitaría sensores de temperatura interior para darte una recomendación adecuada. Con la temperatura exterior actual, es probable que no necesites calefacción.",
+  "actions": []
+}

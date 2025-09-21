@@ -1,0 +1,15 @@
+{
+  "message": "Basándome en las temperaturas actuales registradas por los sensores (Habitaciones: 28.5°C, Planta Principal: 28.0°C), recomiendo encender la calefacción ya que las temperaturas están por debajo del rango de confort (20-22°C). Ajustaré la temperatura objetivo a 21°C.",
+  "actions": [
+    {
+      "entity": "climate.habitaciones",
+      "action": "set_temperature",
+      "parameters": {"temperature": 21}
+    },
+    {
+      "entity": "climate.planta_principal", 
+      "action": "set_temperature",
+      "parameters": {"temperature": 21}
+    }
+  ]
+}

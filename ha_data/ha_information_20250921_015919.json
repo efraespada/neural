@@ -1,0 +1,3281 @@
+{
+  "timestamp": "2025-09-21T01:59:19.334994",
+  "user_prompt": "Debería poner la calefacción?",
+  "summary": {
+    "total_entities": 731,
+    "total_sensors": 412,
+    "relevant_entities": 227,
+    "relevant_sensors": 97,
+    "entity_domains": {
+      "input_boolean": 3,
+      "script": 4,
+      "sensor": 93,
+      "media_player": 14,
+      "light": 31,
+      "scene": 39,
+      "switch": 40,
+      "climate": 3
+    },
+    "sensor_types": {
+      "power": 24,
+      "reactive_power": 1,
+      "power_factor": 1,
+      "temperature": 22,
+      "energy": 18,
+      "battery": 13,
+      "unknown": 3,
+      "enum": 3,
+      "timestamp": 2,
+      "pressure": 3,
+      "humidity": 6,
+      "voltage": 1
+    },
+    "optimization_ratio": "227/731 entities kept"
+  },
+  "entities": [
+    {
+      "entity_id": "input_boolean.sistema_fotovoltaico_inversor_temperatura_por_encima_de_50",
+      "state": "off",
+      "friendly_name": "Sistema Fotovoltaico - Inversor - Temperatura por encima de 50",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:thermometer"
+      }
+    },
+    {
+      "entity_id": "input_boolean.sistema_fotovoltaico_inversor_temperatura_por_encima_de_55",
+      "state": "off",
+      "friendly_name": "Sistema Fotovoltaico - Inversor - Temperatura por encima de 55",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:thermometer-alert"
+      }
+    },
+    {
+      "entity_id": "input_boolean.climatizar",
+      "state": "off",
+      "friendly_name": "Climatizar",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:home-thermometer"
+      }
+    },
+    {
+      "entity_id": "script.alerta_geneneral",
+      "state": "off",
+      "friendly_name": "Alerta geneneral",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:bullhorn-variant"
+      }
+    },
+    {
+      "entity_id": "script.alerta_luces",
+      "state": "off",
+      "friendly_name": "Luces peligro",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "script.luces_informativas",
+      "state": "off",
+      "friendly_name": "Luces Informativas",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "script.boton_de_reinicio",
+      "state": "off",
+      "friendly_name": "Botón de reinicio",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:restart"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv1_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV1 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv2_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv3_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV3 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv4_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV4 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv5_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV5 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv6_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV6 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_r_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - R Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_meter2_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Meter2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_s_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - S Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_t_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - T Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_reactive_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Reactive Power",
+      "device_class": "reactive_power",
+      "unit_of_measurement": "var",
+      "attributes": {
+        "unit_of_measurement": "var"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_power_factor",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Power Factor",
+      "device_class": "power_factor",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_temperature",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_temperature2",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Bat Temperature2",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_ambient_temperature",
+      "state": "37.2",
+      "friendly_name": "FoxESS - Ambient Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_boost_temperature",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Boost Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_inv_temperature",
+      "state": "28.2",
+      "friendly_name": "FoxESS - Inv Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_inverter_bat_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Inverter Bat Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_inverter_bat_power2",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Inverter Bat Power2",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_solar_power",
+      "state": "0.001",
+      "friendly_name": "FoxESS - Solar Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_throughput",
+      "state": "0",
+      "friendly_name": "FoxESS - Energy Throughput",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_generation_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Generation Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_grid_consumption_power",
+      "state": "0.527",
+      "friendly_name": "FoxESS - Grid Consumption Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_feedin_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - FeedIn Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_discharge_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Discharge Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_charge_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Charge Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_load_power",
+      "state": "0.528",
+      "friendly_name": "FoxESS - Load Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_generated",
+      "state": "0",
+      "friendly_name": "FoxESS - Energy Generated",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_generated_month",
+      "state": "502.4",
+      "friendly_name": "FoxESS - Energy Generated Month",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_generated_cumulative",
+      "state": "19232.6",
+      "friendly_name": "FoxESS - Energy Generated Cumulative",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pvenergytotal",
+      "state": "0",
+      "friendly_name": "FoxESS - PVEnergyTotal",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_residual_energy",
+      "state": "0",
+      "friendly_name": "FoxESS - Residual Energy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_battery_level",
+      "state": "90",
+      "friendly_name": "iPhone Battery Level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-90"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_battery_state",
+      "state": "Not Charging",
+      "friendly_name": "iPhone Battery State",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-90"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_16_pro_battery_level",
+      "state": "60",
+      "friendly_name": "iPhone 16 Pro Battery Level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-60"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_16_pro_battery_state",
+      "state": "Not Charging",
+      "friendly_name": "iPhone 16 Pro Battery State",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-60"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_9_pro_fold_battery_level",
+      "state": "61",
+      "friendly_name": "Pixel 9 Pro Fold Battery level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-60"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_9_pro_fold_battery_state",
+      "state": "discharging",
+      "friendly_name": "Pixel 9 Pro Fold Battery state",
+      "device_class": "enum",
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-minus"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuela_cris_battery_level",
+      "state": "83",
+      "friendly_name": "Pixel 6a Abuela Cris Battery level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-80"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuela_cris_battery_state",
+      "state": "discharging",
+      "friendly_name": "Pixel 6a Abuela Cris Battery state",
+      "device_class": "enum",
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-minus"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuelo_efra_battery_level",
+      "state": "52",
+      "friendly_name": "Pixel 6a Abuelo Efra Battery level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-50"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuelo_efra_battery_state",
+      "state": "discharging",
+      "friendly_name": "Pixel 6a Abuelo Efra Battery state",
+      "device_class": "enum",
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-minus"
+      }
+    },
+    {
+      "entity_id": "media_player.chrome_cast_consolas",
+      "state": "playing",
+      "friendly_name": "Cast Consolas",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "volume_level": 1.0,
+        "media_content_type": "video"
+      }
+    },
+    {
+      "entity_id": "media_player.nest_habitacion",
+      "state": "off",
+      "friendly_name": "Nest Habitación ",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.nest_mini_bano_suite",
+      "state": "off",
+      "friendly_name": "Nest Mini Baño Suite",
+      "device_class": "speaker",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.dormitorio",
+      "state": "off",
+      "friendly_name": "TV despacho",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.altavoces",
+      "state": "off",
+      "friendly_name": "Altavoces",
+      "device_class": "speaker",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.nest_cocina",
+      "state": "off",
+      "friendly_name": "Nest Cocina",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.avisos",
+      "state": "off",
+      "friendly_name": "Alertas",
+      "device_class": "speaker",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.nesthub90ca",
+      "state": "off",
+      "friendly_name": "Nest Ático",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.nest_salon",
+      "state": "off",
+      "friendly_name": "Nest Salón",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.tele",
+      "state": "off",
+      "friendly_name": "Cast Consolas Retro",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "light.hue_color_spot_6",
+      "state": "off",
+      "friendly_name": "Despensa",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.led_tv",
+      "state": "on",
+      "friendly_name": "LED TV",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_2",
+      "state": "on",
+      "friendly_name": "Intermedia B",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_2",
+      "state": "on",
+      "friendly_name": "Hue color spot 2",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_3",
+      "state": "on",
+      "friendly_name": "Hue color spot 3",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_1",
+      "state": "on",
+      "friendly_name": "Hue color spot 1",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.tv_alta_a",
+      "state": "unavailable",
+      "friendly_name": "Principal",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "light.lampara_sofa",
+      "state": "on",
+      "friendly_name": "Lámpara Vitrina",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_lamp_1_2",
+      "state": "off",
+      "friendly_name": "Sensor Agua",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_5",
+      "state": "on",
+      "friendly_name": "Hue color spot 5",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_lamp_1",
+      "state": "off",
+      "friendly_name": "Lámpara Frigorífico ",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_1_4",
+      "state": "on",
+      "friendly_name": "Sótano A",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_1",
+      "state": "on",
+      "friendly_name": "Intermedia A",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_4",
+      "state": "on",
+      "friendly_name": "Hue color spot 4",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_2_4",
+      "state": "on",
+      "friendly_name": "Sótano B",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_8",
+      "state": "off",
+      "friendly_name": "Distribuidor C",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.hue_color_lamp_2",
+      "state": "off",
+      "friendly_name": "Lámpara Mesa",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_6_2",
+      "state": "off",
+      "friendly_name": "Distribuidor A",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_1_2",
+      "state": "on",
+      "friendly_name": "Alta A",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.lampara_acuario",
+      "state": "on",
+      "friendly_name": "Lámpara despacho",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_spot_7",
+      "state": "off",
+      "friendly_name": "Distribuidor B",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_1_3",
+      "state": "on",
+      "friendly_name": "Baja A",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_2_3",
+      "state": "on",
+      "friendly_name": "Baja B",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.hue_color_candle_2_2",
+      "state": "on",
+      "friendly_name": "Alta B",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ]
+      }
+    },
+    {
+      "entity_id": "light.escalera",
+      "state": "on",
+      "friendly_name": "Escalera",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 143,
+        "color_temp": 443,
+        "rgb_color": [
+          255,
+          149,
+          46
+        ],
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "scene.garaje_luz_nocturna",
+      "state": "unknown",
+      "friendly_name": "Garaje Luz nocturna",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_velo_de_novia",
+      "state": "2025-07-11T00:06:30.091669+00:00",
+      "friendly_name": "Ático Velo de novia",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_descanso",
+      "state": "unknown",
+      "friendly_name": "Ático Descanso",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.cocina_atenuado",
+      "state": "unknown",
+      "friendly_name": "Cocina Atenuado",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.escalera_lectura",
+      "state": "unknown",
+      "friendly_name": "Escalera Lectura",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_atardecer_de_ensueno",
+      "state": "2025-07-31T21:47:30.816526+00:00",
+      "friendly_name": "Ático Atardecer de ensueño",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.escalera_luz_nocturna",
+      "state": "unknown",
+      "friendly_name": "Escalera Luz nocturna",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_chimenea",
+      "state": "2025-08-20T20:33:21.946492+00:00",
+      "friendly_name": "Ático Chimenea",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.garaje_relax",
+      "state": "unknown",
+      "friendly_name": "Garaje Relax",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_rubor_ambar",
+      "state": "2025-07-31T21:46:59.059815+00:00",
+      "friendly_name": "Ático Rubor ámbar",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_arise",
+      "state": "unknown",
+      "friendly_name": "Ático Arise",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_noche",
+      "state": "unknown",
+      "friendly_name": "Ático Noche",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_romance_de_rubi",
+      "state": "unknown",
+      "friendly_name": "Ático Romance de rubí",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.sensor_agua_energia",
+      "state": "unknown",
+      "friendly_name": "Sótano Energía",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.garaje_energia",
+      "state": "unknown",
+      "friendly_name": "Garaje Energía",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.cocina_lectura",
+      "state": "unknown",
+      "friendly_name": "Cocina Lectura",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_florecimiento",
+      "state": "2025-07-31T21:47:15.721469+00:00",
+      "friendly_name": "Ático Florecimiento",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.garaje_lectura",
+      "state": "unknown",
+      "friendly_name": "Garaje Lectura",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_energia",
+      "state": "unknown",
+      "friendly_name": "Ático Energía",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.cocina_luz_nocturna",
+      "state": "unknown",
+      "friendly_name": "Cocina Luz nocturna",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.escalera_relax",
+      "state": "unknown",
+      "friendly_name": "Escalera Relax",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_aurora_boreal",
+      "state": "2025-08-20T20:32:54.725952+00:00",
+      "friendly_name": "Ático Aurora boreal",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_concentracion",
+      "state": "unknown",
+      "friendly_name": "Ático Concentración",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.escalera_energia",
+      "state": "unknown",
+      "friendly_name": "Escalera Energía",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.cocina_energia",
+      "state": "2025-09-05T01:31:12.654494+00:00",
+      "friendly_name": "Cocina Energía",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.distribuidor_lectura",
+      "state": "unknown",
+      "friendly_name": "Distribuidor Lectura",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_pensativo",
+      "state": "2025-08-20T20:32:46.231178+00:00",
+      "friendly_name": "Ático Pensativo",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.escalera_concentracion",
+      "state": "unknown",
+      "friendly_name": "Escalera Concentración",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.garaje_descanso",
+      "state": "unknown",
+      "friendly_name": "Garaje Descanso",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.cocina_relax",
+      "state": "unknown",
+      "friendly_name": "Cocina Relax",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.cocina_concentracion",
+      "state": "unknown",
+      "friendly_name": "Cocina Concentración",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_relax",
+      "state": "2025-08-20T20:32:38.614493+00:00",
+      "friendly_name": "Ático Relax",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.garaje_concentracion",
+      "state": "unknown",
+      "friendly_name": "Garaje Concentración",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_luz_nocturna",
+      "state": "unknown",
+      "friendly_name": "Ático Luz nocturna",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_lectura",
+      "state": "2025-09-05T01:08:17.602261+00:00",
+      "friendly_name": "Ático Lectura",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_los_colores_de_la_naturaleza",
+      "state": "unknown",
+      "friendly_name": "Ático Los colores de la naturaleza",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.garaje_luz_natural_2",
+      "state": "unknown",
+      "friendly_name": "Garaje Luz natural 2",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.atico_luz_natural",
+      "state": "unknown",
+      "friendly_name": "Ático Luz natural",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.automation_state_after_streaming",
+      "state": "on",
+      "friendly_name": "Automation: state_after_streaming",
+      "device_class": "switch",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.automation_hue_dimmer_switch_3",
+      "state": "on",
+      "friendly_name": "Automation: Escalera Alto",
+      "device_class": "switch",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.automation_hue_tap_dial_switch_1",
+      "state": "on",
+      "friendly_name": "Automation: Hue tap dial switch 1",
+      "device_class": "switch",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.automation_hue_dimmer_switch_1",
+      "state": "on",
+      "friendly_name": "Automation: Escalera Intermedio",
+      "device_class": "switch",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.automation_hue_dimmer_switch_2",
+      "state": "on",
+      "friendly_name": "Automation: Escalera Bajo",
+      "device_class": "switch",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.shellyplus1_345f452105c4_temperature",
+      "state": "63.7",
+      "friendly_name": "Puerta Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "switch.shellyplus1_345f452105c4",
+      "state": "on",
+      "friendly_name": "Puerta",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.sync_box_encendido",
+      "state": "on",
+      "friendly_name": "Sync Box Encendido",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.sync_box_sincronizacion_de_luces",
+      "state": "on",
+      "friendly_name": "Sync Box Sincronización de luces",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.sync_box_compatibilidad_con_dolby_vision",
+      "state": "off",
+      "friendly_name": "Sync Box Compatibilidad con Dolby Vision",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_1_power",
+      "state": "1.64",
+      "friendly_name": "Medidor Patio Power",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_1_energy",
+      "state": "3.37",
+      "friendly_name": "Medidor Patio Energy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_1_energy_returned",
+      "state": "0.0",
+      "friendly_name": "Medidor Patio Energy returned",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_2_power",
+      "state": "0.0",
+      "friendly_name": "shellyem-48E72967A487 Channel 2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_2_energy",
+      "state": "0.0",
+      "friendly_name": "shellyem-48E72967A487 Channel 2 Energy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_2_energy_returned",
+      "state": "0.0",
+      "friendly_name": "shellyem-48E72967A487 Channel 2 Energy returned",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "switch.shellyem_48e72967a487",
+      "state": "on",
+      "friendly_name": "shellyem-48E72967A487",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.energy_production_today",
+      "state": "22.114",
+      "friendly_name": "Solar production forecast Producción de energía estimada - hoy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_production_today_remaining",
+      "state": "22.114",
+      "friendly_name": "Solar production forecast Producción de energía estimada - restante hoy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_production_tomorrow",
+      "state": "23.28",
+      "friendly_name": "Solar production forecast Producción de energía estimada - mañana",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.power_highest_peak_time_today",
+      "state": "2025-09-21T12:00:00+00:00",
+      "friendly_name": "Solar production forecast Hora pico de mayor potencia - hoy",
+      "device_class": "timestamp",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.power_highest_peak_time_tomorrow",
+      "state": "2025-09-21T12:00:00+00:00",
+      "friendly_name": "Solar production forecast Hora pico de mayor potencia - mañana",
+      "device_class": "timestamp",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.power_production_now",
+      "state": "0",
+      "friendly_name": "Solar production forecast Producción de energía estimada - ahora",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_current_hour",
+      "state": "0.0",
+      "friendly_name": "Solar production forecast Producción de energía estimada - esta hora",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_next_hour",
+      "state": "0.0",
+      "friendly_name": "Solar production forecast Producción de energía estimada - próxima hora",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "switch.c_o_2",
+      "state": "off",
+      "friendly_name": "C O 2",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.c_o_2_led",
+      "state": "on",
+      "friendly_name": "C O 2 LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "climate.ac_planta_principal",
+      "state": "off",
+      "friendly_name": "AC Planta Principal",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "temperature": 25.0
+      }
+    },
+    {
+      "entity_id": "climate.ac_habitaciones",
+      "state": "off",
+      "friendly_name": "AC Habitaciones",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "temperature": 25.0
+      }
+    },
+    {
+      "entity_id": "switch.electricidad_despacho",
+      "state": "on",
+      "friendly_name": "Electricidad despacho",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.electricidad_despacho_led",
+      "state": "on",
+      "friendly_name": "Electricidad despacho LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.led_guirnalda",
+      "state": "on",
+      "friendly_name": "LED Vitrina",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.led_guirnalda_led",
+      "state": "on",
+      "friendly_name": "LED Vitrina LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lampara_mudejar",
+      "state": "off",
+      "friendly_name": "Luces patio",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lampara_mudejar_led",
+      "state": "on",
+      "friendly_name": "Luces patio LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.led_acuario",
+      "state": "off",
+      "friendly_name": "LED acuario",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.led_acuario_led",
+      "state": "on",
+      "friendly_name": "LED acuario LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lavadora",
+      "state": "on",
+      "friendly_name": "Lavadora",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lavadora_led",
+      "state": "on",
+      "friendly_name": "Lavadora LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.caldera_electrica",
+      "state": "on",
+      "friendly_name": "Caldera eléctrica ",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.caldera_electrica_led",
+      "state": "on",
+      "friendly_name": "Caldera eléctrica  LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.consolas",
+      "state": "on",
+      "friendly_name": "Consolas",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.consolas_led",
+      "state": "on",
+      "friendly_name": "Consolas LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.frigorifico",
+      "state": "on",
+      "friendly_name": "Frigorífico ",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.frigorifico_led",
+      "state": "on",
+      "friendly_name": "Frigorífico  LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.filtro_acuario",
+      "state": "on",
+      "friendly_name": "Filtro acuario",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.filtro_acuario_led",
+      "state": "on",
+      "friendly_name": "Filtro acuario LED",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "climate.caldera",
+      "state": "heat",
+      "friendly_name": "Caldera",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "temperature": 10.0,
+        "icon": "mdi:radiator"
+      }
+    },
+    {
+      "entity_id": "sensor.ariston_central_heating_total_energy_consumption",
+      "state": "0.0",
+      "friendly_name": "Ariston central heating total energy consumption",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh",
+        "icon": "mdi:cash"
+      }
+    },
+    {
+      "entity_id": "sensor.ariston_domestic_hot_water_total_energy_consumption",
+      "state": "0.0",
+      "friendly_name": "Ariston domestic hot water total energy consumption",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh",
+        "icon": "mdi:cash"
+      }
+    },
+    {
+      "entity_id": "switch.ariston_automatic_thermoregulation",
+      "state": "off",
+      "friendly_name": "Ariston automatic thermoregulation",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:radiator"
+      }
+    },
+    {
+      "entity_id": "media_player.spotify_efra_espada",
+      "state": "idle",
+      "friendly_name": "Spotify Efra Espada",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "light.garaje",
+      "state": "off",
+      "friendly_name": "Garaje",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null,
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "light.despensa",
+      "state": "off",
+      "friendly_name": "Despensa",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null,
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "light.sotano",
+      "state": "off",
+      "friendly_name": "Sótano",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null,
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "light.distribuidor",
+      "state": "off",
+      "friendly_name": "Distribuidor",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null,
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "light.cocina",
+      "state": "off",
+      "friendly_name": "Cocina",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": null,
+        "color_temp": null,
+        "rgb_color": null,
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "light.atico",
+      "state": "on",
+      "friendly_name": "Ático",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "brightness": 255,
+        "color_temp": 346,
+        "rgb_color": [
+          255,
+          173,
+          102
+        ],
+        "icon": "mdi:lightbulb-group"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7e9739_battery",
+      "state": "100",
+      "friendly_name": "Water Leak Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7e9739_device_temperature",
+      "state": "29",
+      "friendly_name": "Water Leak Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7b8c03_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Despacho Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7b8c03_device_temperature",
+      "state": "29",
+      "friendly_name": "Sensor Ventana Despacho Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b8099c2_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Consolas Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b8099c2_device_temperature",
+      "state": "33",
+      "friendly_name": "Sensor Ventana Consolas Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80971b_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Lego Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80971b_device_temperature",
+      "state": "30",
+      "friendly_name": "Sensor Ventana Lego Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdcad_battery",
+      "state": "100",
+      "friendly_name": "Sensor Puerta Terraza Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdcad_device_temperature",
+      "state": "35",
+      "friendly_name": "Sensor Puerta Terraza Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdc53_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Terraza Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdc53_device_temperature",
+      "state": "33",
+      "friendly_name": "Sensor Ventana Terraza Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80a7f6_battery",
+      "state": "100",
+      "friendly_name": "Sensor Puerta Despensa Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80a7f6_device_temperature",
+      "state": "29",
+      "friendly_name": "Sensor Puerta Despensa Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x54ef441001214a4d_device_temperature",
+      "state": "36",
+      "friendly_name": "Enchufe mesa Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x54ef441001214a4d_power",
+      "state": "0",
+      "friendly_name": "Enchufe mesa Potencia",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.0x54ef441001214a4d_energy",
+      "state": "1.46",
+      "friendly_name": "Enchufe mesa Energía",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.0xffffb40e0601a7dc_battery",
+      "state": "100",
+      "friendly_name": "Sensor puerta garaje Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "switch.zigbee2mqtt_bridge_permit_join",
+      "state": "off",
+      "friendly_name": "Zigbee2MQTT Bridge Permit join",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:human-greeting-proximity"
+      }
+    },
+    {
+      "entity_id": "switch.0x54ef441001214a4d",
+      "state": "on",
+      "friendly_name": "Enchufe mesa",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.0x54ef441001214a4d_led_indicator",
+      "state": "on",
+      "friendly_name": "Enchufe mesa Led indicator",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.0x54ef441001214a4d_button_lock",
+      "state": "off",
+      "friendly_name": "Enchufe mesa Button lock",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:lock"
+      }
+    },
+    {
+      "entity_id": "switch.0x54ef441001214a4d_charging_protection",
+      "state": "off",
+      "friendly_name": "Enchufe mesa Charging protection",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.nest_mini_sotano",
+      "state": "unavailable",
+      "friendly_name": "media_player.nest_mini_sotano",
+      "device_class": "speaker",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "media_player.mitv_mssp3",
+      "state": "off",
+      "friendly_name": "TV 4K",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.gw2000a_indoor_humidity",
+      "state": "31",
+      "friendly_name": "Ecowitt Indoor Humidity",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_humidity",
+      "state": "42",
+      "friendly_name": "Ecowitt Humidity",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_humidity_1",
+      "state": "33",
+      "friendly_name": "Ecowitt Humidity 1",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_wh90_battery",
+      "state": "2.56",
+      "friendly_name": "Ecowitt WH90 Battery",
+      "device_class": "voltage",
+      "unit_of_measurement": "V",
+      "attributes": {
+        "unit_of_measurement": "V"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_outdoor_temperature",
+      "state": "24.5",
+      "friendly_name": "Ecowitt Outdoor Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_indoor_temperature",
+      "state": "29.4",
+      "friendly_name": "Ecowitt Indoor Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_temperature_1",
+      "state": "28.6",
+      "friendly_name": "Ecowitt Temperature 1",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_indoor_dewpoint",
+      "state": "10.5",
+      "friendly_name": "Ecowitt Indoor Dewpoint",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_feels_like_temperature",
+      "state": "24.5",
+      "friendly_name": "Ecowitt Feels like Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_humidity_2",
+      "state": "36",
+      "friendly_name": "Ecowitt Humidity 2",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_temperature_2",
+      "state": "27.3",
+      "friendly_name": "Ecowitt Temperature 2",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "media_player.nest_atico",
+      "state": "unavailable",
+      "friendly_name": "media_player.nest_atico",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.ecowitt_humidity_3",
+      "state": "38",
+      "friendly_name": "Ecowitt Humidity 3",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_temperature_3",
+      "state": "27.5",
+      "friendly_name": "Ecowitt Temperature 3",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_humidity_4",
+      "state": "46",
+      "friendly_name": "Ecowitt Humidity 4",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_temperature_4",
+      "state": "25.6",
+      "friendly_name": "Ecowitt Temperature 4",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "switch.lavadora_energia",
+      "state": "unavailable",
+      "friendly_name": "Energía",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lavadora_i_dos_1_active",
+      "state": "unavailable",
+      "friendly_name": "i-Dos 1 Active",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lavadora_i_dos_2_active",
+      "state": "unavailable",
+      "friendly_name": "i-Dos 2 Active",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "switch.lavadora_bloqueo_infantil",
+      "state": "unavailable",
+      "friendly_name": "Bloqueo infantil",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "scene.restore_alert_lights",
+      "state": "2025-09-20T18:35:59.917845+00:00",
+      "friendly_name": "restore_alert_lights",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {}
+    }
+  ],
+  "sensors": [
+    {
+      "entity_id": "sensor.foxess_pv1_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV1 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv2_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv3_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV3 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv4_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV4 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv5_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV5 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv6_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - PV6 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pv_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - PV Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_r_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - R Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_meter2_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Meter2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_s_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - S Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_t_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - T Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_reactive_power",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Reactive Power",
+      "device_class": "reactive_power",
+      "unit_of_measurement": "var",
+      "attributes": {
+        "unit_of_measurement": "var"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_power_factor",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Power Factor",
+      "device_class": "power_factor",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_temperature",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_temperature2",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Bat Temperature2",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_ambient_temperature",
+      "state": "37.2",
+      "friendly_name": "FoxESS - Ambient Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_boost_temperature",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Boost Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_inv_temperature",
+      "state": "28.2",
+      "friendly_name": "FoxESS - Inv Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_inverter_bat_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Inverter Bat Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_inverter_bat_power2",
+      "state": "unknown",
+      "friendly_name": "FoxESS - Inverter Bat Power2",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_solar_power",
+      "state": "0.001",
+      "friendly_name": "FoxESS - Solar Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_throughput",
+      "state": "0",
+      "friendly_name": "FoxESS - Energy Throughput",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_generation_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Generation Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_grid_consumption_power",
+      "state": "0.527",
+      "friendly_name": "FoxESS - Grid Consumption Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_feedin_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - FeedIn Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_discharge_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Discharge Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_bat_charge_power",
+      "state": "0.0",
+      "friendly_name": "FoxESS - Bat Charge Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_load_power",
+      "state": "0.528",
+      "friendly_name": "FoxESS - Load Power",
+      "device_class": "power",
+      "unit_of_measurement": "kW",
+      "attributes": {
+        "unit_of_measurement": "kW"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_generated",
+      "state": "0",
+      "friendly_name": "FoxESS - Energy Generated",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_generated_month",
+      "state": "502.4",
+      "friendly_name": "FoxESS - Energy Generated Month",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_energy_generated_cumulative",
+      "state": "19232.6",
+      "friendly_name": "FoxESS - Energy Generated Cumulative",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_pvenergytotal",
+      "state": "0",
+      "friendly_name": "FoxESS - PVEnergyTotal",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.foxess_residual_energy",
+      "state": "0",
+      "friendly_name": "FoxESS - Residual Energy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_battery_level",
+      "state": "90",
+      "friendly_name": "iPhone Battery Level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-90"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_battery_state",
+      "state": "Not Charging",
+      "friendly_name": "iPhone Battery State",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-90"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_16_pro_battery_level",
+      "state": "60",
+      "friendly_name": "iPhone 16 Pro Battery Level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-60"
+      }
+    },
+    {
+      "entity_id": "sensor.iphone_16_pro_battery_state",
+      "state": "Not Charging",
+      "friendly_name": "iPhone 16 Pro Battery State",
+      "device_class": null,
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-60"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_9_pro_fold_battery_level",
+      "state": "61",
+      "friendly_name": "Pixel 9 Pro Fold Battery level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-60"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_9_pro_fold_battery_state",
+      "state": "discharging",
+      "friendly_name": "Pixel 9 Pro Fold Battery state",
+      "device_class": "enum",
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-minus"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuela_cris_battery_level",
+      "state": "83",
+      "friendly_name": "Pixel 6a Abuela Cris Battery level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-80"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuela_cris_battery_state",
+      "state": "discharging",
+      "friendly_name": "Pixel 6a Abuela Cris Battery state",
+      "device_class": "enum",
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-minus"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuelo_efra_battery_level",
+      "state": "52",
+      "friendly_name": "Pixel 6a Abuelo Efra Battery level",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%",
+        "icon": "mdi:battery-50"
+      }
+    },
+    {
+      "entity_id": "sensor.pixel_6a_abuelo_efra_battery_state",
+      "state": "discharging",
+      "friendly_name": "Pixel 6a Abuelo Efra Battery state",
+      "device_class": "enum",
+      "unit_of_measurement": null,
+      "attributes": {
+        "icon": "mdi:battery-minus"
+      }
+    },
+    {
+      "entity_id": "sensor.electricity_maps_intensidad_de_co2",
+      "state": "140.0",
+      "friendly_name": "Electricity Maps intensidad de CO2",
+      "device_class": null,
+      "unit_of_measurement": "gCO2eq/kWh",
+      "attributes": {
+        "unit_of_measurement": "gCO2eq/kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyplus1_345f452105c4_temperature",
+      "state": "63.7",
+      "friendly_name": "Puerta Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_1_power",
+      "state": "1.64",
+      "friendly_name": "Medidor Patio Power",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_1_energy",
+      "state": "3.37",
+      "friendly_name": "Medidor Patio Energy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_1_energy_returned",
+      "state": "0.0",
+      "friendly_name": "Medidor Patio Energy returned",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_2_power",
+      "state": "0.0",
+      "friendly_name": "shellyem-48E72967A487 Channel 2 Power",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_2_energy",
+      "state": "0.0",
+      "friendly_name": "shellyem-48E72967A487 Channel 2 Energy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.shellyem_48e72967a487_channel_2_energy_returned",
+      "state": "0.0",
+      "friendly_name": "shellyem-48E72967A487 Channel 2 Energy returned",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_production_today",
+      "state": "22.114",
+      "friendly_name": "Solar production forecast Producción de energía estimada - hoy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_production_today_remaining",
+      "state": "22.114",
+      "friendly_name": "Solar production forecast Producción de energía estimada - restante hoy",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_production_tomorrow",
+      "state": "23.28",
+      "friendly_name": "Solar production forecast Producción de energía estimada - mañana",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.power_highest_peak_time_today",
+      "state": "2025-09-21T12:00:00+00:00",
+      "friendly_name": "Solar production forecast Hora pico de mayor potencia - hoy",
+      "device_class": "timestamp",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.power_highest_peak_time_tomorrow",
+      "state": "2025-09-21T12:00:00+00:00",
+      "friendly_name": "Solar production forecast Hora pico de mayor potencia - mañana",
+      "device_class": "timestamp",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.power_production_now",
+      "state": "0",
+      "friendly_name": "Solar production forecast Producción de energía estimada - ahora",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_current_hour",
+      "state": "0.0",
+      "friendly_name": "Solar production forecast Producción de energía estimada - esta hora",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.energy_next_hour",
+      "state": "0.0",
+      "friendly_name": "Solar production forecast Producción de energía estimada - próxima hora",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.ariston_heating_circuit_pressure",
+      "state": "unknown",
+      "friendly_name": "Ariston heating circuit pressure",
+      "device_class": "pressure",
+      "unit_of_measurement": null,
+      "attributes": {}
+    },
+    {
+      "entity_id": "sensor.ariston_central_heating_total_energy_consumption",
+      "state": "0.0",
+      "friendly_name": "Ariston central heating total energy consumption",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh",
+        "icon": "mdi:cash"
+      }
+    },
+    {
+      "entity_id": "sensor.ariston_domestic_hot_water_total_energy_consumption",
+      "state": "0.0",
+      "friendly_name": "Ariston domestic hot water total energy consumption",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh",
+        "icon": "mdi:cash"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7e9739_battery",
+      "state": "100",
+      "friendly_name": "Water Leak Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7e9739_device_temperature",
+      "state": "29",
+      "friendly_name": "Water Leak Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7b8c03_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Despacho Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7b8c03_device_temperature",
+      "state": "29",
+      "friendly_name": "Sensor Ventana Despacho Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b8099c2_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Consolas Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b8099c2_device_temperature",
+      "state": "33",
+      "friendly_name": "Sensor Ventana Consolas Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80971b_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Lego Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80971b_device_temperature",
+      "state": "30",
+      "friendly_name": "Sensor Ventana Lego Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdcad_battery",
+      "state": "100",
+      "friendly_name": "Sensor Puerta Terraza Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdcad_device_temperature",
+      "state": "35",
+      "friendly_name": "Sensor Puerta Terraza Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdc53_battery",
+      "state": "100",
+      "friendly_name": "Sensor Ventana Terraza Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b7cdc53_device_temperature",
+      "state": "33",
+      "friendly_name": "Sensor Ventana Terraza Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80a7f6_battery",
+      "state": "100",
+      "friendly_name": "Sensor Puerta Despensa Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.0x00158d008b80a7f6_device_temperature",
+      "state": "29",
+      "friendly_name": "Sensor Puerta Despensa Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x54ef441001214a4d_device_temperature",
+      "state": "36",
+      "friendly_name": "Enchufe mesa Temperatura",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.0x54ef441001214a4d_power",
+      "state": "0",
+      "friendly_name": "Enchufe mesa Potencia",
+      "device_class": "power",
+      "unit_of_measurement": "W",
+      "attributes": {
+        "unit_of_measurement": "W"
+      }
+    },
+    {
+      "entity_id": "sensor.0x54ef441001214a4d_energy",
+      "state": "1.46",
+      "friendly_name": "Enchufe mesa Energía",
+      "device_class": "energy",
+      "unit_of_measurement": "kWh",
+      "attributes": {
+        "unit_of_measurement": "kWh"
+      }
+    },
+    {
+      "entity_id": "sensor.0xffffb40e0601a7dc_battery",
+      "state": "100",
+      "friendly_name": "Sensor puerta garaje Batería",
+      "device_class": "battery",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_indoor_humidity",
+      "state": "31",
+      "friendly_name": "Ecowitt Indoor Humidity",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_humidity",
+      "state": "42",
+      "friendly_name": "Ecowitt Humidity",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_humidity_1",
+      "state": "33",
+      "friendly_name": "Ecowitt Humidity 1",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_wh90_battery",
+      "state": "2.56",
+      "friendly_name": "Ecowitt WH90 Battery",
+      "device_class": "voltage",
+      "unit_of_measurement": "V",
+      "attributes": {
+        "unit_of_measurement": "V"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_outdoor_temperature",
+      "state": "24.5",
+      "friendly_name": "Ecowitt Outdoor Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_indoor_temperature",
+      "state": "29.4",
+      "friendly_name": "Ecowitt Indoor Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_temperature_1",
+      "state": "28.6",
+      "friendly_name": "Ecowitt Temperature 1",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_relative_pressure",
+      "state": "944.3",
+      "friendly_name": "Ecowitt Relative Pressure",
+      "device_class": "pressure",
+      "unit_of_measurement": "hPa",
+      "attributes": {
+        "unit_of_measurement": "hPa"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_absolute_pressure",
+      "state": "944.3",
+      "friendly_name": "Ecowitt Absolute Pressure",
+      "device_class": "pressure",
+      "unit_of_measurement": "hPa",
+      "attributes": {
+        "unit_of_measurement": "hPa"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_indoor_dewpoint",
+      "state": "10.5",
+      "friendly_name": "Ecowitt Indoor Dewpoint",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.gw2000a_feels_like_temperature",
+      "state": "24.5",
+      "friendly_name": "Ecowitt Feels like Temperature",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_humidity_2",
+      "state": "36",
+      "friendly_name": "Ecowitt Humidity 2",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_temperature_2",
+      "state": "27.3",
+      "friendly_name": "Ecowitt Temperature 2",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_humidity_3",
+      "state": "38",
+      "friendly_name": "Ecowitt Humidity 3",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_temperature_3",
+      "state": "27.5",
+      "friendly_name": "Ecowitt Temperature 3",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_humidity_4",
+      "state": "46",
+      "friendly_name": "Ecowitt Humidity 4",
+      "device_class": "humidity",
+      "unit_of_measurement": "%",
+      "attributes": {
+        "unit_of_measurement": "%"
+      }
+    },
+    {
+      "entity_id": "sensor.ecowitt_temperature_4",
+      "state": "25.6",
+      "friendly_name": "Ecowitt Temperature 4",
+      "device_class": "temperature",
+      "unit_of_measurement": "°C",
+      "attributes": {
+        "unit_of_measurement": "°C"
+      }
+    }
+  ],
+  "services": {
+    "available_services": {
+      "light": [
+        "turn_on",
+        "turn_off",
+        "toggle"
+      ],
+      "switch": [
+        "turn_on",
+        "turn_off",
+        "toggle"
+      ],
+      "cover": [
+        "open_cover",
+        "close_cover",
+        "stop_cover"
+      ],
+      "climate": [
+        "set_temperature",
+        "set_hvac_mode"
+      ],
+      "fan": [
+        "turn_on",
+        "turn_off",
+        "set_speed"
+      ],
+      "media_player": [
+        "play_media",
+        "pause",
+        "stop",
+        "volume_set"
+      ]
+    },
+    "note": "Essential services for decision making"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "Optimized Home Assistant state snapshot",
+    "version": "2.0",
+    "optimization": "Filtered relevant entities and simplified attributes"
+  }
+}

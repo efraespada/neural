@@ -1,0 +1,4 @@
+{
+  "message": "La temperatura ambiente es de 37.2°C según el sensor ambiental del sistema fotovoltaico (FoxESS). La temperatura del inversor es de 28.2°C.",
+  "actions": []
+}
