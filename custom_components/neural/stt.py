@@ -6,7 +6,6 @@ import logging
 from typing import Any
 
 import aiohttp
-import async_timeout
 
 from homeassistant.components.stt import (
     AudioBitRates,
