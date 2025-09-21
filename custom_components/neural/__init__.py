@@ -55,7 +55,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             }
             hass.data[DOMAIN]["stt_config"] = stt_config
             hass.data[DOMAIN]["stt_setup"] = True
-            _LOGGER.info("STT configuration stored successfully")
+            _LOGGER.warning("STT configuration stored successfully: %s", stt_config)
         except Exception as e:
             _LOGGER.error("Error setting up STT configuration: %s", e)
             # Continue without STT if setup fails

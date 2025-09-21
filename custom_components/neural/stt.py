@@ -172,16 +172,17 @@ class NeuralSTTProvider(Provider):
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, async_add_entities) -> None:
     """Set up entry."""
-    pass
+    _LOGGER.warning("STT async_setup_entry called for Neural AI")
+    _LOGGER.warning("Config entry data: %s", config_entry.data)
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     return True
 
 async def async_get_engine(
-    hass: HomeAssistant, config: dict, discovery_info: dict | None = None
+    hass: HomeAssistant, config: dict[str, Any] | None = None
 ) -> NeuralSTTProvider:
-    """Set up STT from a config entry."""
+    """Set up Neural STT provider."""
     model = config.get(CONF_STT_MODEL, DEFAULT_STT_MODEL)
     api_key = config.get(CONF_STT_API_KEY, "")
 
@@ -189,11 +190,9 @@ async def async_get_engine(
         CONF_STT_API_KEY: api_key,
         CONF_STT_MODEL: model,
     }
-    
-    # Create and register the STT provider    
-    """Set up Neural STT provider."""
     if stt_config is None:
         stt_config = {}
     
+    _LOGGER.warning("Creating Neural STT provider with config: %s", stt_config)
     return NeuralSTTProvider(hass, stt_config)
 
