@@ -18,14 +18,15 @@ from homeassistant.components.stt import (
     SpeechMetadata,
     SpeechResult,
     SpeechResultState,
+    async_register_provider,
+    async_unregister_provider,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import DOMAIN
 from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
-from .core import get_audio_use_case
+from .core.dependency_injection.injector_container import get_audio_use_case
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -113,29 +114,21 @@ class NeuralSTTProvider(Provider):
     async def _transcribe_audio(self, audio_data: bytes, language: str) -> str:
         """Transcribe audio using the audio use case."""
         try:
-            # Get configuration from config entry
-            ai_url = self.config.get("ai_url", "https://openrouter.ai/api/v1")
-            ai_api_key = self.config.get("ai_api_key", "")
-            ai_model = self.config.get("ai_model", "openai/gpt-oss-20b")
-            stt_model = self.config.get("stt_model", "whisper-1")
-            stt_api_key = self.config.get("stt_api_key", "")
+            # Setup dependencies
+            await setup_dependencies()
             
-            _LOGGER.info("STT Config - AI URL: %s, STT Model: %s, STT API Key: %s", 
-                        ai_url, stt_model, "***" if stt_api_key else "None")
-            
-            # Create AI client directly with STT configuration
-            from .core.api.ai_client import AIClient
-            ai_client = AIClient(
-                ai_url=ai_url,
-                ai_model=ai_model,
-                api_key=ai_api_key,
-                stt_api_key=stt_api_key
-            )
-            
-            # Transcribe audio directly
-            transcription = await ai_client.transcribe_audio(audio_data, language)
-            
-            return transcription
+            try:
+                # Get audio use case
+                audio_use_case = get_audio_use_case()
+                
+                # Transcribe audio using the use case
+                transcription = await audio_use_case.transcribe_audio(audio_data, language)
+                
+                return transcription
+                
+            finally:
+                # Clean up dependencies
+                clear_dependencies()
                         
         except Exception as e:
             _LOGGER.error("Error transcribing audio: %s", e)
@@ -150,11 +143,20 @@ class NeuralSTTProvider(Provider):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities) -> bool:
     """Set up STT from a config entry."""
+    stt_config = hass.data.get(DOMAIN, {}).get("stt_config", {})
+    
+    # Create and register the STT provider
+    provider = await async_get_engine(hass, stt_config)
+    async_register_provider(hass, provider)
+    
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload STT config entry."""
+    # Unregister the STT provider
+    async_unregister_provider(hass, DOMAIN)
+    
     return True
 
 
