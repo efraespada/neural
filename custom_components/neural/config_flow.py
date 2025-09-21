@@ -25,7 +25,7 @@ from .core import get_ai_use_case, get_ha_use_case
 from .core.managers.config_manager import ConfigManager
 from .core.repositories.implementations.file_repository_impl import FileRepositoryImpl
 from .core.api.models.domain.config import AppConfig, LLMConfig, HAConfig
-from core.const import (
+from .core.const import (
     DEFAULT_CONFIG_FILE_PATH,
     DEFAULT_WORK_MODE,
     DEFAULT_PERSONALITY,
@@ -49,8 +49,7 @@ from .const import (
     CONF_MICROPHONE_ENABLED,
     CONF_VOICE_LANGUAGE,
     CONF_VOICE_TIMEOUT,
-    AI_MODELS,
-    
+    AI_MODELS, 
 )
 
 _LOGGER = logging.getLogger(__name__)
