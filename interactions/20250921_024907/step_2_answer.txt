@@ -1,6 +1,0 @@
-```json
-{
-  "message": "I'm sorry Dave, I'm afraid I can't do that. The current ambient temperature is 28.5°C, which is already within a comfortable range. No need to activate the heating.",
-  "actions": []
-}
-```

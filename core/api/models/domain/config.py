@@ -13,7 +13,7 @@ class LLMConfig:
     url: str = "https://openrouter.ai/api/v1"
     model: str = "anthropic/claude-3.5-sonnet"
     api_key: Optional[str] = None
-    personality: str = "HAL9000 - Space Odyssey"
+    personality: str = "hal9000"
     
     def to_dict(self) -> Dict[str, Any]:
         """Convertir a diccionario."""

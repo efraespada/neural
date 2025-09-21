@@ -44,7 +44,7 @@ Examples:
   neural ai config --url https://openrouter.ai/api/v1
   neural ai config --model anthropic/claude-3.5-sonnet
   neural ai config --api-key sk-or-v1-your-api-key
-  neural ai config --personality "HAL9000 - Space Odyssey"
+  neural ai config --personality hal9000
   neural ai config --url https://openrouter.ai/api/v1 --model anthropic/claude-3.5-sonnet --api-key sk-or-v1-your-api-key --personality "Jarvis - Ironman"
 
   # AI decision making
@@ -121,7 +121,7 @@ Examples:
     config_ai_parser.add_argument("--model", help="Set LLM model")
     config_ai_parser.add_argument("--api-key", help="Set LLM API key")
     config_ai_parser.add_argument("--personality", 
-                                 choices=["HAL9000 - Space Odyssey", "Mother - Alien", "Jarvis - Ironman", "Kitt - Knight Rider"],
+                                 choices=["hal9000", "mother", "jarvis", "kitt"],
                                  help="Set AI personality")
     
     # AI decide command

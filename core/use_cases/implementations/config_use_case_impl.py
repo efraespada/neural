@@ -216,7 +216,7 @@ class ConfigUseCaseImpl(ConfigUseCase):
             
             # Validar personalidad si se proporciona
             if personality and personality.strip():
-                valid_personalities = ["HAL9000 - Space Odyssey", "Mother - Alien", "Jarvis - Ironman", "Kitt - Knight Rider"]
+                valid_personalities = ["hal9000", "mother", "jarvis", "kitt"]
                 if personality.strip() not in valid_personalities:
                     raise ValueError(f"Invalid personality: {personality}. Must be one of: {', '.join(valid_personalities)}")
             
@@ -253,7 +253,7 @@ class ConfigUseCaseImpl(ConfigUseCase):
             _LOGGER.debug("Updating LLM personality to: %s", personality)
             
             # Validar personalidad
-            valid_personalities = ["HAL9000 - Space Odyssey", "Mother - Alien", "Jarvis - Ironman", "Kitt - Knight Rider"]
+            valid_personalities = ["hal9000", "mother", "jarvis", "kitt"]
             if not personality or not personality.strip():
                 raise ValueError("LLM personality cannot be empty")
             if personality.strip() not in valid_personalities:

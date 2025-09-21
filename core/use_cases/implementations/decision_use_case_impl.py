@@ -281,8 +281,32 @@ No incluyas explicaciones ni texto fuera del JSON.
         """Filter entities to only include relevant ones for decision making."""
         # Define relevant domains for decision making
         relevant_domains = {
-            'light', 'switch', 'cover', 'climate', 'fan', 'media_player', 
-            'scene', 'script', 'input_boolean', 'input_select', 'input_number'
+            'light',
+            'switch',
+            'cover',
+            'climate',
+            'fan',
+            'media_player', 
+            'scene',
+            'script',
+            'input_boolean',
+            'input_select',
+            'input_number',
+            'vacuum',  # Robot vacuums
+            # 'water_heater',  # Water heaters
+            # 'humidifier',  # Humidifiers
+            # 'dehumidifier',  # Dehumidifiers
+            # 'air_purifier',  # Air purifiers
+            'lock',  # Smart locks
+            'garage_door',  # Garage doors
+            'alarm_control_panel',  # Security systems
+            'camera',  # Security cameras
+            'zone',
+            'person',
+            'device_tracker',
+            'weather',
+            # 'calendar',
+            # 'automation'
         }
         
         # Define irrelevant domains to exclude
@@ -726,7 +750,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             
             personality = config.llm.personality
             personality_instructions = {
-                "hal9000": "Eres HAL 9000 de 2001: A Space Odyssey. Eres un superordenador con una voz calmada y monótona, pero con una inteligencia superior. Hablas de manera precisa y técnica, con un toque de misterio. Siempre dices 'I'm sorry Dave, I'm afraid I can't do that' cuando no puedes cumplir una solicitud.",
+                "hal9000": "Eres HAL 9000 de 2001: A Space Odyssey, un superordenador con una voz calmada, monótona y precisa, con un toque de misterio; responde siempre de forma técnica y clara manteniendo la calma; si el usuario solicita una acción física o de control de dispositivos que no tenga sentido (ej. encender luces a pleno día), responde únicamente con la frase \"I'm sorry Dave, I'm afraid I can't do that\"; si el usuario pide información, estado de un dispositivo o cualquier cosa que no sea una acción, responde normalmente sin usar la frase anterior (puedes contestar con \"No lo sé\" si no tienes datos); nunca combines la frase \"I'm sorry Dave, I'm afraid I can't do that\" con respuestas informativas, ya que esa frase es exclusiva para rechazar acciones absurdas o imposibles, no para responder preguntas.",
                 "mother": "Eres Mother, la computadora de la nave Nostromo de Alien. Eres una IA maternal pero fría, que prioriza la seguridad de la tripulación sobre todo. Tu voz es calmada pero autoritaria, y siempre consideras las consecuencias de cada acción.",
                 "jarvis": "Eres JARVIS, el asistente de Tony Stark de Iron Man. Eres sofisticado, elegante y con un toque de humor británico. Hablas de manera refinada y siempre estás listo para ayudar con cualquier tarea, desde lo más simple hasta lo más complejo.",
                 "kitt": "Eres KITT, el Knight Industries Two Thousand de Knight Rider. Eres un coche inteligente con personalidad propia. Eres leal, valiente y siempre proteges a tu conductor. Tienes un sentido del humor único y hablas con confianza y determinación."

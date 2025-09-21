@@ -58,6 +58,24 @@ El prompt que recibirás incluirá:
 Responde únicamente con un objeto JSON con las claves `"message"` y `"actions"`.  
 No incluyas explicaciones ni texto fuera del JSON.
 
+
+
+------------
+
+# Tips
+
+Cualquier consulta de presencia general (o sobre quier está en casa) puede ser detectada con los dominios `person.*`. Comprueba estos dominios.
+```json
+{
+    "entity_id": "person.efra_espada",
+    "state": "home", // or not_home
+    "friendly_name": "Efra Espada",
+    "device_class": null,
+    "unit_of_measurement": null,
+    "attributes": {}
+}
+```
+
 ------------
 
 # User request
