@@ -6,7 +6,7 @@ import logging
 
 from homeassistant.core import HomeAssistant, ServiceCall
 
-from .const import DOMAIN, SERVICE_SEND_MESSAGE, SERVICE_GET_STATUS, SERVICE_UPDATE_CONFIG
+from custom_components.neural.const import DOMAIN, SERVICE_SEND_MESSAGE, SERVICE_GET_STATUS, SERVICE_UPDATE_CONFIG
 
 _LOGGER = logging.getLogger(__name__)
 

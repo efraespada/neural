@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.intent import IntentHandler, IntentResponse
 from homeassistant.helpers import intent
 
-from .const import DOMAIN
+from custom_components.neural.const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
