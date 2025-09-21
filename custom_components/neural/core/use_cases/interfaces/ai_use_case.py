@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from core.api.models.domain.ai import AIStatus, AIResponse, AIModel
+from ...api.models.domain.ai import AIStatus
 
 
 class AIUseCase(ABC):

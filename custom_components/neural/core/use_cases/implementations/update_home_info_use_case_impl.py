@@ -6,7 +6,7 @@ import logging
 import os
 from typing import Optional
 
-from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
+from ..interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
 
 _LOGGER = logging.getLogger(__name__)
 

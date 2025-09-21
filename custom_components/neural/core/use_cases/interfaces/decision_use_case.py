@@ -2,7 +2,6 @@ import abc
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 
-
 @dataclass
 class DecisionAction:
     """Represents an action to be executed in Home Assistant."""

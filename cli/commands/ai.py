@@ -12,6 +12,12 @@ from ..utils.display import (
     print_header,
 )
 
+from core.dependency_injection.injector_container import (
+    get_config_use_case,
+    get_decision_use_case,
+    get_do_actions_use_case,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -151,7 +157,6 @@ class AICommand(BaseCommand):
                 return False
 
             # Get config use case
-            from core.dependency_injection.injector_container import get_config_use_case
             config_use_case = get_config_use_case()
             
             # Parse configuration parameters
@@ -266,7 +271,6 @@ class AICommand(BaseCommand):
                 return False
 
             # Get decision use case
-            from core.dependency_injection.injector_container import get_decision_use_case
             decision_use_case = get_decision_use_case()
             
             print_info(f"Prompt del usuario: {prompt}")
@@ -289,7 +293,6 @@ class AICommand(BaseCommand):
                 
                 # Execute actions using do_actions_use_case
                 print_info("Ejecutando acciones...")
-                from core.dependency_injection.injector_container import get_do_actions_use_case
                 do_actions_use_case = get_do_actions_use_case()
                 
                 execution_result = await do_actions_use_case.execute_actions(decision.actions)

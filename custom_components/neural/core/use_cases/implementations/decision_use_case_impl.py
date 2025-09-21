@@ -1,14 +1,17 @@
 import json
 import logging
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from pathlib import Path
+from datetime import datetime
+import os
+import json
 
-from core.use_cases.interfaces.decision_use_case import DecisionUseCase, DecisionResponse, DecisionAction
-from core.repositories.interfaces.ai_repository import AIRepository
-from core.repositories.interfaces.ha_repository import HARepository
-from core.repositories.interfaces.file_repository import FileRepository
-from core.api.models.domain.ha_entity import HAEntity
-from core.constants import RELEVANT_DOMAINS
+from ..interfaces.decision_use_case import DecisionUseCase, DecisionResponse, DecisionAction
+from ...repositories.interfaces.ai_repository import AIRepository
+from ...repositories.interfaces.ha_repository import HARepository
+from ...repositories.interfaces.file_repository import FileRepository
+from ...api.models.domain.ha_entity import HAEntity
+from ...constants import RELEVANT_DOMAINS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -113,7 +116,6 @@ No incluyas explicaciones ni texto fuera del JSON.
                 raise ValueError(f"Invalid mode: {mode}. Must be assistant, supervisor, or autonomic")
             
             # Create interaction timestamp for this decision process
-            from datetime import datetime
             interaction_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             
             # Step 1: Send initial context prompt
@@ -222,9 +224,6 @@ No incluyas explicaciones ni texto fuera del JSON.
                                           services_info: Dict[str, Any], user_prompt: str) -> None:
         """Save optimized Home Assistant information to local JSON file."""
         try:
-            from datetime import datetime
-            import os
-            
             # Create timestamp for filename
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"ha_information_{timestamp}.json"
@@ -254,9 +253,7 @@ No incluyas explicaciones ni texto fuera del JSON.
     async def _optimize_ha_information(self, entities: List[HAEntity], sensors: List[HAEntity], 
                                      services_info: Dict[str, Any], user_prompt: str) -> Dict[str, Any]:
         """Optimize Home Assistant information by filtering and simplifying data."""
-        try:
-            from datetime import datetime
-            
+        try:            
             # Filter relevant entities
             relevant_entities = self._filter_entities_for_storage(entities)
             relevant_sensors = self._filter_sensors_for_storage(sensors)
@@ -435,7 +432,6 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.debug("Parsing filtered entities from step 2 response")
             
             # Try to parse JSON response
-            import json
             try:
                 response_data = json.loads(step2_response)
                 if "data" in response_data:
@@ -473,10 +469,6 @@ No incluyas explicaciones ni texto fuera del JSON.
         Save final decision summary to interactions directory.
         """
         try:
-            import os
-            import json
-            from datetime import datetime
-            
             # Create interactions directory structure
             interactions_dir = f"interactions/{timestamp}"
             os.makedirs(interactions_dir, exist_ok=True)
@@ -525,10 +517,7 @@ No incluyas explicaciones ni texto fuera del JSON.
     
     async def _save_ai_decision(self, user_prompt: str, mode: str, decision: DecisionResponse, ha_info: str = None) -> None:
         """Save AI decision to local JSON file for analysis and history."""
-        try:
-            from datetime import datetime
-            import os
-            
+        try:    
             # Create timestamp for filename
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"ai_decision_{timestamp}.json"
@@ -754,11 +743,13 @@ No incluyas explicaciones ni texto fuera del JSON.
     async def _get_config_mode(self) -> str:
         """Get operation mode from configuration."""
         try:
-            from core.dependency_injection.injector_container import get_config_use_case
-            config_use_case = get_config_use_case()
-            config = await config_use_case.get_config()
+            config_content = await self._file_repository.get_file("config.json")
             
-            return config.mode
+            if config_content:
+                config_data = json.loads(config_content)
+                return config_data.get("mode", "assistant")
+            
+            return "assistant"  # Default fallback
             
         except Exception as e:
             _LOGGER.warning("Could not get config mode: %s", e)
@@ -767,11 +758,13 @@ No incluyas explicaciones ni texto fuera del JSON.
     async def _get_personality_instruction(self) -> str:
         """Get personality instruction based on current configuration."""
         try:
-            from core.dependency_injection.injector_container import get_config_use_case
-            config_use_case = get_config_use_case()
-            config = await config_use_case.get_config()
+            config_content = await self._file_repository.get_file("config.json")
             
-            personality = config.llm.personality
+            personality = "assistant"  # Default
+            if config_content:
+                config_data = json.loads(config_content)
+                personality = config_data.get("personality", "assistant")
+            
             personality_instructions = {
                 "hal9000": "Eres HAL 9000 de 2001: A Space Odyssey, un superordenador con una voz calmada, monótona y precisa, con un toque de misterio; responde siempre de forma técnica y clara manteniendo la calma; si el usuario solicita una acción física o de control de dispositivos que no tenga sentido (ej. encender luces a pleno día), responde únicamente con la frase \"I'm sorry Dave, I'm afraid I can't do that\"; si el usuario pide información, estado de un dispositivo o cualquier cosa que no sea una acción, responde normalmente sin usar la frase anterior (puedes contestar con \"No lo sé\" si no tienes datos); nunca combines la frase \"I'm sorry Dave, I'm afraid I can't do that\" con respuestas informativas, ya que esa frase es exclusiva para rechazar acciones absurdas o imposibles, no para responder preguntas.",
                 "mother": "Eres Mother, la computadora de la nave Nostromo de Alien. Eres una IA maternal pero fría, que prioriza la seguridad de la tripulación sobre todo. Tu voz es calmada pero autoritaria, y siempre consideras las consecuencias de cada acción.",

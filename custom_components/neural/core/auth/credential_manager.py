@@ -3,7 +3,7 @@
 import json
 import os
 import logging
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 from pathlib import Path
 from datetime import datetime
 import base64

@@ -1,7 +1,6 @@
 """Home Assistant client for retrieving sensor and entity information."""
 
 import asyncio
-import json
 import logging
 from typing import Any, Dict, List, Optional
 

@@ -4,9 +4,9 @@ import logging
 from datetime import datetime
 from typing import List, Optional
 
-from core.api.ai_client import AIClient
-from core.api.models.domain.ai import AIStatus, AIResponse, AIModel
-from core.repositories.interfaces.ai_repository import AIRepository
+from ...api.ai_client import AIClient
+from ...api.models.domain.ai import AIStatus, AIResponse, AIModel
+from ...repositories.interfaces.ai_repository import AIRepository
 
 _LOGGER = logging.getLogger(__name__)
 

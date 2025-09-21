@@ -4,8 +4,7 @@ Interfaz para casos de uso de configuración.
 
 from abc import ABC, abstractmethod
 from typing import Optional, Dict, Any
-from core.api.models.domain.config import AppConfig, ConfigValidationResult
-
+from ...api.models.domain.config import AppConfig, ConfigValidationResult
 
 class ConfigUseCase(ABC):
     """Interfaz para casos de uso de configuración."""

@@ -5,7 +5,6 @@ Interfaz para el repositorio de archivos locales.
 from abc import ABC, abstractmethod
 from typing import Optional
 
-
 class FileRepository(ABC):
     """Interfaz para el repositorio de archivos locales."""
 

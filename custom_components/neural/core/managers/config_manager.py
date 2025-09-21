@@ -4,11 +4,11 @@ Manager para gestión de configuración de la aplicación.
 
 import json
 import logging
-from typing import Optional, Dict, Any
-from pathlib import Path
+from typing import Optional
+from urllib.parse import urlparse
 
-from core.repositories.interfaces.file_repository import FileRepository
-from core.api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
+from ..repositories.interfaces.file_repository import FileRepository
+from ..api.models.domain.config import AppConfig, LLMConfig, ConfigValidationResult
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -223,7 +223,6 @@ class ConfigManager:
     def _is_valid_url(self, url: str) -> bool:
         """Validar formato de URL."""
         try:
-            from urllib.parse import urlparse
             parsed = urlparse(url)
             return bool(parsed.scheme and parsed.netloc)
         except (ValueError, AttributeError):

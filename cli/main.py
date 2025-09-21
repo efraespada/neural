@@ -8,7 +8,7 @@ import sys
 import os
 
 # Add custom_components/neural to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "custom_components", "neural"))
+# sys.path.append(os.path.join(os.path.dirname(__file__), "..", "custom_components", "neural"))
 
 from .commands.ai import AICommand
 from .commands.ha import HACommand

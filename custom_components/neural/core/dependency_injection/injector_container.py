@@ -1,8 +1,8 @@
 """Professional dependency injection container using injector library."""
 
 import logging
-from typing import Type, TypeVar, Optional, Any
-from injector import Injector, inject, singleton, provider, Module
+from typing import Type, TypeVar, Optional
+from injector import Injector, singleton, provider, Module
 
 from ..api.ai_client import AIClient
 from ..api.ha_client import HAClient

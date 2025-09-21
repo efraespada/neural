@@ -3,7 +3,7 @@
 import logging
 from typing import List, Optional
 
-from core.api.models.domain.ai import AIStatus, AIResponse, AIModel
+from ...api.models.domain.ai import AIStatus, AIResponse
 from core.repositories.interfaces.ai_repository import AIRepository
 from core.use_cases.interfaces.ai_use_case import AIUseCase
 

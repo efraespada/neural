@@ -2,12 +2,11 @@
 Implementación del repositorio de archivos locales.
 """
 
-import os
 import aiofiles
 from pathlib import Path
 from typing import Optional
 
-from core.repositories.interfaces.file_repository import FileRepository
+from ..interfaces.file_repository import FileRepository
 
 
 class FileRepositoryImpl(FileRepository):

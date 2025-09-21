@@ -4,8 +4,7 @@ import abc
 from typing import List, Dict, Any
 from dataclasses import dataclass
 
-from core.use_cases.interfaces.decision_use_case import DecisionAction
-
+from ..interfaces.decision_use_case import DecisionAction
 
 @dataclass
 class ActionExecutionResult:

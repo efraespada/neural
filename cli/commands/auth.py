@@ -2,7 +2,8 @@
 
 import logging
 import getpass
-from typing import Optional
+import sys
+import os
 
 from .base import BaseCommand
 from ..utils.display import (
@@ -14,9 +15,8 @@ from ..utils.display import (
 )
 
 # Add core to path for imports
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "..", "core"))
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "custom_components", "neural"))
 
 from core.api.ha_auth_client import HAAuthClient
 from core.auth.credential_manager import CredentialManager

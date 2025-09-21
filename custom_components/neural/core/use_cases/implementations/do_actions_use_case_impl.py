@@ -1,11 +1,11 @@
 """Implementation of do actions use case."""
 
 import logging
-from typing import List, Dict, Any
+from typing import List
 
-from core.use_cases.interfaces.do_actions_use_case import DoActionsUseCase, ActionExecutionResult, ActionsExecutionResponse
-from core.use_cases.interfaces.decision_use_case import DecisionAction
-from core.repositories.interfaces.ha_repository import HARepository
+from ..interfaces.do_actions_use_case import DoActionsUseCase, ActionExecutionResult, ActionsExecutionResponse
+from ..interfaces.decision_use_case import DecisionAction
+from ...repositories.interfaces.ha_repository import HARepository
 
 _LOGGER = logging.getLogger(__name__)
 

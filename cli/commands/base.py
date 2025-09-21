@@ -12,10 +12,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "custom_comp
 from core.dependency_injection.providers import (
     get_ai_use_case,
     get_ha_use_case,
+    setup_dependencies,
 )
 
-# Session manager removed - no longer needed for Neural AI
-from ..utils.display import print_error, print_info
+from ..utils.display import print_error
 
 logger = logging.getLogger(__name__)
 
@@ -29,10 +29,7 @@ class BaseCommand(ABC):
 
     async def setup(self, interactive: bool = True, ha_ip: str = None, ha_token: str = None) -> bool:
         """Setup the command by getting use cases."""
-        try:
-            # Setup dependencies first
-            from core.dependency_injection.providers import setup_dependencies
-            
+        try:            
             # Use fixed URL for Home Assistant
             ha_url = "http://homeassistant.local:8123"
             

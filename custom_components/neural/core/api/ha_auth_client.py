@@ -1,7 +1,6 @@
 """Home Assistant authentication client."""
 
 import asyncio
-import json
 import logging
 from typing import Dict, Optional, Tuple
 from datetime import datetime, timedelta

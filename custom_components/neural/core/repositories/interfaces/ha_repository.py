@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from core.api.models.domain.ha_entity import HAEntity, HAEntityState, HAEntitySummary, HAConfig
+from ...api.models.domain.ha_entity import HAEntity, HAEntitySummary, HAConfig
 
 
 class HARepository(ABC):
