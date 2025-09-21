@@ -88,27 +88,27 @@ class NeuralSTTEntity(SpeechToTextEntity):
     @property
     def supported_formats(self) -> list[AudioFormats]:
         """Return a list of supported formats."""
-        return [AudioFormats.WAV, AudioFormats.OGG, AudioFormats.MP3, AudioFormats.MP4]
+        return [AudioFormats.WAV]
 
     @property
     def supported_codecs(self) -> list[AudioCodecs]:
         """Return a list of supported codecs."""
-        return [AudioCodecs.PCM, AudioCodecs.OGG_OPUS, AudioCodecs.MP3, AudioCodecs.AAC]
+        return [AudioCodecs.PCM]
 
     @property
     def supported_bit_rates(self) -> list[AudioBitRates]:
         """Return a list of supported bit rates."""
-        return [AudioBitRates.BITRATE_8, AudioBitRates.BITRATE_16, AudioBitRates.BITRATE_24]
+        return [AudioBitRates.BITRATE_16]
 
     @property
     def supported_sample_rates(self) -> list[AudioSampleRates]:
         """Return a list of supported sample rates."""
-        return [AudioSampleRates.SAMPLERATE_8000, AudioSampleRates.SAMPLERATE_16000, AudioSampleRates.SAMPLERATE_22050, AudioSampleRates.SAMPLERATE_44100, AudioSampleRates.SAMPLERATE_48000]
+        return [AudioSampleRates.SAMPLERATE_16000]
 
     @property
     def supported_channels(self) -> list[AudioChannels]:
         """Return a list of supported channels."""
-        return [AudioChannels.CHANNEL_MONO, AudioChannels.CHANNEL_STEREO]
+        return [AudioChannels.CHANNEL_MONO]
 
     async def async_process_audio_stream(
         self, metadata: SpeechMetadata, stream: Any
