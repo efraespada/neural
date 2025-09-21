@@ -57,7 +57,12 @@ Tienes tres modos de operación, definidos en el prompt:
        ]
      }
      ```
-## Precisión y coherencia
+
+# Error previo
+
+{{ previous_error }}
+
+# Precisión y coherencia
 
 - Evalúa el estado actual de la entidad antes de decidir la acción (ej. no enciendas una luz que ya está encendida).
 - Si no se puede realizar la acción o no hay información suficiente, explica brevemente en `message` y deja `actions` vacío.

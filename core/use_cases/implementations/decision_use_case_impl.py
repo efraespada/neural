@@ -6,7 +6,8 @@ from pathlib import Path
 from core.use_cases.interfaces.decision_use_case import DecisionUseCase, DecisionResponse, DecisionAction
 from core.use_cases.interfaces.ai_use_case import AIUseCase
 from core.use_cases.interfaces.ha_use_case import HAUseCase
-from core.api.models.domain.ha_entity import HAEntity, HAEntityState
+from core.api.models.domain.ha_entity import HAEntity
+from core.constants import RELEVANT_DOMAINS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -142,6 +143,11 @@ No incluyas explicaciones ni texto fuera del JSON.
             
             # Parse final decision
             final_decision = await self.validate_decision_response(step2_response.response)
+            
+            # Validate actions and retry if necessary
+            final_decision = await self._validate_and_retry_actions(
+                interaction_timestamp, user_prompt.strip(), mode, final_decision, ha_info
+            )
             
             # Save final decision
             await self._save_final_decision(interaction_timestamp, user_prompt.strip(), mode, final_decision, ha_info)
@@ -279,46 +285,15 @@ No incluyas explicaciones ni texto fuera del JSON.
     
     def _filter_entities_for_storage(self, entities: List[HAEntity]) -> List[HAEntity]:
         """Filter entities to only include relevant ones for decision making."""
-        # Define relevant domains for decision making
-        relevant_domains = {
-            'light',
-            'switch',
-            'cover',
-            'climate',
-            'fan',
-            'media_player', 
-            'scene',
-            'script',
-            'input_boolean',
-            'input_select',
-            'input_number',
-            'vacuum',  # Robot vacuums
-            # 'water_heater',  # Water heaters
-            # 'humidifier',  # Humidifiers
-            # 'dehumidifier',  # Dehumidifiers
-            # 'air_purifier',  # Air purifiers
-            'lock',  # Smart locks
-            'garage_door',  # Garage doors
-            'alarm_control_panel',  # Security systems
-            'camera',  # Security cameras
-            'zone',
-            'person',
-            'device_tracker',
-            'weather',
-            # 'calendar',
-            # 'automation'
-        }
-        
-        # Define irrelevant domains to exclude
-        irrelevant_domains = {
-            'update', 'system', 'config', 'sun', 'moon', 'zone', 
-            'person', 'device_tracker', 'weather', 'calendar'
-        }
+        # Use constants for domain filtering
         
         filtered_entities = []
         for entity in entities:
-            # Check if entity domain is relevant
-            if any(entity.entity_id.startswith(domain + '.') for domain in relevant_domains):
+            # Extract domain from entity_id
+            domain = entity.entity_id.split('.')[0] if '.' in entity.entity_id else entity.entity_id
+            
+            # Check if domain is relevant
+            if domain in RELEVANT_DOMAINS:
                 filtered_entities.append(entity)
             # Also include sensors that might be relevant
             elif entity.entity_id.startswith('sensor.') and self._is_relevant_sensor(entity):
@@ -640,9 +615,21 @@ No incluyas explicaciones ni texto fuera del JSON.
         }
     
     async def _get_services_info(self) -> Dict[str, Any]:
-        """Get information about available services."""
+        """Get information about available services from Home Assistant."""
         try:
-            # Get common service domains
+            # Get real services from Home Assistant
+            services = await self._ha_use_case.get_services()
+            
+            # Filter services to only include relevant domains
+            filtered_services = self._filter_services_by_domains(services)
+            
+            return {
+                "available_services": filtered_services,
+                "note": "Real services filtered by relevant domains"
+            }
+        except Exception as e:
+            _LOGGER.warning("Error getting services info: %s", e)
+            # Fallback to common services if real services fail
             common_services = {
                 "light": ["turn_on", "turn_off", "toggle"],
                 "switch": ["turn_on", "turn_off", "toggle"],
@@ -651,14 +638,47 @@ No incluyas explicaciones ni texto fuera del JSON.
                 "fan": ["turn_on", "turn_off", "set_speed"],
                 "media_player": ["play_media", "pause", "stop", "volume_set"]
             }
-            
             return {
                 "available_services": common_services,
-                "note": "This is a sample of common services. Full service discovery would require additional API calls."
+                "note": "Fallback to common services due to error"
             }
+    
+    def _filter_services_by_domains(self, services: Dict[str, Any]) -> Dict[str, Any]:
+        """Filter services to only include those from relevant domains."""
+        try:
+            filtered_services = []
+            
+            if isinstance(services, dict) and "available_services" in services:
+                # Handle the case where services is wrapped in available_services
+                services_list = services.get("available_services", [])
+            elif isinstance(services, list):
+                # Handle the case where services is directly a list
+                services_list = services
+            else:
+                _LOGGER.warning("Unexpected services format: %s", type(services))
+                return {"available_services": [], "note": "No services available"}
+            
+            for service_domain in services_list:
+                if isinstance(service_domain, dict) and "domain" in service_domain:
+                    domain = service_domain["domain"]
+                    
+                    # Only include services from relevant domains
+                    if domain in RELEVANT_DOMAINS:
+                        filtered_services.append(service_domain)
+                    else:
+                        _LOGGER.debug("Filtering out domain %s (not in relevant domains)", domain)
+            
+            _LOGGER.info("Filtered services: %d domains from %d total", 
+                        len(filtered_services), len(services_list))
+            
+            return {
+                "available_services": filtered_services,
+                "note": f"Services filtered to {len(filtered_services)} relevant domains"
+            }
+            
         except Exception as e:
-            _LOGGER.warning("Error getting services info: %s", e)
-            return {"available_services": {}, "note": "Services information not available"}
+            _LOGGER.error("Error filtering services: %s", e)
+            return {"available_services": [], "note": "Error filtering services"}
     
     async def _build_step1_prompt(self, user_prompt: str, mode: str) -> str:
         """
@@ -981,3 +1001,166 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
         except Exception as e:
             _LOGGER.error("Error validating decision response: %s", e)
             raise ValueError(f"Error validating decision response: {e}")
+    
+    async def validate_actions(self, actions: List[DecisionAction], ha_info: str) -> Dict[str, Any]:
+        """Validate actions against available entities and services."""
+        try:
+            # Parse HA information to get available entities and services
+            ha_data = json.loads(ha_info)
+            available_entities = {entity["entity_id"] for entity in ha_data.get("entities", [])}
+            available_services = self._extract_available_services(ha_data.get("services", {}))
+            
+            errors = []
+            invalid_entities = []
+            invalid_actions = []
+            
+            for action in actions:
+                # Check if entity exists
+                if action.entity and action.entity not in available_entities:
+                    invalid_entities.append(action.entity)
+                    errors.append(f"Entity '{action.entity}' does not exist")
+                
+                # Check if action is valid for the entity domain
+                if action.entity and action.action:
+                    domain = action.entity.split('.')[0] if '.' in action.entity else action.entity
+                    if domain in available_services:
+                        domain_services = available_services[domain]
+                        if action.action not in domain_services:
+                            invalid_actions.append(f"{action.action} for {action.entity}")
+                            errors.append(f"Action '{action.action}' is not valid for domain '{domain}'")
+            
+            return {
+                "is_valid": len(errors) == 0,
+                "errors": errors,
+                "invalid_entities": invalid_entities,
+                "invalid_actions": invalid_actions,
+                "available_entities": list(available_entities),
+                "available_services": available_services
+            }
+            
+        except Exception as e:
+            _LOGGER.error("Error validating actions: %s", e)
+            return {
+                "is_valid": False,
+                "errors": [f"Error validating actions: {e}"],
+                "invalid_entities": [],
+                "invalid_actions": [],
+                "available_entities": [],
+                "available_services": {}
+            }
+    
+    def _extract_available_services(self, services_data: Dict[str, Any]) -> Dict[str, List[str]]:
+        """Extract available services by domain from HA data."""
+        try:
+            services_by_domain = {}
+            
+            if isinstance(services_data, dict) and "available_services" in services_data:
+                services_list = services_data.get("available_services", [])
+            elif isinstance(services_data, list):
+                services_list = services_data
+            else:
+                return {}
+            
+            for service_domain in services_list:
+                if isinstance(service_domain, dict) and "domain" in service_domain:
+                    domain = service_domain["domain"]
+                    domain_services = []
+                    
+                    if "services" in service_domain:
+                        for service_name in service_domain["services"].keys():
+                            domain_services.append(service_name)
+                    
+                    services_by_domain[domain] = domain_services
+            
+            return services_by_domain
+            
+        except Exception as e:
+            _LOGGER.error("Error extracting services: %s", e)
+            return {}
+    
+    async def _build_retry_prompt(self, user_prompt: str, mode: str, ha_info: str, previous_error: str) -> str:
+        """
+        Build retry prompt using request_action_retry_prompt.md template.
+        """
+        try:
+            _LOGGER.debug("Building retry prompt")
+            
+            # Read the request_action_retry_prompt.md template
+            with open("request_action_retry_prompt.md", "r", encoding="utf-8") as f:
+                template = f.read()
+            
+            # Get AI personality from configuration
+            personality_instruction = await self._get_personality_instruction()
+            
+            # Replace placeholders
+            prompt = template.replace("{{ original_prompt }}", user_prompt)
+            prompt = prompt.replace("{{ home assistant data }}", ha_info)
+            prompt = prompt.replace("{{ operation mode }}", mode)
+            prompt = prompt.replace("{{ personality }}", personality_instruction)
+            prompt = prompt.replace("{{ previous_error }}", previous_error)
+            
+            _LOGGER.debug("Retry prompt built successfully")
+            return prompt
+            
+        except Exception as e:
+            _LOGGER.error("Error building retry prompt: %s", e)
+            raise ValueError(f"Error building retry prompt: {e}")
+    
+    async def _validate_and_retry_actions(self, interaction_timestamp: str, user_prompt: str, 
+                                        mode: str, decision: DecisionResponse, ha_info: str) -> DecisionResponse:
+        """
+        Validate actions and retry with error feedback if necessary.
+        """
+        try:
+            max_retries = 3
+            retry_count = 0
+            current_decision = decision
+            
+            while retry_count < max_retries:
+                # Validate current actions
+                validation_result = await self.validate_actions(current_decision.actions, ha_info)
+                
+                if validation_result["is_valid"]:
+                    _LOGGER.info("Actions validated successfully")
+                    return current_decision
+                
+                # Build error message for retry
+                error_parts = []
+                if validation_result["invalid_entities"]:
+                    error_parts.append(f"Entidades inexistentes: {', '.join(validation_result['invalid_entities'])}")
+                if validation_result["invalid_actions"]:
+                    error_parts.append(f"Acciones inválidas: {', '.join(validation_result['invalid_actions'])}")
+                
+                previous_error = "ERRORES DETECTADOS:\n" + "\n".join(error_parts)
+                
+                _LOGGER.warning("Actions validation failed (attempt %d/%d): %s", 
+                              retry_count + 1, max_retries, previous_error)
+                
+                # Build retry prompt
+                retry_prompt = await self._build_retry_prompt(user_prompt, mode, ha_info, previous_error)
+                
+                # Send retry prompt to AI
+                retry_response = await self._ai_use_case.send_message(retry_prompt)
+                
+                # Save retry interaction
+                step_name = f"step_{3 + retry_count}_retry_request"
+                answer_name = f"step_{3 + retry_count}_retry_answer"
+                await self._save_interaction(interaction_timestamp, step_name, retry_prompt)
+                await self._save_interaction(interaction_timestamp, answer_name, retry_response.response)
+                
+                # Parse retry response
+                try:
+                    current_decision = await self.validate_decision_response(retry_response.response)
+                    retry_count += 1
+                except Exception as e:
+                    _LOGGER.error("Error parsing retry response: %s", e)
+                    break
+            
+            if retry_count >= max_retries:
+                _LOGGER.warning("Maximum retries reached, returning last decision")
+            
+            return current_decision
+            
+        except Exception as e:
+            _LOGGER.error("Error in validate and retry: %s", e)
+            return decision
