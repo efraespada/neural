@@ -1,4 +1,0 @@
-{
-  "message": "La temperatura actual en las diferentes zonas de la casa es:\n- Planta principal: 28.0°C\n- Habitaciones: 28.5°C\n- Exterior: 24.5°C\n- Ambiente interior (sensor Ecowitt): 29.4°C",
-  "actions": []
-}

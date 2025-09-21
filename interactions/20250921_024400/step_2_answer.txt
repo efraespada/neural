@@ -1,0 +1,6 @@
+```json
+{
+  "message": "La temperatura ambiente actual es de 28.5°C en las habitaciones y 28.0°C en la planta principal. No es necesario encender la calefacción, ya que la temperatura es adecuada.",
+  "actions": []
+}
+```

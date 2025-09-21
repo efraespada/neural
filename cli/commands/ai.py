@@ -158,9 +158,20 @@ class AICommand(BaseCommand):
             url = kwargs.get('url')
             model = kwargs.get('model')
             api_key = kwargs.get('api_key')
+            personality = kwargs.get('personality')
             
-            if url and model and api_key:
+            if url and model and api_key and personality:
                 # Update all LLM configuration
+                print_info(f"Actualizando configuración LLM: URL={url}, Modelo={model}, API Key=***, Personalidad={personality}")
+                success = await config_use_case.update_llm_config(url, model, api_key, personality)
+                if success:
+                    print_success("✓ Configuración LLM actualizada correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando configuración LLM")
+                    return False
+            elif url and model and api_key:
+                # Update URL, model and API key
                 print_info(f"Actualizando configuración LLM: URL={url}, Modelo={model}, API Key=***")
                 success = await config_use_case.update_llm_config(url, model, api_key)
                 if success:
@@ -215,6 +226,16 @@ class AICommand(BaseCommand):
                 else:
                     print_error("✗ Error actualizando API key del LLM")
                     return False
+            elif personality:
+                # Update only personality
+                print_info(f"Actualizando personalidad del LLM: {personality}")
+                success = await config_use_case.update_llm_personality(personality)
+                if success:
+                    print_success("✓ Personalidad del LLM actualizada correctamente")
+                    return True
+                else:
+                    print_error("✗ Error actualizando personalidad del LLM")
+                    return False
             else:
                 # Show current configuration
                 print_info("Mostrando configuración actual...")
@@ -224,6 +245,7 @@ class AICommand(BaseCommand):
                 print_info(f"  Modo: {summary['mode']}")
                 print_info(f"  LLM URL: {summary['llm']['url']}")
                 print_info(f"  LLM Modelo: {summary['llm']['model']}")
+                print_info(f"  LLM Personalidad: {summary['llm']['personality']}")
                 print_info(f"  Archivo: {summary['config_file']}")
                 print_info(f"  Cargado: {'Sí' if summary['is_loaded'] else 'No'}")
                 print_info(f"  Creado: {summary['created_at']}")

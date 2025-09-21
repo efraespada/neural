@@ -44,7 +44,8 @@ Examples:
   neural ai config --url https://openrouter.ai/api/v1
   neural ai config --model anthropic/claude-3.5-sonnet
   neural ai config --api-key sk-or-v1-your-api-key
-  neural ai config --url https://openrouter.ai/api/v1 --model anthropic/claude-3.5-sonnet --api-key sk-or-v1-your-api-key
+  neural ai config --personality "HAL9000 - Space Odyssey"
+  neural ai config --url https://openrouter.ai/api/v1 --model anthropic/claude-3.5-sonnet --api-key sk-or-v1-your-api-key --personality "Jarvis - Ironman"
 
   # AI decision making
   neural ai decide "Enciende las luces del salón"
@@ -119,6 +120,9 @@ Examples:
     config_ai_parser.add_argument("--url", help="Set LLM URL")
     config_ai_parser.add_argument("--model", help="Set LLM model")
     config_ai_parser.add_argument("--api-key", help="Set LLM API key")
+    config_ai_parser.add_argument("--personality", 
+                                 choices=["HAL9000 - Space Odyssey", "Mother - Alien", "Jarvis - Ironman", "Kitt - Knight Rider"],
+                                 help="Set AI personality")
     
     # AI decide command
     decide_parser = ai_subparsers.add_parser("decide", help="Make AI decisions based on Home Assistant state")
@@ -208,6 +212,7 @@ async def main():
                     url=getattr(args, 'url', None),
                     model=getattr(args, 'model', None),
                     api_key=getattr(args, 'api_key', None),
+                    personality=getattr(args, 'personality', None),
                     interactive=not args.non_interactive,
                 )
             elif args.action == "decide":

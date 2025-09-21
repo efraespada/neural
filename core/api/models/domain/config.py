@@ -13,13 +13,15 @@ class LLMConfig:
     url: str = "https://openrouter.ai/api/v1"
     model: str = "anthropic/claude-3.5-sonnet"
     api_key: Optional[str] = None
+    personality: str = "HAL9000 - Space Odyssey"
     
     def to_dict(self) -> Dict[str, Any]:
         """Convertir a diccionario."""
         return {
             "url": self.url,
             "model": self.model,
-            "api_key": self.api_key
+            "api_key": self.api_key,
+            "personality": self.personality
         }
     
     @classmethod
@@ -28,7 +30,8 @@ class LLMConfig:
         return cls(
             url=data.get("url", data.get("ip", "https://openrouter.ai/api/v1")),  # Backward compatibility
             model=data.get("model", "anthropic/claude-3.5-sonnet"),
-            api_key=data.get("api_key")
+            api_key=data.get("api_key"),
+            personality=data.get("personality", "assistant")
         )
 
 
@@ -75,9 +78,13 @@ class AppConfig:
             updated_at=updated_at
         )
     
-    def update_llm(self, url: str, model: str, api_key: Optional[str] = None) -> None:
+    def update_llm(self, url: str, model: str, api_key: Optional[str] = None, personality: Optional[str] = None) -> None:
         """Actualizar configuración LLM."""
-        self.llm = LLMConfig(url=url, model=model, api_key=api_key)
+        # Preserve existing personality if not provided
+        current_personality = self.llm.personality if self.llm else "assistant"
+        new_personality = personality if personality is not None else current_personality
+        
+        self.llm = LLMConfig(url=url, model=model, api_key=api_key, personality=new_personality)
         self.updated_at = datetime.now()
     
     def update_mode(self, mode: str) -> None:

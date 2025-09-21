@@ -1,4 +1,0 @@
-{
-  "message": "Lo siento, pero no veo ningún dispositivo de climatización (climate) en los datos proporcionados para poder ajustar la temperatura a 22 grados",
-  "actions": []
-}

@@ -1,6 +1,0 @@
-```json
-{
-  "message": "La temperatura ambiente en las habitaciones es de 28.5°C y en la planta principal es de 28.0°C. No parece necesario encender la calefacción ya que las temperaturas son bastante altas.",
-  "actions": []
-}
-```

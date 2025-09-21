@@ -1,1 +1,0 @@
-{"message":"OK","actions":[],"data":{"entities":[{"entity_id":"light.hue_color_spot_6","friendly_name":"Despensa"},{"entity_id":"light.led_tv","friendly_name":"LED TV"},{"entity_id":"..."}]}}

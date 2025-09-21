@@ -188,7 +188,7 @@ class ConfigUseCaseImpl(ConfigUseCase):
             _LOGGER.error("Error updating LLM model: %s", e)
             raise
 
-    async def update_llm_config(self, url: str, model: str, api_key: Optional[str] = None) -> bool:
+    async def update_llm_config(self, url: str, model: str, api_key: Optional[str] = None, personality: Optional[str] = None) -> bool:
         """
         Actualizar configuración completa del LLM.
         
@@ -196,6 +196,7 @@ class ConfigUseCaseImpl(ConfigUseCase):
             url: Nueva URL del modelo LLM
             model: Nuevo modelo LLM
             api_key: Nueva API key (opcional)
+            personality: Nueva personalidad (opcional)
             
         Returns:
             True si se actualizó correctamente
@@ -205,13 +206,19 @@ class ConfigUseCaseImpl(ConfigUseCase):
             OSError: Si hay error actualizando la configuración
         """
         try:
-            _LOGGER.debug("Updating LLM config - URL: %s, Model: %s", url, model)
+            _LOGGER.debug("Updating LLM config - URL: %s, Model: %s, Personality: %s", url, model, personality)
             
             # Validar parámetros
             if not url or not url.strip():
                 raise ValueError("LLM URL cannot be empty")
             if not model or not model.strip():
                 raise ValueError("LLM model cannot be empty")
+            
+            # Validar personalidad si se proporciona
+            if personality and personality.strip():
+                valid_personalities = ["HAL9000 - Space Odyssey", "Mother - Alien", "Jarvis - Ironman", "Kitt - Knight Rider"]
+                if personality.strip() not in valid_personalities:
+                    raise ValueError(f"Invalid personality: {personality}. Must be one of: {', '.join(valid_personalities)}")
             
             # Ensure configuration is loaded
             await self.get_config()
@@ -220,11 +227,46 @@ class ConfigUseCaseImpl(ConfigUseCase):
             return await self._config_manager.update_config(
                 llm_url=url.strip(),
                 llm_model=model.strip(),
-                llm_api_key=api_key.strip() if api_key else None
+                llm_api_key=api_key.strip() if api_key else None,
+                llm_personality=personality.strip() if personality else None
             )
             
         except Exception as e:
             _LOGGER.error("Error updating LLM config: %s", e)
+            raise
+
+    async def update_llm_personality(self, personality: str) -> bool:
+        """
+        Actualizar personalidad del LLM.
+        
+        Args:
+            personality: Nueva personalidad
+            
+        Returns:
+            True si se actualizó correctamente
+            
+        Raises:
+            ValueError: Si la personalidad no es válida
+            OSError: Si hay error actualizando la configuración
+        """
+        try:
+            _LOGGER.debug("Updating LLM personality to: %s", personality)
+            
+            # Validar personalidad
+            valid_personalities = ["HAL9000 - Space Odyssey", "Mother - Alien", "Jarvis - Ironman", "Kitt - Knight Rider"]
+            if not personality or not personality.strip():
+                raise ValueError("LLM personality cannot be empty")
+            if personality.strip() not in valid_personalities:
+                raise ValueError(f"Invalid personality: {personality}. Must be one of: {', '.join(valid_personalities)}")
+            
+            # Ensure configuration is loaded
+            await self.get_config()
+            
+            # Actualizar configuración
+            return await self._config_manager.update_config(llm_personality=personality.strip())
+            
+        except Exception as e:
+            _LOGGER.error("Error updating LLM personality: %s", e)
             raise
 
     async def validate_config(self, config: Optional[AppConfig] = None) -> ConfigValidationResult:
@@ -307,7 +349,8 @@ class ConfigUseCaseImpl(ConfigUseCase):
                 "mode": config.mode,
                 "llm": {
                     "url": config.llm.url,
-                    "model": config.llm.model
+                    "model": config.llm.model,
+                    "personality": config.llm.personality
                 },
                 "created_at": config.created_at.isoformat(),
                 "updated_at": config.updated_at.isoformat(),

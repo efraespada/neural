@@ -1,0 +1,6 @@
+```json
+{
+  "message": "I'm sorry Dave, I'm afraid I can't do that. The current temperature is already 28.5°C, which is above the recommended comfort range.",
+  "actions": []
+}
+```

@@ -1,1 +1,0 @@
-{"message":"¡Hola! ¿En qué puedo ayudarte con tu Home Assistant hoy?","actions":[],"data":{} }

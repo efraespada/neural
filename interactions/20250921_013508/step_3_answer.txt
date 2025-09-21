@@ -1,1 +1,0 @@
-{"message":"No puedo hacer eso, las condiciones lumínicas son aceptables y no hay ninguna entidad que corresponda a \"luz del ático\".","actions": [],"data":{"relevant_entities":[{"entity_id":"light.hue_color_sp..."}]}}

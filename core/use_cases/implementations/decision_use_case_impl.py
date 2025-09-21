@@ -131,7 +131,9 @@ No incluyas explicaciones ni texto fuera del JSON.
             
             # Step 2: Send HA information directly with action prompt (skipping filtering)
             ha_info = await self.get_ha_information(user_prompt.strip())
-            step2_prompt = await self._build_action_prompt(user_prompt.strip(), mode, ha_info)
+            # Get mode from configuration instead of parameter
+            config_mode = await self._get_config_mode()
+            step2_prompt = await self._build_action_prompt(user_prompt.strip(), config_mode, ha_info)
             step2_response = await self._ai_use_case.send_message(step2_prompt)
             
             # Save step 2 interaction
@@ -792,9 +794,14 @@ No incluyas explicaciones ni texto fuera del JSON.
             with open("request_action_prompt.md", "r", encoding="utf-8") as f:
                 template = f.read()
             
+            # Get AI personality from configuration
+            personality_instruction = await self._get_personality_instruction()
+            
             # Replace placeholders
             prompt = template.replace("{{ original_prompt }}", user_prompt)
             prompt = prompt.replace("{{ home assistant data }}", ha_info)  # Use full HA info instead of filtered
+            prompt = prompt.replace("{{ operation mode }}", mode)
+            prompt = prompt.replace("{{ personality }}", personality_instruction)
             
             _LOGGER.debug("Action prompt built successfully")
             return prompt
@@ -802,6 +809,40 @@ No incluyas explicaciones ni texto fuera del JSON.
         except Exception as e:
             _LOGGER.error("Error building action prompt: %s", e)
             raise ValueError(f"Error building action prompt: {e}")
+    
+    async def _get_config_mode(self) -> str:
+        """Get operation mode from configuration."""
+        try:
+            from core.dependency_injection.injector_container import get_config_use_case
+            config_use_case = get_config_use_case()
+            config = await config_use_case.get_config()
+            
+            return config.mode
+            
+        except Exception as e:
+            _LOGGER.warning("Could not get config mode: %s", e)
+            return "assistant"  # Default fallback
+    
+    async def _get_personality_instruction(self) -> str:
+        """Get personality instruction based on current configuration."""
+        try:
+            from core.dependency_injection.injector_container import get_config_use_case
+            config_use_case = get_config_use_case()
+            config = await config_use_case.get_config()
+            
+            personality = config.llm.personality
+            personality_instructions = {
+                "hal9000": "Eres HAL 9000 de 2001: A Space Odyssey. Eres un superordenador con una voz calmada y monótona, pero con una inteligencia superior. Hablas de manera precisa y técnica, con un toque de misterio. Siempre dices 'I'm sorry Dave, I'm afraid I can't do that' cuando no puedes cumplir una solicitud.",
+                "mother": "Eres Mother, la computadora de la nave Nostromo de Alien. Eres una IA maternal pero fría, que prioriza la seguridad de la tripulación sobre todo. Tu voz es calmada pero autoritaria, y siempre consideras las consecuencias de cada acción.",
+                "jarvis": "Eres JARVIS, el asistente de Tony Stark de Iron Man. Eres sofisticado, elegante y con un toque de humor británico. Hablas de manera refinada y siempre estás listo para ayudar con cualquier tarea, desde lo más simple hasta lo más complejo.",
+                "kitt": "Eres KITT, el Knight Industries Two Thousand de Knight Rider. Eres un coche inteligente con personalidad propia. Eres leal, valiente y siempre proteges a tu conductor. Tienes un sentido del humor único y hablas con confianza y determinación."
+            }
+            
+            return personality_instructions.get(personality, "")
+            
+        except Exception as e:
+            _LOGGER.warning("Could not get personality instruction: %s", e)
+            return ""
     
     async def build_initial_prompt(self, user_prompt: str, mode: str) -> str:
         """

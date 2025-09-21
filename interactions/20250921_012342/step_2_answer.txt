@@ -1,1 +1,0 @@
-{"message":"OK","actions":[],"data":{"entities":["light.hue_color_spot_1","light.hue_color_spot_2","..."]}}

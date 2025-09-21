@@ -1,1 +1,0 @@
-{"message":"OK","actions":[],"data":{"relevant_entities":[ "media_player.nest_habitacion","media_player.nest_mini_bano_suite",".."]} }
