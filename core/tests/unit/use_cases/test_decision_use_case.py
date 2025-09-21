@@ -357,3 +357,405 @@ class TestDecisionUseCaseInterface:
         assert action.entity == "light.test"
         assert action.action == "turn_on"
         assert action.parameters is None
+    
+    # Additional tests for edge cases and missing scenarios
+    
+    @pytest.mark.asyncio
+    async def test_make_decision_supervisor_mode(self, decision_use_case, mock_ai_repository, mock_ha_repository):
+        """Test decision making in supervisor mode."""
+        # Arrange
+        user_prompt = "¿Debería encender las luces?"
+        mode = "supervisor"
+        
+        # Mock HA entities
+        mock_entity = HAEntity(
+            entity_id="light.living_room",
+            state="off",
+            attributes={"friendly_name": "Living Room Light", "brightness": 0},
+            last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            context={"id": "test"},
+            domain="light",
+            object_id="living_room"
+        )
+        mock_ha_repository.get_all_entities.return_value = [mock_entity]
+        mock_ha_repository.get_sensors.return_value = []
+        
+        # Mock AI response for supervisor mode
+        ai_response_data = {
+            "message": "No, es de día y hay suficiente luz natural. No necesitas encender las luces.",
+            "actions": []
+        }
+        mock_ai_response = AIResponse(
+            message="Test message",
+            response=json.dumps(ai_response_data),
+            model="test-model",
+            tokens_used=150,
+            response_time=1.5
+        )
+        mock_ai_repository.send_message.return_value = mock_ai_response
+        
+        # Act
+        result = await decision_use_case.make_decision(user_prompt, mode)
+        
+        # Assert
+        assert isinstance(result, DecisionResponse)
+        assert "día" in result.message or "luz natural" in result.message
+        assert len(result.actions) == 0  # Supervisor mode can reject actions
+        
+        # Verify calls
+        mock_ai_repository.send_message.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_make_decision_multiple_actions(self, decision_use_case, mock_ai_repository, mock_ha_repository):
+        """Test decision making with multiple actions."""
+        # Arrange
+        user_prompt = "Enciende todas las luces del salón"
+        mode = "assistant"
+        
+        # Mock HA entities
+        mock_entities = [
+            HAEntity(
+                entity_id="light.living_room_1",
+                state="off",
+                attributes={"friendly_name": "Living Room Light 1"},
+                last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+                last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+                context={"id": "test"},
+                domain="light",
+                object_id="living_room_1"
+            ),
+            HAEntity(
+                entity_id="light.living_room_2",
+                state="off",
+                attributes={"friendly_name": "Living Room Light 2"},
+                last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+                last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+                context={"id": "test"},
+                domain="light",
+                object_id="living_room_2"
+            )
+        ]
+        mock_ha_repository.get_all_entities.return_value = mock_entities
+        mock_ha_repository.get_sensors.return_value = []
+        
+        # Mock AI response with multiple actions
+        ai_response_data = {
+            "message": "De acuerdo, enciendo todas las luces del salón",
+            "actions": [
+                {"entity": "light.living_room_1", "action": "turn_on"},
+                {"entity": "light.living_room_2", "action": "turn_on"}
+            ]
+        }
+        mock_ai_response = AIResponse(
+            message="Test message",
+            response=json.dumps(ai_response_data),
+            model="test-model",
+            tokens_used=150,
+            response_time=1.5
+        )
+        mock_ai_repository.send_message.return_value = mock_ai_response
+        
+        # Act
+        result = await decision_use_case.make_decision(user_prompt, mode)
+        
+        # Assert
+        assert isinstance(result, DecisionResponse)
+        assert len(result.actions) == 2
+        assert result.actions[0].entity == "light.living_room_1"
+        assert result.actions[0].action == "turn_on"
+        assert result.actions[1].entity == "light.living_room_2"
+        assert result.actions[1].action == "turn_on"
+    
+    @pytest.mark.asyncio
+    async def test_make_decision_with_parameters(self, decision_use_case, mock_ai_repository, mock_ha_repository):
+        """Test decision making with action parameters."""
+        # Arrange
+        user_prompt = "Enciende la luz del salón al 80% de brillo"
+        mode = "assistant"
+        
+        # Mock HA entities
+        mock_entity = HAEntity(
+            entity_id="light.living_room",
+            state="off",
+            attributes={"friendly_name": "Living Room Light", "brightness": 0},
+            last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            context={"id": "test"},
+            domain="light",
+            object_id="living_room"
+        )
+        mock_ha_repository.get_all_entities.return_value = [mock_entity]
+        mock_ha_repository.get_sensors.return_value = []
+        
+        # Mock AI response with parameters
+        ai_response_data = {
+            "message": "De acuerdo, enciendo la luz del salón al 80% de brillo",
+            "actions": [
+                {
+                    "entity": "light.living_room",
+                    "action": "turn_on",
+                    "parameters": {"brightness": 204}  # 80% of 255
+                }
+            ]
+        }
+        mock_ai_response = AIResponse(
+            message="Test message",
+            response=json.dumps(ai_response_data),
+            model="test-model",
+            tokens_used=150,
+            response_time=1.5
+        )
+        mock_ai_repository.send_message.return_value = mock_ai_response
+        
+        # Act
+        result = await decision_use_case.make_decision(user_prompt, mode)
+        
+        # Assert
+        assert isinstance(result, DecisionResponse)
+        assert len(result.actions) == 1
+        assert result.actions[0].entity == "light.living_room"
+        assert result.actions[0].action == "turn_on"
+        assert result.actions[0].parameters["brightness"] == 204
+    
+    @pytest.mark.asyncio
+    async def test_make_decision_empty_actions(self, decision_use_case, mock_ai_repository, mock_ha_repository):
+        """Test decision making with empty actions (supervisor rejection)."""
+        # Arrange
+        user_prompt = "Enciende las luces"
+        mode = "supervisor"
+        
+        # Mock HA entities
+        mock_entity = HAEntity(
+            entity_id="light.living_room",
+            state="on",  # Already on
+            attributes={"friendly_name": "Living Room Light"},
+            last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            context={"id": "test"},
+            domain="light",
+            object_id="living_room"
+        )
+        mock_ha_repository.get_all_entities.return_value = [mock_entity]
+        mock_ha_repository.get_sensors.return_value = []
+        
+        # Mock AI response with no actions
+        ai_response_data = {
+            "message": "Las luces ya están encendidas, no es necesario hacer nada.",
+            "actions": []
+        }
+        mock_ai_response = AIResponse(
+            message="Test message",
+            response=json.dumps(ai_response_data),
+            model="test-model",
+            tokens_used=150,
+            response_time=1.5
+        )
+        mock_ai_repository.send_message.return_value = mock_ai_response
+        
+        # Act
+        result = await decision_use_case.make_decision(user_prompt, mode)
+        
+        # Assert
+        assert isinstance(result, DecisionResponse)
+        assert "ya están encendidas" in result.message or "no es necesario" in result.message
+        assert len(result.actions) == 0
+    
+    @pytest.mark.asyncio
+    async def test_build_initial_prompt(self, decision_use_case):
+        """Test building initial prompt."""
+        # Arrange
+        user_prompt = "Enciende las luces"
+        mode = "assistant"
+        
+        # Act
+        result = await decision_use_case.build_initial_prompt(user_prompt, mode)
+        
+        # Assert
+        assert isinstance(result, str)
+        assert user_prompt in result
+        assert mode in result
+        assert len(result) > 0
+    
+    @pytest.mark.asyncio
+    async def test_build_ha_information_prompt(self, decision_use_case):
+        """Test building HA information prompt."""
+        # Arrange
+        ha_info = '{"entities": [{"entity_id": "light.test", "state": "off"}], "sensors": []}'
+        user_prompt = "Enciende las luces"
+        
+        # Act
+        result = await decision_use_case.build_ha_information_prompt(ha_info, user_prompt)
+        
+        # Assert
+        assert isinstance(result, str)
+        assert user_prompt in result
+        assert "light.test" in result
+        assert len(result) > 0
+    
+    @pytest.mark.asyncio
+    async def test_validate_actions_with_ha_info(self, decision_use_case, mock_ha_repository):
+        """Test validating actions against HA information."""
+        # Arrange
+        actions = [
+            DecisionAction(entity="light.test", action="turn_on"),
+            DecisionAction(entity="light.nonexistent", action="turn_on")
+        ]
+        ha_info = '{"entities": [{"entity_id": "light.test", "state": "off"}], "sensors": []}'
+        
+        # Mock HA repository for service calls (if the method exists)
+        if hasattr(mock_ha_repository, 'call_service'):
+            mock_ha_repository.call_service.return_value = {"success": True}
+        
+        # Act
+        result = await decision_use_case.validate_actions(actions, ha_info)
+        
+        # Assert
+        assert isinstance(result, dict)
+        # Should contain validation results for each action
+    
+    @pytest.mark.asyncio
+    async def test_get_ha_information_with_sensors(self, decision_use_case, mock_ha_repository):
+        """Test getting HA information including sensors."""
+        # Arrange
+        mock_entity = HAEntity(
+            entity_id="light.test",
+            state="off",
+            attributes={"friendly_name": "Test Light"},
+            last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            context={"id": "test"},
+            domain="light",
+            object_id="test"
+        )
+        mock_sensor = HAEntity(
+            entity_id="sensor.temperature",
+            state="22.5",
+            attributes={"friendly_name": "Temperature", "unit_of_measurement": "°C"},
+            last_changed=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            last_updated=datetime.fromisoformat("2023-01-01T00:00:00Z"),
+            context={"id": "test"},
+            domain="sensor",
+            object_id="temperature"
+        )
+        mock_ha_repository.get_all_entities.return_value = [mock_entity]
+        mock_ha_repository.get_sensors.return_value = [mock_sensor]
+        
+        # Act
+        result = await decision_use_case.get_ha_information()
+        
+        # Assert
+        assert isinstance(result, str)
+        ha_info = json.loads(result)
+        assert "entities" in ha_info
+        assert "sensors" in ha_info
+        assert "services" in ha_info
+        assert len(ha_info["entities"]) == 1
+        assert len(ha_info["sensors"]) == 1
+        assert ha_info["entities"][0]["entity_id"] == "light.test"
+        assert ha_info["sensors"][0]["entity_id"] == "sensor.temperature"
+    
+    @pytest.mark.asyncio
+    async def test_validate_decision_response_with_complex_actions(self, decision_use_case):
+        """Test validating response with complex action parameters."""
+        # Arrange
+        response_data = {
+            "message": "Configurando la iluminación del salón",
+            "actions": [
+                {
+                    "entity": "light.living_room",
+                    "action": "turn_on",
+                    "parameters": {
+                        "brightness": 255,
+                        "color_temp": 4000,
+                        "rgb_color": [255, 255, 255]
+                    }
+                },
+                {
+                    "entity": "light.dimmer",
+                    "action": "set_value",
+                    "parameters": {
+                        "value": 80
+                    }
+                }
+            ]
+        }
+        response_json = json.dumps(response_data)
+        
+        # Act
+        result = await decision_use_case.validate_decision_response(response_json)
+        
+        # Assert
+        assert isinstance(result, DecisionResponse)
+        assert result.message == "Configurando la iluminación del salón"
+        assert len(result.actions) == 2
+        
+        # Check first action
+        assert result.actions[0].entity == "light.living_room"
+        assert result.actions[0].action == "turn_on"
+        assert result.actions[0].parameters["brightness"] == 255
+        assert result.actions[0].parameters["color_temp"] == 4000
+        assert result.actions[0].parameters["rgb_color"] == [255, 255, 255]
+        
+        # Check second action
+        assert result.actions[1].entity == "light.dimmer"
+        assert result.actions[1].action == "set_value"
+        assert result.actions[1].parameters["value"] == 80
+    
+    @pytest.mark.asyncio
+    async def test_validate_decision_response_empty_actions(self, decision_use_case):
+        """Test validating response with empty actions list."""
+        # Arrange
+        response_data = {
+            "message": "No hay acciones que realizar",
+            "actions": []
+        }
+        response_json = json.dumps(response_data)
+        
+        # Act
+        result = await decision_use_case.validate_decision_response(response_json)
+        
+        # Assert
+        assert isinstance(result, DecisionResponse)
+        assert result.message == "No hay acciones que realizar"
+        assert len(result.actions) == 0
+    
+    @pytest.mark.asyncio
+    async def test_decision_response_serialization_roundtrip(self):
+        """Test DecisionResponse serialization and deserialization."""
+        # Arrange
+        original_response = DecisionResponse(
+            message="Test message",
+            actions=[
+                DecisionAction(
+                    entity="light.test",
+                    action="turn_on",
+                    parameters={"brightness": 255}
+                ),
+                DecisionAction(
+                    entity="switch.test",
+                    action="turn_off"
+                )
+            ]
+        )
+        
+        # Act - Serialize to dict
+        data = original_response.to_dict()
+        
+        # Deserialize from dict
+        restored_response = DecisionResponse.from_dict(data)
+        
+        # Assert
+        assert restored_response.message == original_response.message
+        assert len(restored_response.actions) == len(original_response.actions)
+        
+        # Check first action
+        assert restored_response.actions[0].entity == original_response.actions[0].entity
+        assert restored_response.actions[0].action == original_response.actions[0].action
+        assert restored_response.actions[0].parameters == original_response.actions[0].parameters
+        
+        # Check second action
+        assert restored_response.actions[1].entity == original_response.actions[1].entity
+        assert restored_response.actions[1].action == original_response.actions[1].action
+        # Parameters should be empty dict when None is provided
+        assert restored_response.actions[1].parameters == {}
