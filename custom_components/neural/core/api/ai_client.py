@@ -8,10 +8,6 @@ from typing import Any, Dict, List, Optional
 import aiohttp
 
 from .base_client import BaseClient
-from .exceptions import (
-    MyVerisureConnectionError,
-    MyVerisureError,
-)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -42,7 +38,7 @@ class AIClient(BaseClient):
             
         except Exception as e:
             _LOGGER.error("Failed to connect to OpenRouter: %s", e)
-            raise MyVerisureConnectionError(f"Failed to connect to OpenRouter: {e}") from e
+            raise Exception(f"Failed to connect to OpenRouter: {e}") from e
 
     async def _test_connection(self) -> bool:
         """Test connection to OpenRouter service."""
@@ -93,16 +89,16 @@ class AIClient(BaseClient):
     async def send_message(self, message: str, model: Optional[str] = None) -> str:
         """Send a message to the AI and get response."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         if not self._api_key:
-            raise MyVerisureError("OpenRouter API key is required")
+            raise Exception("OpenRouter API key is required")
 
         model_to_use = model or self._ai_model
         
         # Check if model is available
         if not await self.is_model_ready():
-            raise MyVerisureError(f"Model {model_to_use} is not available on OpenRouter")
+            raise Exception(f"Model {model_to_use} is not available on OpenRouter")
         
         try:
             payload = {
@@ -142,16 +138,16 @@ class AIClient(BaseClient):
                 else:
                     error_text = await response.text()
                     _LOGGER.error("OpenRouter service error: %s", error_text)
-                    raise MyVerisureError(f"OpenRouter service error: {response.status}")
+                    raise Exception(f"OpenRouter service error: {response.status}")
                     
         except Exception as e:
             _LOGGER.error("Failed to send message to OpenRouter: %s", e)
-            raise MyVerisureError(f"Failed to send message to OpenRouter: {e}") from e
+            raise Exception(f"Failed to send message to OpenRouter: {e}") from e
 
     async def analyze_prompt(self, prompt: str, model: Optional[str] = None) -> Dict[str, Any]:
         """Send a prompt and analyze the response with additional metadata."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         model_to_use = model or self._ai_model
         start_time = asyncio.get_event_loop().time()
@@ -183,7 +179,7 @@ class AIClient(BaseClient):
     async def get_status(self) -> Dict[str, Any]:
         """Get OpenRouter service status."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             async with self._session.get(
@@ -223,7 +219,7 @@ class AIClient(BaseClient):
     async def list_models(self) -> List[str]:
         """List available AI models on OpenRouter."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             async with self._session.get(
@@ -254,7 +250,7 @@ class AIClient(BaseClient):
     async def get_model_info(self, model_id: str = None) -> Dict[str, Any]:
         """Get detailed information about a specific model."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         model_to_check = model_id or self._ai_model
         

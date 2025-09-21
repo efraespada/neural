@@ -9,7 +9,6 @@ import aiohttp
 from gql import Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
-from .exceptions import MyVerisureConnectionError
 from .fields import VERISURE_GRAPHQL_URL
 
 _LOGGER = logging.getLogger(__name__)
@@ -118,7 +117,7 @@ class BaseClient:
     ) -> Dict[str, Any]:
         """Execute a GraphQL query."""
         if not self._client:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             result = await self._client.execute_async(
@@ -151,7 +150,7 @@ class BaseClient:
     ) -> Dict[str, Any]:
         """Execute a GraphQL query using direct aiohttp request."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             request_data = {"query": query, "variables": variables or {}}

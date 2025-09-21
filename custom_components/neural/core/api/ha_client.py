@@ -8,10 +8,6 @@ from typing import Any, Dict, List, Optional
 import aiohttp
 
 from .base_client import BaseClient
-from .exceptions import (
-    MyVerisureConnectionError,
-    MyVerisureError,
-)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -97,7 +93,7 @@ class HAClient(BaseClient):
     async def get_states(self) -> List[Dict[str, Any]]:
         """Get all states from Home Assistant."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             async with self._session.get(
@@ -111,11 +107,11 @@ class HAClient(BaseClient):
                 else:
                     error_text = await response.text()
                     _LOGGER.error("Home Assistant error: %s", error_text)
-                    raise MyVerisureError(f"Home Assistant error: {response.status}")
+                    raise Exception(f"Home Assistant error: {response.status}")
                     
         except Exception as e:
             _LOGGER.error("Failed to get states from Home Assistant: %s", e)
-            raise MyVerisureError(f"Failed to get states from Home Assistant: {e}") from e
+            raise Exception(f"Failed to get states from Home Assistant: {e}") from e
 
     async def get_entities_by_domain(self, domain: str) -> List[Dict[str, Any]]:
         """Get entities filtered by domain."""
@@ -150,7 +146,7 @@ class HAClient(BaseClient):
     async def get_entity_state(self, entity_id: str) -> Optional[Dict[str, Any]]:
         """Get state of a specific entity."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             async with self._session.get(
@@ -166,16 +162,16 @@ class HAClient(BaseClient):
                 else:
                     error_text = await response.text()
                     _LOGGER.error("Home Assistant error: %s", error_text)
-                    raise MyVerisureError(f"Home Assistant error: {response.status}")
+                    raise Exception(f"Home Assistant error: {response.status}")
                     
         except Exception as e:
             _LOGGER.error("Failed to get entity state for %s: %s", entity_id, e)
-            raise MyVerisureError(f"Failed to get entity state for {entity_id}: {e}") from e
+            raise Exception(f"Failed to get entity state for {entity_id}: {e}") from e
 
     async def get_entity_history(self, entity_id: str, start_time: str = None, end_time: str = None) -> List[Dict[str, Any]]:
         """Get history for a specific entity."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             params = {}
@@ -195,16 +191,16 @@ class HAClient(BaseClient):
                 else:
                     error_text = await response.text()
                     _LOGGER.error("Home Assistant error: %s", error_text)
-                    raise MyVerisureError(f"Home Assistant error: {response.status}")
+                    raise Exception(f"Home Assistant error: {response.status}")
                     
         except Exception as e:
             _LOGGER.error("Failed to get entity history for %s: %s", entity_id, e)
-            raise MyVerisureError(f"Failed to get entity history for {entity_id}: {e}") from e
+            raise Exception(f"Failed to get entity history for {entity_id}: {e}") from e
 
     async def get_services(self) -> Dict[str, Any]:
         """Get available services from Home Assistant."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             async with self._session.get(
@@ -217,16 +213,16 @@ class HAClient(BaseClient):
                 else:
                     error_text = await response.text()
                     _LOGGER.error("Home Assistant error: %s", error_text)
-                    raise MyVerisureError(f"Home Assistant error: {response.status}")
+                    raise Exception(f"Home Assistant error: {response.status}")
                     
         except Exception as e:
             _LOGGER.error("Failed to get services from Home Assistant: %s", e)
-            raise MyVerisureError(f"Failed to get services from Home Assistant: {e}") from e
+            raise Exception(f"Failed to get services from Home Assistant: {e}") from e
 
     async def get_config(self) -> Dict[str, Any]:
         """Get Home Assistant configuration."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             async with self._session.get(
@@ -239,16 +235,16 @@ class HAClient(BaseClient):
                 else:
                     error_text = await response.text()
                     _LOGGER.error("Home Assistant error: %s", error_text)
-                    raise MyVerisureError(f"Home Assistant error: {response.status}")
+                    raise Exception(f"Home Assistant error: {response.status}")
                     
         except Exception as e:
             _LOGGER.error("Failed to get config from Home Assistant: %s", e)
-            raise MyVerisureError(f"Failed to get config from Home Assistant: {e}") from e
+            raise Exception(f"Failed to get config from Home Assistant: {e}") from e
 
     async def call_service(self, domain: str, service: str, entity_id: str = None, service_data: dict = None) -> dict:
         """Call a service on Home Assistant."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             # Prepare the service call data
@@ -273,11 +269,11 @@ class HAClient(BaseClient):
                     error_text = await response.text()
                     _LOGGER.error("Service call failed: %s.%s - Status: %d, Error: %s", 
                                  domain, service, response.status, error_text)
-                    raise MyVerisureError(f"Service call failed: {response.status} - {error_text}")
+                    raise Exception(f"Service call failed: {response.status} - {error_text}")
                     
         except Exception as e:
             _LOGGER.error("Failed to call service %s.%s: %s", domain, service, e)
-            raise MyVerisureError(f"Failed to call service {domain}.{service}: {e}") from e
+            raise Exception(f"Failed to call service {domain}.{service}: {e}") from e
 
     def update_ha_config(self, ha_url: str = None, ha_token: str = None) -> None:
         """Update Home Assistant configuration."""
@@ -304,7 +300,7 @@ class HAClient(BaseClient):
     async def get_complete_info(self) -> Dict[str, Any]:
         """Get complete information from Home Assistant."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             _LOGGER.info("Getting complete information from Home Assistant")
@@ -337,7 +333,7 @@ class HAClient(BaseClient):
             
         except Exception as e:
             _LOGGER.error("Failed to get complete information from Home Assistant: %s", e)
-            raise MyVerisureError(f"Failed to get complete information from Home Assistant: {e}") from e
+            raise Exception(f"Failed to get complete information from Home Assistant: {e}") from e
 
     async def disconnect(self) -> None:
         """Disconnect from the Home Assistant service."""

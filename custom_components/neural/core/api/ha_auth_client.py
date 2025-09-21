@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 
 import aiohttp
 
-from .exceptions import MyVerisureConnectionError, MyVerisureError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +40,7 @@ class HAAuthClient:
             _LOGGER.info("Connected to Home Assistant authentication service")
         except Exception as e:
             _LOGGER.error("Failed to connect to Home Assistant: %s", e)
-            raise MyVerisureConnectionError(f"Failed to connect to Home Assistant: {e}") from e
+            raise Exception(f"Failed to connect to Home Assistant: {e}") from e
 
     async def disconnect(self) -> None:
         """Disconnect from Home Assistant."""
@@ -53,7 +52,7 @@ class HAAuthClient:
     async def login(self, token: str) -> Tuple[bool, str]:
         """Login to Home Assistant using a long-lived access token."""
         if not self._session:
-            raise MyVerisureConnectionError("Client not connected")
+            raise Exception("Client not connected")
 
         try:
             _LOGGER.info("Attempting login to Home Assistant with token")
