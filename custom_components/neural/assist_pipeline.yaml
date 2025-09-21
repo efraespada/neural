@@ -1,0 +1,29 @@
+# Neural AI Assist Pipeline Configuration
+# This file should be placed in the Home Assistant configuration directory
+# and referenced in the Assist pipeline configuration
+
+# Example configuration for Assist pipeline
+# Add this to your configuration.yaml:
+
+# assist_pipeline:
+#   - name: "Neural AI"
+#     language: "es"
+#     conversation_engine: "conversation"
+#     conversation_language: "es"
+#     stt_engine: "cloud"
+#     stt_language: "es"
+#     tts_engine: "cloud"
+#     tts_language: "es"
+#     tts_voice: "es-ES-Standard-A"
+#     wake_word_engine: "openwakeword"
+#     wake_word_id: "neural_ai"
+
+# Or use the UI to configure the pipeline with these settings:
+# - Language: Spanish (es)
+# - STT Engine: Cloud (or local if available)
+# - TTS Engine: Cloud (or local if available)
+# - Wake Word: openWakeWord (if installed)
+# - Conversation Engine: conversation (default)
+
+# The Neural AI integration will automatically register as an intent handler
+# and will process commands through the Assist pipeline.

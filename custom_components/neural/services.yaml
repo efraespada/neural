@@ -1,9 +1,9 @@
 # Services for Neural AI integration
 
-# Send a message to AI
+# Send a message to the AI
 send_message:
   name: "Send Message to AI"
-  description: "Send a message to the AI and get a response"
+  description: "Send a message to the Neural AI and get a response"
   target:
     entity:
       integration: neural
@@ -15,27 +15,28 @@ send_message:
       required: true
       selector:
         text:
-    model:
-      name: "AI Model"
-      description: "The AI model to use (optional)"
-      required: false
-      selector:
-        text:
 
 # Get AI status
 get_status:
   name: "Get AI Status"
-  description: "Get the current status of the AI service"
+  description: "Get the current status of the Neural AI service"
   target:
     entity:
       integration: neural
       domain: sensor
 
-# List available AI models
-list_models:
-  name: "List AI Models"
-  description: "List all available AI models"
+# Update configuration
+update_config:
+  name: "Update Configuration"
+  description: "Update Neural AI configuration"
   target:
     entity:
       integration: neural
       domain: sensor
+  fields:
+    config:
+      name: "Configuration"
+      description: "Configuration parameters to update"
+      required: true
+      selector:
+        object:

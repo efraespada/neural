@@ -1,0 +1,46 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuración de Neural AI",
+        "description": "Configure su integración Neural AI",
+        "data": {
+          "ha_token": "Token de Larga Duración de Home Assistant",
+          "openrouter_token": "Token de API de OpenRouter",
+          "work_mode": "Modo de Trabajo",
+          "personality": "Personalidad de IA",
+          "ai_model": "Modelo de IA",
+          "microphone_enabled": "Habilitar Micrófono",
+          "voice_language": "Idioma de Voz",
+          "voice_timeout": "Tiempo de Espera de Voz (segundos)"
+        }
+      }
+    },
+    "error": {
+      "ha_token_required": "Se requiere el token de Home Assistant",
+      "openrouter_token_required": "Se requiere el token de OpenRouter",
+      "invalid_tokens": "Tokens inválidos. Por favor verifique sus credenciales.",
+      "cannot_connect": "No se puede conectar a los servicios",
+      "unknown": "Ocurrió un error desconocido"
+    },
+    "abort": {
+      "already_configured": "Neural AI ya está configurado"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Neural AI",
+        "description": "Configure las opciones de Neural AI",
+        "data": {
+          "work_mode": "Modo de Trabajo",
+          "personality": "Personalidad de IA",
+          "ai_model": "Modelo de IA",
+          "microphone_enabled": "Habilitar Micrófono",
+          "voice_language": "Idioma de Voz",
+          "voice_timeout": "Tiempo de Espera de Voz (segundos)"
+        }
+      }
+    }
+  }
+}
