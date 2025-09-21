@@ -6,8 +6,8 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Optional
 
-# Add core to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "core"))
+# Add custom_components/neural to path
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "custom_components", "neural"))
 
 from core.dependency_injection.providers import (
     get_ai_use_case,

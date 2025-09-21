@@ -12,9 +12,8 @@ from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResu
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
-# Import core dependencies using relative imports
-from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
-from .core.dependency_injection.injector_container import get_ai_use_case, get_ha_use_case
+# Import core dependencies
+from .core import setup_dependencies, clear_dependencies, get_ai_use_case, get_ha_use_case
 
 from .const import (
     DOMAIN,

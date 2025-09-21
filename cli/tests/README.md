@@ -13,8 +13,6 @@ cli/tests/
 ├── run_tests.py            # Test execution script
 ├── README.md               # This file
 ├── test_display.py         # Display utility tests
-├── test_input_helpers.py   # Input helper tests
-├── test_session_manager.py # Session manager tests
 ├── test_commands.py        # Command tests
 └── test_integration.py     # Integration tests
 ```
@@ -27,15 +25,7 @@ cli/tests/
   - Output formatting and emoji usage
   - Mock objects for testing without real data
 
-- **`test_input_helpers.py`**: Tests for user input functions
-  - `get_user_credentials`, `select_phone`, `get_otp_code`
-  - Input validation and error handling
-  - Mock user input scenarios
 
-- **`test_session_manager.py`**: Tests for session management
-  - Session persistence (save/load)
-  - Authentication state management
-  - File operations and error handling
 
 - **`test_commands.py`**: Tests for CLI commands
   - `AuthCommand`, `InfoCommand`, `AlarmCommand`
@@ -80,8 +70,6 @@ python -m pytest cli/tests/ -m integration -v
 # Display tests only
 python -m pytest cli/tests/ -m display -v
 
-# Session manager tests only
-python -m pytest cli/tests/ -m session -v
 ```
 
 ### Test with Coverage
@@ -103,19 +91,7 @@ The tests cover the following areas:
 - Error message handling
 - Mock object integration
 
-### ✅ **Input Helpers** (100%)
-- User credential input
-- Phone selection
-- OTP code input
-- Installation selection
-- Action confirmation
 
-### ✅ **Session Management** (100%)
-- Session persistence
-- Authentication state
-- File operations
-- Error handling
-- Cleanup operations
 
 ### ✅ **Commands** (100%)
 - All command classes
@@ -145,8 +121,6 @@ The tests cover the following areas:
 - `@pytest.mark.slow`: Slow running tests
 - `@pytest.mark.auth`: Authentication tests
 - `@pytest.mark.display`: Display tests
-- `@pytest.mark.input`: Input helper tests
-- `@pytest.mark.session`: Session manager tests
 - `@pytest.mark.commands`: Command tests
 
 ## 🎯 Test Design Principles

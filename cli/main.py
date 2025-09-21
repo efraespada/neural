@@ -7,8 +7,8 @@ import logging
 import sys
 import os
 
-# Add core to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "core"))
+# Add custom_components/neural to path
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "custom_components", "neural"))
 
 from .commands.ai import AICommand
 from .commands.ha import HACommand
