@@ -1,5 +1,7 @@
 """Home Assistant interaction command for the CLI."""
 
+import sys
+import os
 import logging
 from typing import Optional
 
@@ -11,6 +13,15 @@ from ..utils.display import (
     print_info,
     print_header,
 )
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "custom_components", "neural"))
+
+from core.dependency_injection.injector_container import (
+    get_container,
+    get_config_use_case,
+)
+from core.auth.credential_manager import CredentialManager
+from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
 
 logger = logging.getLogger(__name__)
 
@@ -383,7 +394,6 @@ class HACommand(BaseCommand):
         try:
             # Check stored credentials
             try:
-                from core.auth.credential_manager import CredentialManager
                 credential_manager = CredentialManager()
                 
                 if credential_manager.has_credentials():
@@ -439,7 +449,6 @@ class HACommand(BaseCommand):
                 return False
 
             # Get config use case
-            from core.dependency_injection.injector_container import get_config_use_case
             config_use_case = get_config_use_case()
             
             # Parse configuration parameters
@@ -484,9 +493,7 @@ class HACommand(BaseCommand):
                 return False
             
             # Get update home info use case
-            from core.dependency_injection.injector_container import get_container
             container = get_container()
-            from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
             update_home_info_use_case = container.get(UpdateHomeInfoUseCase)
             
             if home_info:
