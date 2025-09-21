@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from collections.abc import AsyncIterable
 
 import aiohttp
 
@@ -111,7 +112,7 @@ class NeuralSTTEntity(SpeechToTextEntity):
         return [AudioChannels.CHANNEL_MONO]
 
     async def async_process_audio_stream(
-        self, metadata: SpeechMetadata, stream: Any
+        self, metadata: SpeechMetadata, stream: AsyncIterable[bytes]
     ) -> SpeechResult:
         """Process audio stream and return speech result."""
         try:
@@ -144,13 +145,14 @@ class NeuralSTTEntity(SpeechToTextEntity):
             _LOGGER.error("Error processing audio: %s", e)
             return SpeechResult("", SpeechResultState.ERROR)
 
-    async def _read_audio_stream(self, stream: Any) -> bytes:
+    async def _read_audio_stream(self, stream: AsyncIterable[bytes]) -> bytes:
         """Read audio data from stream."""
         audio_data = b""
         chunk_count = 0
         try:
             _LOGGER.warning("Starting to read audio stream")
-            while chunk := await stream.read(4096):
+            # Handle async generator/iterable
+            async for chunk in stream:
                 audio_data += chunk
                 chunk_count += 1
                 if chunk_count % 10 == 0:  # Log every 10 chunks
