@@ -17,7 +17,8 @@
     "keyring>=24.0.0",
     "cryptography>=41.0.0",
     "injector>=0.20.0",
-    "openai>=1.0.0"
+    "openai>=1.0.0",
+    "pydub>=0.25.1"
   ],
   "version": "1.0.0",
   "icon": "icon.png"

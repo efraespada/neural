@@ -7,6 +7,7 @@ from io import BytesIO
 
 import aiohttp
 import openai
+from pydub import AudioSegment
 
 from .base_client import BaseClient
 
@@ -307,10 +308,6 @@ class AIClient(BaseClient):
             
             _LOGGER.info("Transcribing audio with Whisper model: %s, language: %s", self.stt_model, language)
             
-            # Create a file-like object from audio data with proper format
-            audio_file = BytesIO(audio_data)
-            audio_file.name = "audio.wav"
-            
             # Ensure audio data is valid
             if len(audio_data) < 1000:  # Minimum size check
                 raise ValueError("Audio data too small, might be corrupted")
@@ -318,14 +315,34 @@ class AIClient(BaseClient):
             # Log audio data details for debugging
             _LOGGER.info("Audio data size: %d bytes, first 20 bytes: %s", len(audio_data), audio_data[:20].hex())
             
-            # Check if audio data looks like WAV
-            if audio_data.startswith(b'RIFF'):
-                _LOGGER.info("Audio data appears to be WAV format")
-            else:
-                _LOGGER.warning("Audio data doesn't start with RIFF header, might not be WAV format")
+            # Convert audio to proper WAV format
+            try:
+                # Convert raw audio data to WAV format using pydub
+                audio_segment = AudioSegment(
+                    data=audio_data,
+                    sample_width=2,  # 16-bit
+                    frame_rate=16000,  # 16kHz
+                    channels=1  # Mono
+                )
+                
+                # Export as WAV
+                wav_buffer = BytesIO()
+                audio_segment.export(wav_buffer, format="wav")
+                wav_data = wav_buffer.getvalue()
+                
+                _LOGGER.info("Converted audio to WAV format: %d bytes", len(wav_data))
+                
+                # Create file-like object with converted WAV data
+                audio_file = BytesIO(wav_data)
+                audio_file.name = "audio.wav"
+                
+            except Exception as e:
+                _LOGGER.error("Failed to convert audio to WAV format: %s", e)
+                # Fallback: try with original data
+                audio_file = BytesIO(audio_data)
+                audio_file.name = "audio.wav"
             
             # Transcribe using OpenAI Whisper in executor
-            import asyncio
             transcription = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: self._whisper_client.audio.transcriptions.create(
