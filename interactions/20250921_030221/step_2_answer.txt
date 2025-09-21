@@ -1,6 +1,0 @@
-```json
-{
-  "message": "I'm sorry Efra, I'm afraid I can't do that. No se encontró una entidad de luz específica para el ático en los datos disponibles.",
-  "actions": []
-}
-```

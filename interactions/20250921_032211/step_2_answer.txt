@@ -1,6 +1,0 @@
-```json
-{
-  "message": "Lo siento Efra, no puedo obtener el estado de la batería de la aspiradora en este momento.",
-  "actions": []
-}
-```

@@ -1,6 +1,0 @@
-```json
-{
-  "message": "Lo siento Efra, me temo que no puedo hacer eso. El ático está cerrado actualmente y no hay luces disponibles para encender.",
-  "actions": []
-}
-```
