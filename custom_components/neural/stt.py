@@ -148,7 +148,7 @@ class NeuralSTTProvider(Provider):
             self._session = None
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities) -> bool:
     """Set up STT from a config entry."""
     return True
 

@@ -18,8 +18,9 @@ class NeuralIntentHandler(IntentHandler):
 
     def __init__(self, coordinator) -> None:
         """Initialize the intent handler."""
-        super().__init__(INTENT_NEURAL_COMMAND)
+        super().__init__()
         self.coordinator = coordinator
+        self.intent_type = INTENT_NEURAL_COMMAND
 
     async def async_handle(self, intent_obj: intent.Intent) -> IntentResponse:
         """Handle the intent."""
@@ -46,9 +47,18 @@ class NeuralIntentHandler(IntentHandler):
             return intent_response
 
 
-async def async_setup_intents(hass: HomeAssistant, coordinator) -> None:
+async def async_setup_intents(hass: HomeAssistant, coordinator=None) -> None:
     """Set up Neural AI intents."""
     try:
+        # Get coordinator from hass data if not provided
+        if coordinator is None:
+            from .const import DOMAIN
+            if DOMAIN in hass.data and "coordinator" in hass.data[DOMAIN]:
+                coordinator = hass.data[DOMAIN]["coordinator"]
+            else:
+                _LOGGER.warning("No coordinator available for Neural AI intents")
+                return
+        
         # Register the intent handler
         intent_handler = NeuralIntentHandler(coordinator)
         intent.async_register(hass, intent_handler)
