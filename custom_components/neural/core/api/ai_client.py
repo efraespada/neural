@@ -299,20 +299,41 @@ class AIClient(BaseClient):
             if not self._whisper_client:
                 if not self._stt_api_key:
                     raise ValueError("STT API key is required for audio transcription")
-                self._whisper_client = openai.OpenAI(api_key=self._stt_api_key)
+                # Initialize client in executor to avoid blocking
+                import asyncio
+                self._whisper_client = await asyncio.get_event_loop().run_in_executor(
+                    None, lambda: openai.OpenAI(api_key=self._stt_api_key)
+                )
             
             _LOGGER.info("Transcribing audio with Whisper model: %s, language: %s", self.stt_model, language)
             
-            # Create a file-like object from audio data
+            # Create a file-like object from audio data with proper format
             audio_file = BytesIO(audio_data)
             audio_file.name = "audio.wav"
             
-            # Transcribe using OpenAI Whisper
-            transcription = self._whisper_client.audio.transcriptions.create(
-                model=self.stt_model,
-                file=audio_file,
-                language=language,
-                response_format="json"
+            # Ensure audio data is valid
+            if len(audio_data) < 1000:  # Minimum size check
+                raise ValueError("Audio data too small, might be corrupted")
+            
+            # Log audio data details for debugging
+            _LOGGER.info("Audio data size: %d bytes, first 20 bytes: %s", len(audio_data), audio_data[:20].hex())
+            
+            # Check if audio data looks like WAV
+            if audio_data.startswith(b'RIFF'):
+                _LOGGER.info("Audio data appears to be WAV format")
+            else:
+                _LOGGER.warning("Audio data doesn't start with RIFF header, might not be WAV format")
+            
+            # Transcribe using OpenAI Whisper in executor
+            import asyncio
+            transcription = await asyncio.get_event_loop().run_in_executor(
+                None,
+                lambda: self._whisper_client.audio.transcriptions.create(
+                    model=self.stt_model,
+                    file=audio_file,
+                    language=language,
+                    response_format="json"
+                )
             )
             
             result_text = transcription.text
