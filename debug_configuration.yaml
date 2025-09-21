@@ -3,14 +3,15 @@
 
 # Enable debug logging for the integration
 logger:
-  custom_components.my_verisure: debug
-  custom_components.my_verisure.alarm_control_panel: debug
-  custom_components.my_verisure.coordinator: debug
-  custom_components.my_verisure.api.client: debug
+  custom_components.neural: debug
+  custom_components.neural.coordinator: debug
+  custom_components.neural.core.api.ai_client: debug
+  custom_components.neural.core.api.ha_client: debug
+  custom_components.neural.core.api.ha_auth_client: debug
 
 # Example service call to test the integration
 # You can call this service from Developer Tools > Services
-# service: my_verisure.change_language
+# service: neural.change_language
 # data:
 #   language: "en"
 
@@ -21,11 +22,11 @@ logger:
 #       platform: time
 #       at: "12:00:00"
 #     action:
-#       - service: my_verisure.change_language
+#       - service: neural.change_language
 #         data:
 #           language: "es"
 #       - delay:
 #           seconds: 5
-#       - service: my_verisure.change_language
+#       - service: neural.change_language
 #         data:
 #           language: "en" 

@@ -3,13 +3,23 @@
 from __future__ import annotations
 
 import logging
+import sys
+import os
 from typing import Any
 
 import voluptuous as vol
+import aiohttp
 
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
+
+# Add core path to sys.path
+sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
+
+# Import core dependencies
+from core.dependency_injection.providers import setup_dependencies, clear_dependencies
+from core.dependency_injection.injector_container import get_ai_use_case, get_ha_use_case
 
 from .const import (
     DOMAIN,
@@ -93,29 +103,37 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
         )
 
     async def _test_tokens(self, ha_token: str, openrouter_token: str) -> bool:
-        """Test if the provided tokens are valid."""
+        """Test if the provided tokens are valid using core use cases."""
         try:
-            # Test Home Assistant token
-            import aiohttp
-            async with aiohttp.ClientSession() as session:
-                headers = {"Authorization": f"Bearer {ha_token}"}
-                async with session.get(
-                    "http://supervisor/core/api/",
-                    headers=headers,
-                    timeout=aiohttp.ClientTimeout(total=10)
-                ) as response:
-                    if response.status == 200:
-                        # Test OpenRouter token
-                        headers = {"Authorization": f"Bearer {openrouter_token}"}
-                        async with session.get(
-                            "https://openrouter.ai/api/v1/models",
-                            headers=headers,
-                            timeout=aiohttp.ClientTimeout(total=10)
-                        ) as response:
-                            return response.status == 200
-            return False
+            # Setup dependencies with test tokens
+            await setup_dependencies(
+                ai_url="https://openrouter.ai/api/v1",
+                ai_model="openai/gpt-4o-mini",  # Use a default model for testing
+                ai_api_key=openrouter_token,
+                ha_url="http://supervisor/core",
+                ha_token=ha_token
+            )
+            
+            # Test AI connection
+            ai_use_case = get_ai_use_case()
+            ai_connected = await ai_use_case.test_connection()
+            
+            # Test HA connection
+            ha_use_case = get_ha_use_case()
+            ha_entities = await ha_use_case.get_all_entities()
+            ha_connected = len(ha_entities) >= 0  # If we can get entities, HA is connected
+            
+            # Clean up dependencies
+            clear_dependencies()
+            
+            return ai_connected and ha_connected
+            
         except Exception as e:
             _LOGGER.error("Error testing tokens: %s", e)
+            try:
+                clear_dependencies()
+            except:
+                pass
             return False
 
 
