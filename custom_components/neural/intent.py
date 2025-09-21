@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.intent import IntentHandler, IntentResponse
 from homeassistant.helpers import intent
 
-from .const import DOMAIN, INTENT_NEURAL_COMMAND
+from .const import INTENT_NEURAL_COMMAND
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class NeuralIntentHandler(IntentHandler):
     async def async_handle(self, intent_obj: intent.Intent) -> IntentResponse:
         """Handle the intent."""
         try:
-            _LOGGER.info("Processing Neural AI intent: %s", intent_obj.text)
+            _LOGGER.warning("Processing Neural AI intent: %s", intent_obj.text)
             
             # Get the command from the intent
             command = intent_obj.text
@@ -37,7 +37,7 @@ class NeuralIntentHandler(IntentHandler):
             intent_response = intent_obj.create_response()
             intent_response.async_set_speech(response)
             
-            _LOGGER.info("Neural AI response: %s", response)
+            _LOGGER.warning("Neural AI response: %s", response)
             return intent_response
             
         except Exception as e:
@@ -59,11 +59,17 @@ async def async_setup_intents(hass: HomeAssistant, coordinator=None) -> None:
                 _LOGGER.warning("No coordinator available for Neural AI intents")
                 return
         
+        # Check if intent is already registered
+        from .const import INTENT_NEURAL_COMMAND
+        if INTENT_NEURAL_COMMAND in hass.data.get("intent", {}):
+            _LOGGER.warning("Neural AI intent already registered, skipping")
+            return
+        
         # Register the intent handler
         intent_handler = NeuralIntentHandler(coordinator)
         intent.async_register(hass, intent_handler)
         
-        _LOGGER.info("Neural AI intents registered successfully")
+        _LOGGER.warning("Neural AI intents registered successfully")
         
     except Exception as e:
         _LOGGER.error("Error setting up Neural AI intents: %s", e)
@@ -75,7 +81,7 @@ async def async_unload_intents(hass: HomeAssistant) -> None:
         # Unregister the intent handler
         intent.async_unregister(hass, INTENT_NEURAL_COMMAND)
         
-        _LOGGER.info("Neural AI intents unloaded successfully")
+        _LOGGER.warning("Neural AI intents unloaded successfully")
         
     except Exception as e:
         _LOGGER.error("Error unloading Neural AI intents: %s", e)

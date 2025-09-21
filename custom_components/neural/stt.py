@@ -44,7 +44,14 @@ class NeuralSTTProvider(Provider):
         self.hass = hass
         self.config = config
         self._session: aiohttp.ClientSession | None = None
-        _LOGGER.info("Neural STT provider initialized with config: %s", config)
+        
+        # Log configuration details (without sensitive data)
+        safe_config = {k: v for k, v in config.items() if k != "stt_api_key"}
+        safe_config["stt_api_key"] = "***" if config.get("stt_api_key") else "None"
+        _LOGGER.info("Neural STT provider initialized with config: %s", safe_config)
+        _LOGGER.info("STT Model: %s", config.get("stt_model", "whisper-1"))
+        _LOGGER.info("AI URL: %s", config.get("ai_url", "https://openrouter.ai/api/v1"))
+        _LOGGER.info("AI Model: %s", config.get("ai_model", "openai/gpt-oss-20b"))
 
     @property
     def supported_languages(self) -> list[str]:
@@ -81,20 +88,26 @@ class NeuralSTTProvider(Provider):
     ) -> SpeechResult:
         """Process audio stream and return speech result."""
         try:
-            _LOGGER.info("Processing audio with Neural STT")
+            _LOGGER.warning("Processing audio with Neural STT")
+            _LOGGER.warning("Audio metadata - Language: %s, Format: %s, Codec: %s", 
+                        metadata.language, metadata.format, metadata.codec)
+            _LOGGER.warning("Audio metadata - Bit rate: %s, Sample rate: %s, Channels: %s", 
+                        metadata.bit_rate, metadata.sample_rate, metadata.channel)
             
             # Read audio data from stream
             audio_data = await self._read_audio_stream(stream)
+            _LOGGER.warning("Audio data size: %d bytes", len(audio_data))
             
             if not audio_data:
-                _LOGGER.error("No audio data received")
+                _LOGGER.warning("No audio data received")
                 return SpeechResult("", SpeechResultState.ERROR)
             
-            # Send audio to OpenRouter API
+            # Send audio to transcription
+            _LOGGER.warning("Starting audio transcription with language: %s", metadata.language)
             text = await self._transcribe_audio(audio_data, metadata.language)
             
             if text:
-                _LOGGER.info("Transcription successful: %s", text)
+                _LOGGER.warning("Transcription successful: %s", text)
                 return SpeechResult(text, SpeechResultState.SUCCESS)
             else:
                 _LOGGER.error("No transcription result")
@@ -107,31 +120,43 @@ class NeuralSTTProvider(Provider):
     async def _read_audio_stream(self, stream: Any) -> bytes:
         """Read audio data from stream."""
         audio_data = b""
+        chunk_count = 0
         try:
+            _LOGGER.warning("Starting to read audio stream")
             while chunk := await stream.read(4096):
                 audio_data += chunk
+                chunk_count += 1
+                if chunk_count % 10 == 0:  # Log every 10 chunks
+                    _LOGGER.warning("Read %d chunks, total size: %d bytes", chunk_count, len(audio_data))
         except Exception as e:
             _LOGGER.error("Error reading audio stream: %s", e)
             return b""
         
+        _LOGGER.warning("Audio stream reading completed: %d chunks, %d bytes total", chunk_count, len(audio_data))
         return audio_data
 
     async def _transcribe_audio(self, audio_data: bytes, language: str) -> str:
         """Transcribe audio using the audio use case."""
         try:
+            _LOGGER.warning("Setting up dependencies for audio transcription")
             # Setup dependencies
             await setup_dependencies()
             
             try:
+                _LOGGER.warning("Getting audio use case")
                 # Get audio use case
                 audio_use_case = get_audio_use_case()
                 
+                _LOGGER.warning("Calling audio use case transcribe_audio with %d bytes, language: %s", 
+                            len(audio_data), language)
                 # Transcribe audio using the use case
                 transcription = await audio_use_case.transcribe_audio(audio_data, language)
                 
+                _LOGGER.warning("Audio transcription completed: %s", transcription[:50] + "..." if len(transcription) > 50 else transcription)
                 return transcription
                 
             finally:
+                _LOGGER.warning("Cleaning up dependencies")
                 # Clean up dependencies
                 clear_dependencies()
                         
@@ -166,14 +191,9 @@ async def async_get_engine(
     }
     
     # Create and register the STT provider    
-    return await async_get_engine(hass, stt_config)
-
-
-async def async_get_engine(
-    hass: HomeAssistant, config: dict[str, Any] | None = None
-) -> NeuralSTTProvider:
     """Set up Neural STT provider."""
-    if config is None:
-        config = {}
+    if stt_config is None:
+        stt_config = {}
     
-    return NeuralSTTProvider(hass, config)
+    return NeuralSTTProvider(hass, stt_config)
+

@@ -40,6 +40,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         from .intent import async_setup_intents
         await async_setup_intents(hass, coordinator)
         hass.data[DOMAIN]["intents_setup"] = True
+        _LOGGER.warning("Neural AI intents registered successfully")
 
     # Set up STT engine (only once)
     if not hass.data[DOMAIN].get("stt_setup"):
