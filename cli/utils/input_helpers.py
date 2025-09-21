@@ -11,9 +11,9 @@ def get_user_credentials() -> tuple[str, str]:
     """Solicita las credenciales del usuario."""
     from .display import print_header, print_error
 
-    print_header("MY VERISURE - AUTENTICACIÓN INTERACTIVA")
+    print_header("Neural - AUTENTICACIÓN INTERACTIVA")
 
-    print("👤 Ingresa tus credenciales de My Verisure:")
+    print("👤 Ingresa tus credenciales de Neural:")
     print()
 
     # Solicitar User ID (DNI/NIE)

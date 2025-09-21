@@ -1,4 +1,4 @@
-# Sistema de Traducciones para My Verisure
+# Sistema de Traducciones para Neural
 
 ## 🎯 Implementación Correcta
 
@@ -12,7 +12,7 @@ Siguiendo las mejores prácticas de Home Assistant, hemos implementado un sistem
   "entity": {
     "alarm_control_panel": {
       "my_verisure": {
-        "name": "My Verisure",
+        "name": "Neural",
         "state": {
           "armed_home": "Perimetral",
           "armed_away": "Total",
@@ -31,7 +31,7 @@ Siguiendo las mejores prácticas de Home Assistant, hemos implementado un sistem
   "entity": {
     "alarm_control_panel": {
       "my_verisure": {
-        "name": "My Verisure",
+        "name": "Neural",
         "state": {
           "armed_home": "Perimetral",
           "armed_away": "Total",
@@ -50,7 +50,7 @@ Siguiendo las mejores prácticas de Home Assistant, hemos implementado un sistem
   "entity": {
     "alarm_control_panel": {
       "my_verisure": {
-        "name": "My Verisure",
+        "name": "Neural",
         "state": {
           "armed_home": "Home",
           "armed_away": "Away",

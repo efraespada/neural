@@ -353,7 +353,7 @@ class SessionManager:
                 print_header("¡AUTENTICACIÓN COMPLETADA!")
                 print_success("¡Código OTP verificado correctamente!")
                 print_success("¡Autenticación completa exitosa!")
-                print_info("Ya puedes usar la API de My Verisure")
+                print_info("Ya puedes usar la API de Neural")
 
                 self.is_authenticated = True
                 # Get the final auth result after OTP verification
@@ -384,7 +384,7 @@ class SessionManager:
             return False
 
         except MyVerisureError as e:
-            print_error(f"Error de My Verisure: {e}")
+            print_error(f"Error de Neural: {e}")
             return False
 
         except KeyboardInterrupt:

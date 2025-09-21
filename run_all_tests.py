@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Script global para ejecutar todos los tests del proyecto My Verisure."""
+"""Script global para ejecutar todos los tests del proyecto Neural."""
 
 import sys
 import os
@@ -192,7 +192,7 @@ def run_coverage_report() -> bool:
 
 def main():
     """Función principal."""
-    print_header("My Verisure - Test Suite")
+    print_header("Neural - Test Suite")
     
     # Verificar que estamos en el directorio correcto
     if not Path("cli").exists() or not Path("core").exists():

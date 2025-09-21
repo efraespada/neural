@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""My Verisure CLI - Executable script."""
+"""Neural CLI - Executable script."""
 
 import sys
 import os

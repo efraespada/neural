@@ -1,4 +1,4 @@
-# Makefile para My Verisure Project
+# Makefile para Neural Project
 # Comandos útiles para desarrollo y testing
 
 .PHONY: help test test-cli test-core test-all lint type-check clean install dev-setup
@@ -17,7 +17,7 @@ BLUE = \033[0;34m
 NC = \033[0m # No Color
 
 help: ## Mostrar esta ayuda
-	@echo "$(BLUE)My Verisure - Comandos disponibles:$(NC)"
+	@echo "$(BLUE)Neural - Comandos disponibles:$(NC)"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(GREEN)%-15s$(NC) %s\n", $$1, $$2}'
 	@echo ""

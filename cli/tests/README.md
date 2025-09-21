@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-This directory contains comprehensive tests for the My Verisure CLI application. The tests are organized into different categories to ensure thorough coverage of all functionality.
+This directory contains comprehensive tests for the Neural CLI application. The tests are organized into different categories to ensure thorough coverage of all functionality.
 
 ## 🗂️ Test Structure
 

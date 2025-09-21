@@ -1,4 +1,4 @@
-"""Dependency injection container for My Verisure integration."""
+"""Dependency injection container for Neural integration."""
 
 from typing import Type, TypeVar, Callable, Any, Dict, Optional
 

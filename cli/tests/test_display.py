@@ -72,7 +72,7 @@ class TestDisplayFunctions:
         """Test print_command_header function."""
         print_command_header("AUTH", "Authentication management")
         output = mock_stdout.getvalue()
-        assert "🚀 MY VERISURE CLI - AUTH" in output
+        assert "🚀 Neural CLI - AUTH" in output
         assert "ℹ️  Authentication management" in output
 
     @patch("sys.stdout", new_callable=StringIO)

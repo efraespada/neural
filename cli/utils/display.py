@@ -35,7 +35,7 @@ def print_warning(message: str) -> None:
 
 def print_command_header(command: str, description: str) -> None:
     """Imprime el encabezado de un comando."""
-    print_header(f"MY VERISURE CLI - {command.upper()}")
+    print_header(f"Neural CLI - {command.upper()}")
     print_info(description)
     print()
 

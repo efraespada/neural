@@ -303,7 +303,7 @@ def run_tests_with_coverage_all():
 
 def main():
     """Función principal."""
-    print_header("My Verisure - Working Coverage Analysis")
+    print_header("Neural - Working Coverage Analysis")
     
     # Verificar que estamos en el directorio correcto
     if not Path("cli").exists() or not Path("core").exists():

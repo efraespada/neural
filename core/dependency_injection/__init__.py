@@ -1,4 +1,4 @@
-"""Dependency injection container for My Verisure integration using injector."""
+"""Dependency injection container for Neural integration using injector."""
 
 from .injector_container import (
     DependencyContainer,

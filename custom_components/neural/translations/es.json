@@ -1,10 +1,10 @@
 {
-  "title": "My Verisure",
+  "title": "Neural",
   "config": {
     "step": {
       "user": {
-        "title": "Autenticación My Verisure",
-        "description": "Introduce las credenciales de tu cuenta My Verisure para conectar con tu sistema de seguridad.",
+        "title": "Autenticación Neural",
+        "description": "Introduce las credenciales de tu cuenta Neural para conectar con tu sistema de seguridad.",
         "data": {
           "user": "ID de Usuario (DNI/NIE)",
           "password": "Contraseña"
@@ -26,14 +26,14 @@
       },
       "installation": {
         "title": "Seleccionar Instalación",
-        "description": "Selecciona qué instalación de My Verisure quieres añadir a Home Assistant.",
+        "description": "Selecciona qué instalación de Neural quieres añadir a Home Assistant.",
         "data": {
           "installation_id": "Instalación"
         }
       },
       "reauth_confirm": {
         "title": "Re-autenticación",
-        "description": "Tus credenciales de My Verisure han expirado. Por favor, introdúcelas de nuevo.",
+        "description": "Tus credenciales de Neural han expirado. Por favor, introdúcelas de nuevo.",
         "data": {
           "user": "ID de Usuario (DNI/NIE)",
           "password": "Contraseña"
@@ -44,7 +44,7 @@
       "invalid_auth": "Autenticación inválida",
       "cannot_connect": "Error al conectar",
       "unknown": "Error inesperado",
-      "cannot_get_installations": "No se pudieron obtener las instalaciones de My Verisure",
+      "cannot_get_installations": "No se pudieron obtener las instalaciones de Neural",
       "otp_required": "Se requiere autenticación de dos factores",
       "otp_invalid": "Código OTP inválido",
       "otp_failed": "Error al enviar el código OTP"
@@ -57,8 +57,8 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opciones My Verisure",
-        "description": "Configurar opciones adicionales para la integración My Verisure.",
+        "title": "Opciones Neural",
+        "description": "Configurar opciones adicionales para la integración Neural.",
         "data": {
           "scan_interval": "Intervalo de escaneo (minutos)"
         }
@@ -68,7 +68,7 @@
   "entity": {
     "alarm_control_panel": {
       "my_verisure": {
-        "name": "My Verisure",
+        "name": "Neural",
         "state": {
           "armed_home": "Perimetral",
           "armed_away": "Total",

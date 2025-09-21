@@ -160,7 +160,7 @@ def show_next_steps():
 
 def main():
     """Función principal."""
-    print_header("My Verisure - Setup de Desarrollo")
+    print_header("Neural - Setup de Desarrollo")
     
     # Verificar que estamos en el directorio correcto
     if not Path("cli").exists() or not Path("core").exists():

@@ -1,7 +1,7 @@
 #!/bin/bash
-# Setup script for My Verisure CLI
+# Setup script for Neural CLI
 
-echo "🚀 Setting up My Verisure CLI..."
+echo "🚀 Setting up Neural CLI..."
 
 # Check if virtual environment exists
 if [ ! -d "venv" ]; then

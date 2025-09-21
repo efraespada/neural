@@ -1,8 +1,8 @@
-"""Custom exceptions for My Verisure API."""
+"""Custom exceptions for Neural API."""
 
 
 class MyVerisureError(Exception):
-    """Base exception for My Verisure API errors."""
+    """Base exception for Neural API errors."""
 
 
 class MyVerisureAuthenticationError(MyVerisureError):
@@ -10,11 +10,11 @@ class MyVerisureAuthenticationError(MyVerisureError):
 
 
 class MyVerisureConnectionError(MyVerisureError):
-    """Connection to My Verisure API failed."""
+    """Connection to Neural API failed."""
 
 
 class MyVerisureResponseError(MyVerisureError):
-    """Invalid response from My Verisure API."""
+    """Invalid response from Neural API."""
 
 
 class MyVerisureMFAError(MyVerisureError):

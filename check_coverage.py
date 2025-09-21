@@ -148,7 +148,7 @@ def show_coverage_usage():
 
 def main():
     """Función principal."""
-    print_header("My Verisure - Coverage Checker")
+    print_header("Neural - Coverage Checker")
     
     # Verificar que estamos en el directorio correcto
     if not Path("cli").exists() or not Path("core").exists():

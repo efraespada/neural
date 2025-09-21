@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Script específico para ejecutar tests del CLI de My Verisure."""
+"""Script específico para ejecutar tests del CLI de Neural."""
 
 import sys
 import os
@@ -160,7 +160,7 @@ def run_cli_coverage() -> bool:
 
 def main():
     """Función principal."""
-    print_header("My Verisure - CLI Test Suite")
+    print_header("Neural - CLI Test Suite")
     
     # Verificar que estamos en el directorio correcto
     if not Path("cli").exists():

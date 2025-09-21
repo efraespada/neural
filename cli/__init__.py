@@ -1,4 +1,4 @@
-"""My Verisure CLI - Command Line Interface for My Verisure integration."""
+"""Neural CLI - Command Line Interface for Neural integration."""
 
 __version__ = "1.0.0"
-__author__ = "My Verisure Team"
+__author__ = "Neural Team"

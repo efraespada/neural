@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script para ejecutar tests del proyecto My Verisure
+# Script para ejecutar tests del proyecto Neural
 # Uso: ./run_tests.sh [opciones]
 
 set -e  # Salir si hay algún error
@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Función para mostrar ayuda
 show_help() {
-    echo -e "${BLUE}My Verisure - Script de Tests${NC}"
+    echo -e "${BLUE}Neural - Script de Tests${NC}"
     echo ""
     echo "Uso: $0 [OPCIONES]"
     echo ""

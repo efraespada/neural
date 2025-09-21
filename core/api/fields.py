@@ -1,4 +1,4 @@
-"""Constants and field names for My Verisure API."""
+"""Constants and field names for Neural API."""
 
 # API Endpoints
 VERISURE_GRAPHQL_URL = "https://customers.securitasdirect.es/owa-api/graphql"

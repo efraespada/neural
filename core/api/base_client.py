@@ -1,4 +1,4 @@
-"""Base client for My Verisure GraphQL API."""
+"""Base client for Neural GraphQL API."""
 
 import json
 import logging
@@ -34,7 +34,7 @@ class BaseClient:
         await self.disconnect()
 
     async def connect(self) -> None:
-        """Connect to My Verisure API."""
+        """Connect to Neural API."""
         if self._session is None:
             self._session = aiohttp.ClientSession()
 
@@ -50,7 +50,7 @@ class BaseClient:
         )
 
     async def disconnect(self) -> None:
-        """Disconnect from My Verisure API."""
+        """Disconnect from Neural API."""
         if self._client:
             self._client = None
 

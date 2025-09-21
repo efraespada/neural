@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""My Verisure CLI - Command Line Interface."""
+"""Neural CLI - Command Line Interface."""
 
 import argparse
 import asyncio

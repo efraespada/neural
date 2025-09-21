@@ -12,7 +12,7 @@ def main():
     project_root = Path(__file__).parent.parent.parent
     tests_dir = Path(__file__).parent
 
-    print("🚀 Running My Verisure CLI Tests")
+    print("🚀 Running Neural CLI Tests")
     print("=" * 50)
 
     # Change to project root

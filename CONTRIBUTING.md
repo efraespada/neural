@@ -1,6 +1,6 @@
-# Contributing to My Verisure
+# Contributing to Neural
 
-We love your input! We want to make contributing to My Verisure as easy and transparent as possible, whether it's:
+We love your input! We want to make contributing to Neural as easy and transparent as possible, whether it's:
 
 - Reporting a bug
 - Discussing the current state of the code

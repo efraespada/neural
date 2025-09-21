@@ -1,4 +1,4 @@
-"""My Verisure API client."""
+"""Neural API client."""
 
 from .exceptions import (
     MyVerisureAuthenticationError,
