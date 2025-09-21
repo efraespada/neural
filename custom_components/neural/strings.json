@@ -2,84 +2,43 @@
   "config": {
     "step": {
       "user": {
-        "title": "Neural Authentication",
-        "description": "Enter your Neural account credentials to connect to your security system.",
+        "title": "Neural AI Configuration",
+        "description": "Configure your Neural AI integration with Home Assistant and OpenRouter.",
         "data": {
-          "user": "User ID (DNI/NIE)",
-          "password": "[%key:common::config_flow::data::password%]"
-        }
-      },
-      "phone_selection": {
-        "title": "Select Phone Number",
-        "description": "Select which phone number should receive the OTP code for two-factor authentication.",
-        "data": {
-          "phone_id": "Phone Number"
-        }
-      },
-      "otp_verification": {
-        "title": "Enter OTP Code",
-        "description": "Enter the 6-digit OTP code sent to your selected phone number.",
-        "data": {
-          "otp_code": "OTP Code"
-        }
-      },
-      "installation": {
-        "title": "Select Installation",
-        "description": "Select which Neural installation you want to add to Home Assistant.",
-        "data": {
-          "installation_id": "Installation"
-        }
-      },
-      "reauth_confirm": {
-        "title": "Re-authenticate",
-        "description": "Your Neural credentials have expired. Please re-enter them.",
-        "data": {
-          "user": "User ID (DNI/NIE)",
-          "password": "[%key:common::config_flow::data::password%]"
+          "ha_token": "Home Assistant Long-Lived Token",
+          "ai_api_key": "OpenRouter API Token",
+          "work_mode": "Work Mode",
+          "personality": "AI Personality",
+          "ai_model": "AI Model",
+          "microphone_enabled": "Enable Microphone",
+          "voice_language": "Voice Language",
+          "voice_timeout": "Voice Timeout (seconds)"
         }
       }
     },
     "error": {
-      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
-      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
-      "unknown": "[%key:common::config_flow::error::unknown%]",
-      "cannot_get_installations": "Could not get installations from Neural",
-      "otp_required": "Two-factor authentication required",
-      "otp_invalid": "Invalid OTP code",
-      "otp_failed": "Failed to send OTP code",
-      "otp_reauth_required": "Two-factor authentication required again. Please reconfigure the integration to provide a new OTP code.",
-      "session_expired": "Your session has expired. Please reconfigure the integration to authenticate again."
+      "ha_token_required": "Home Assistant token is required",
+      "ai_api_key_required": "OpenRouter token is required",
+      "invalid_tokens": "Invalid tokens provided. Please check your credentials.",
+      "cannot_connect": "Cannot connect to services",
+      "unknown": "Unknown error occurred"
     },
     "abort": {
-      "already_configured": "[%key:common::config_flow::abort::already_configured_account%]",
-      "reauth_successful": "[%key:common::config_flow::abort::reauth_successful%]"
+      "already_configured": "Neural AI is already configured"
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Neural Options",
-        "description": "Configure additional options for Neural integration.",
+        "title": "Neural AI Options",
+        "description": "Configure Neural AI options",
         "data": {
-          "scan_interval": "Scan interval (minutes)"
-        }
-      }
-    }
-  },
-  "entity": {
-    "alarm_control_panel": {
-      "my_verisure": {
-        "name": "Neural",
-        "state": {
-          "armed_home": "Perimetral",
-          "armed_away": "Total",
-          "armed_night": "Noche",
-          "armed_vacation": "Vacaciones",
-          "armed_custom_bypass": "Personalizado",
-          "disarmed": "Desarmada",
-          "triggered": "Disparada",
-          "arming": "Armando",
-          "disarming": "Desarmando"
+          "work_mode": "Work Mode",
+          "personality": "AI Personality",
+          "ai_model": "AI Model",
+          "microphone_enabled": "Enable Microphone",
+          "voice_language": "Voice Language",
+          "voice_timeout": "Voice Timeout (seconds)"
         }
       }
     }

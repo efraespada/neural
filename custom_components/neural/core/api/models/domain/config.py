@@ -5,6 +5,7 @@ Modelos de dominio para configuración.
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
 from datetime import datetime
+from ....const import DEFAULT_HA_URL
 
 
 @dataclass
@@ -36,18 +37,50 @@ class LLMConfig:
 
 
 @dataclass
+class HAConfig:
+    """Configuración de Home Assistant."""
+    url: str = DEFAULT_HA_URL
+    token: Optional[str] = None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convertir a diccionario."""
+        return {
+            "url": self.url,
+            "token": self.token
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'HAConfig':
+        """Crear desde diccionario."""
+        return cls(
+            url=data.get("url", DEFAULT_HA_URL),
+            token=data.get("token")
+        )
+
+
+@dataclass
 class AppConfig:
     """Configuración principal de la aplicación."""
-    mode: str
     llm: LLMConfig
+    ha: HAConfig
+    work_mode: str = "assistant"
+    personality: str = "jarvis"
+    microphone_enabled: bool = True
+    voice_language: str = "es-ES"
+    voice_timeout: int = 5
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     
     def to_dict(self) -> Dict[str, Any]:
         """Convertir a diccionario."""
         return {
-            "mode": self.mode,
             "llm": self.llm.to_dict(),
+            "ha": self.ha.to_dict(),
+            "work_mode": self.work_mode,
+            "personality": self.personality,
+            "microphone_enabled": self.microphone_enabled,
+            "voice_language": self.voice_language,
+            "voice_timeout": self.voice_timeout,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat()
         }
@@ -72,8 +105,13 @@ class AppConfig:
                 pass
         
         return cls(
-            mode=data.get("mode", "supervisor"),
             llm=LLMConfig.from_dict(data.get("llm", {})),
+            ha=HAConfig.from_dict(data.get("ha", {})),
+            work_mode=data.get("work_mode", "assistant"),
+            personality=data.get("personality", "jarvis"),
+            microphone_enabled=data.get("microphone_enabled", True),
+            voice_language=data.get("voice_language", "es-ES"),
+            voice_timeout=data.get("voice_timeout", 5),
             created_at=created_at,
             updated_at=updated_at
         )
@@ -87,9 +125,9 @@ class AppConfig:
         self.llm = LLMConfig(url=url, model=model, api_key=api_key, personality=new_personality)
         self.updated_at = datetime.now()
     
-    def update_mode(self, mode: str) -> None:
-        """Actualizar modo de la aplicación."""
-        self.mode = mode
+    def update_work_mode(self, work_mode: str) -> None:
+        """Actualizar modo de trabajo de la aplicación."""
+        self.work_mode = work_mode
         self.updated_at = datetime.now()
 
 

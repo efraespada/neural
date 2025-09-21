@@ -29,18 +29,24 @@ from ..managers.config_manager import ConfigManager
 T = TypeVar("T")
 _LOGGER = logging.getLogger(__name__)
 
+from ..const import (
+    DEFAULT_AI_URL,
+    DEFAULT_AI_MODEL,
+    DEFAULT_HA_URL,
+    DEFAULT_CONFIG_FILE_PATH
+)
 
 class Configuration:
     """Configuration class for dependency injection."""
     
     def __init__(self, 
-                 ai_url: str = "https://openrouter.ai/api/v1",
-                 ai_model: str = "anthropic/claude-3.5-sonnet",
+                 ai_url: str = DEFAULT_AI_URL,
+                 ai_model: str = DEFAULT_AI_MODEL,
                  ai_api_key: Optional[str] = None,
-                 ha_url: str = "http://homeassistant.local:8123",
+                 ha_url: str = DEFAULT_HA_URL,
                  ha_token: Optional[str] = None,
                  file_base_path: str = ".",
-                 config_file_path: str = "config.json"):
+                 config_file_path: str = DEFAULT_CONFIG_FILE_PATH):
         """Initialize configuration."""
         self.ai_url = ai_url
         self.ai_model = ai_model

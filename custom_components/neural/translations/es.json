@@ -1,84 +1,45 @@
 {
-  "title": "Neural",
+  "title": "Neural AI",
   "config": {
     "step": {
       "user": {
-        "title": "Autenticación Neural",
-        "description": "Introduce las credenciales de tu cuenta Neural para conectar con tu sistema de seguridad.",
+        "title": "Configuración de Neural AI",
+        "description": "Configure su integración Neural AI con Home Assistant y OpenRouter.",
         "data": {
-          "user": "ID de Usuario (DNI/NIE)",
-          "password": "Contraseña"
-        }
-      },
-      "phone_selection": {
-        "title": "Seleccionar Número de Teléfono",
-        "description": "Selecciona qué número de teléfono debe recibir el código OTP para la autenticación de dos factores.",
-        "data": {
-          "phone_id": "Número de Teléfono"
-        }
-      },
-      "otp_verification": {
-        "title": "Introducir Código OTP",
-        "description": "Introduce el código OTP de 6 dígitos enviado a tu número de teléfono seleccionado.",
-        "data": {
-          "otp_code": "Código OTP"
-        }
-      },
-      "installation": {
-        "title": "Seleccionar Instalación",
-        "description": "Selecciona qué instalación de Neural quieres añadir a Home Assistant.",
-        "data": {
-          "installation_id": "Instalación"
-        }
-      },
-      "reauth_confirm": {
-        "title": "Re-autenticación",
-        "description": "Tus credenciales de Neural han expirado. Por favor, introdúcelas de nuevo.",
-        "data": {
-          "user": "ID de Usuario (DNI/NIE)",
-          "password": "Contraseña"
+          "ha_token": "Token de Larga Duración de Home Assistant",
+          "ai_api_key": "Token de API de OpenRouter",
+          "work_mode": "Modo de Trabajo",
+          "personality": "Personalidad de IA",
+          "ai_model": "Modelo de IA",
+          "microphone_enabled": "Habilitar Micrófono",
+          "voice_language": "Idioma de Voz",
+          "voice_timeout": "Tiempo de Espera de Voz (segundos)"
         }
       }
     },
     "error": {
-      "invalid_auth": "Autenticación inválida",
-      "cannot_connect": "Error al conectar",
-      "unknown": "Error inesperado",
-      "cannot_get_installations": "No se pudieron obtener las instalaciones de Neural",
-      "otp_required": "Se requiere autenticación de dos factores",
-      "otp_invalid": "Código OTP inválido",
-      "otp_failed": "Error al enviar el código OTP"
+      "ha_token_required": "Se requiere el token de Home Assistant",
+      "ai_api_key_required": "Se requiere el token de OpenRouter",
+      "invalid_tokens": "Tokens inválidos. Por favor verifique sus credenciales.",
+      "cannot_connect": "No se puede conectar a los servicios",
+      "unknown": "Ocurrió un error desconocido"
     },
     "abort": {
-      "already_configured": "La cuenta ya está configurada",
-      "reauth_successful": "La re-autenticación fue exitosa"
+      "already_configured": "Neural AI ya está configurado"
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Opciones Neural",
-        "description": "Configurar opciones adicionales para la integración Neural.",
+        "title": "Opciones de Neural AI",
+        "description": "Configure las opciones de Neural AI",
         "data": {
-          "scan_interval": "Intervalo de escaneo (minutos)"
-        }
-      }
-    }
-  },
-  "entity": {
-    "alarm_control_panel": {
-      "my_verisure": {
-        "name": "Neural",
-        "state": {
-          "armed_home": "Perimetral",
-          "armed_away": "Total",
-          "armed_night": "Noche",
-          "armed_vacation": "Vacaciones",
-          "armed_custom_bypass": "Personalizado",
-          "disarmed": "Desarmada",
-          "triggered": "Disparada",
-          "arming": "Armando",
-          "disarming": "Desarmando"
+          "work_mode": "Modo de Trabajo",
+          "personality": "Personalidad de IA",
+          "ai_model": "Modelo de IA",
+          "microphone_enabled": "Habilitar Micrófono",
+          "voice_language": "Idioma de Voz",
+          "voice_timeout": "Tiempo de Espera de Voz (segundos)"
         }
       }
     }

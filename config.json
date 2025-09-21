@@ -1,11 +1,19 @@
 {
-  "mode": "supervisor",
   "llm": {
     "url": "https://openrouter.ai/api/v1",
     "model": "openai/gpt-oss-20b",
     "api_key": "sk-or-v1-",
     "personality": "hal9000"
   },
-  "created_at": "2025-09-21T01:30:00",
-  "updated_at": "2025-09-21T02:40:56.980253"
+  "ha": {
+    "url": "http://homeassistant.local:8123",
+    "token": ""
+  },
+  "work_mode": "assistant",
+  "personality": "hal9000",
+  "microphone_enabled": true,
+  "voice_language": "es-ES",
+  "voice_timeout": 5,
+  "created_at": "2025-09-21T16:17:17.367476",
+  "updated_at": "2025-09-21T16:17:17.367483"
 }

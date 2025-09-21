@@ -5,8 +5,10 @@ import logging
 from typing import Any, Dict, List, Optional
 
 import aiohttp
+import asyncio
 
 from .base_client import BaseClient
+from ..auth.credential_manager import CredentialManager
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -14,7 +16,7 @@ _LOGGER = logging.getLogger(__name__)
 class HAClient(BaseClient):
     """Home Assistant client for retrieving sensor and entity information."""
 
-    def __init__(self, ha_url: str = "http://homeassistant.local:8123", ha_token: str = None) -> None:
+    def __init__(self, ha_url: str, ha_token: str = None) -> None:
         """Initialize the Home Assistant client."""
         super().__init__()
         self._ha_url = ha_url.rstrip('/')
@@ -22,7 +24,6 @@ class HAClient(BaseClient):
         # If no token provided, try to get it from credential manager
         if ha_token is None:
             try:
-                from ..auth.credential_manager import CredentialManager
                 credential_manager = CredentialManager()
                 if credential_manager.has_credentials():
                     stored_token = credential_manager.get_token()
@@ -284,7 +285,6 @@ class HAClient(BaseClient):
         elif ha_token is None and not self._ha_token:
             # If no token provided and we don't have one, try to get it from credential manager
             try:
-                from ..auth.credential_manager import CredentialManager
                 credential_manager = CredentialManager()
                 if credential_manager.has_credentials():
                     stored_token = credential_manager.get_token()
@@ -305,7 +305,6 @@ class HAClient(BaseClient):
             _LOGGER.info("Getting complete information from Home Assistant")
             
             # Get all information in parallel for better performance
-            import asyncio
             
             # Create tasks for all API calls
             tasks = {

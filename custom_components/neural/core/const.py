@@ -13,12 +13,6 @@ CONF_AI_MODEL = "ai_model"
 CONF_HA_URL = "ha_url"
 CONF_HA_TOKEN = "ha_token"
 
-# Default values
-DEFAULT_SCAN_INTERVAL = 10  # minutes
-DEFAULT_AI_URL = "http://localhost:11434"  # Ollama default
-DEFAULT_AI_MODEL = "llama3.2"
-DEFAULT_HA_URL = "http://homeassistant.local:8123"  # Home Assistant default
-
 # Entity configuration
 ENTITY_NAMES = {
     "ai_chat": "Neural AI Chat",
@@ -37,4 +31,38 @@ DEVICE_INFO = {
     "configuration_url": "https://github.com/efraespada/neural",
 }
 
-# API endpoints - removed Verisure specific endpoints
+# Work modes
+WORK_MODE_ASSISTANT = "assistant"
+WORK_MODE_SUPERVISOR = "supervisor"
+WORK_MODE_AUTONOMIC = "autonomic"
+
+WORK_MODES = [
+    WORK_MODE_ASSISTANT,
+    WORK_MODE_SUPERVISOR,
+    WORK_MODE_AUTONOMIC,
+]
+
+# Personalities
+PERSONALITY_HAL9000 = "hal9000"
+PERSONALITY_JARVIS = "jarvis"
+PERSONALITY_KITT = "kitt"
+PERSONALITY_MOTHER = "mother"
+
+PERSONALITIES = [
+    PERSONALITY_HAL9000,
+    PERSONALITY_JARVIS,
+    PERSONALITY_KITT,
+    PERSONALITY_MOTHER,
+]
+
+# Default values
+DEFAULT_WORK_MODE = WORK_MODE_ASSISTANT
+DEFAULT_PERSONALITY = PERSONALITY_HAL9000
+DEFAULT_AI_MODEL = "openai/gpt-oss-20b"
+DEFAULT_AI_URL = "https://openrouter.ai/api/v1"
+DEFAULT_MICROPHONE_ENABLED = True
+DEFAULT_VOICE_LANGUAGE = "es-ES"
+DEFAULT_VOICE_TIMEOUT = 5
+DEFAULT_HA_URL = "http://homeassistant.local:8123"  # Home Assistant default
+DEFAULT_SCAN_INTERVAL = 10  # minutes
+DEFAULT_CONFIG_FILE_PATH = "config.json"

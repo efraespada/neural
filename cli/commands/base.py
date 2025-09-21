@@ -13,6 +13,7 @@ from core.dependency_injection.providers import (
     get_ai_use_case,
     get_ha_use_case,
     setup_dependencies,
+    create_default_config,
 )
 
 from ..utils.display import print_error
@@ -30,16 +31,11 @@ class BaseCommand(ABC):
     async def setup(self, interactive: bool = True, ha_ip: str = None, ha_token: str = None) -> bool:
         """Setup the command by getting use cases."""
         try:            
-            # Use fixed URL for Home Assistant
-            ha_url = "http://homeassistant.local:8123"
+            # Create default config if it doesn't exist
+            await create_default_config()
             
-            # Configure with dynamic values (will load from config file)
-            await setup_dependencies(
-                ai_url=None,  # Will load from config file
-                ai_model=None,  # Will load from config file
-                ha_url=ha_url,
-                ha_token=ha_token
-            )
+            # Setup dependencies using config file (CLI - HA token optional)
+            await setup_dependencies()
             
             # Get use cases
             self.ai_use_case = get_ai_use_case()

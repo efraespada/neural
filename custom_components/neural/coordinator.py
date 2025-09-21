@@ -65,14 +65,8 @@ class NeuralDataUpdateCoordinator(DataUpdateCoordinator):
             self.is_processing = True
             await self.async_request_refresh()
             
-            # Setup dependencies with configuration
-            await setup_dependencies(
-                ai_url="https://openrouter.ai/api/v1",
-                ai_model=self.entry.data.get("ai_model", "openai/gpt-4o-mini"),
-                ai_api_key=self.entry.data.get("openrouter_token"),
-                ha_url="http://supervisor/core",
-                ha_token=self.entry.data.get("ha_token")
-            )
+            # Setup dependencies using config.json
+            await setup_dependencies()
             
             # Get use cases
             decision_use_case = get_decision_use_case()

@@ -20,6 +20,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..", "custom_comp
 
 from core.api.ha_auth_client import HAAuthClient
 from core.auth.credential_manager import CredentialManager
+from core.managers.config_manager import ConfigManager
+from core.repositories.implementations.file_repository_impl import FileRepositoryImpl
+from core.const import DEFAULT_HA_URL
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +33,26 @@ class AuthCommand(BaseCommand):
     def __init__(self):
         super().__init__()
         self._credential_manager = CredentialManager()
+
+    async def _get_ha_url_from_config(self) -> str:
+        """Get HA URL from config.json file."""
+        try:
+            # Create file repository and config manager
+            file_repo = FileRepositoryImpl(base_path=".")
+            config_manager = ConfigManager(file_repo, "config.json")
+            
+            # Load configuration from file
+            try:
+                config_data = await config_manager.get_config()
+                return config_data.ha.url
+            except ValueError:
+                # Configuration not loaded, load it
+                config_data = await config_manager.load_config()
+                return config_data.ha.url
+        except Exception as e:
+            logger.warning(f"Could not load HA URL from config: {e}")
+            # Return default URL if config cannot be loaded
+            return DEFAULT_HA_URL
 
     async def execute(self, action: str, **kwargs) -> bool:
         """Execute authentication command."""
@@ -62,13 +85,12 @@ class AuthCommand(BaseCommand):
                 print_error("Error al obtener credenciales almacenadas")
                 return False
 
-            print_info(f"URL de Home Assistant: homeassistant.local:8123")
+            # Get HA URL from config
+            ha_url = await self._get_ha_url_from_config()
+            print_info(f"URL de Home Assistant: {ha_url}")
             print_info(f"Tipo de autenticación: Token de acceso de larga duración")
             print_info(f"Token: {'Configurado' if credentials.get('token') else 'No configurado'}")
             print_info(f"Almacenado en: {credentials.get('stored_at', 'Desconocido')}")
-
-            # Use fixed URL for Home Assistant
-            ha_url = "http://homeassistant.local:8123"
 
             print_info("\nProbando conexión con token almacenado...")
             
@@ -126,8 +148,8 @@ class AuthCommand(BaseCommand):
         print_header("INICIO DE SESIÓN EN HOME ASSISTANT")
 
         try:
-            # Use fixed URL for Home Assistant
-            ha_url = "http://homeassistant.local:8123"
+            # Get HA URL from config
+            ha_url = await self._get_ha_url_from_config()
 
             # Get token
             if not token:
@@ -155,8 +177,7 @@ class AuthCommand(BaseCommand):
                 if success:
                     print_success("✓ Login exitoso")
                     
-                    # Store credentials (using token as both username and password for compatibility)
-                    if self._credential_manager.store_credentials(ha_url, "token_user", token, token):
+                    if self._credential_manager.store_credentials(token):
                         print_success("✓ Token almacenado de forma segura")
                         print_info("El token se usará automáticamente en el futuro")
                     else:

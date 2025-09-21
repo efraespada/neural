@@ -22,12 +22,35 @@ from core.dependency_injection.injector_container import (
 )
 from core.auth.credential_manager import CredentialManager
 from core.use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
+from core.managers.config_manager import ConfigManager
+from core.repositories.implementations.file_repository_impl import FileRepositoryImpl
+from core.const import DEFAULT_HA_URL
 
 logger = logging.getLogger(__name__)
 
 
 class HACommand(BaseCommand):
     """Home Assistant interaction command."""
+
+    async def _get_ha_url_from_config(self) -> str:
+        """Get HA URL from config.json file."""
+        try:
+            # Create file repository and config manager
+            file_repo = FileRepositoryImpl(base_path=".")
+            config_manager = ConfigManager(file_repo, "config.json")
+            
+            # Load configuration from file
+            try:
+                config_data = await config_manager.get_config()
+                return config_data.ha.url
+            except ValueError:
+                # Configuration not loaded, load it
+                config_data = await config_manager.load_config()
+                return config_data.ha.url
+        except Exception as e:
+            logger.warning(f"Could not load HA URL from config: {e}")
+            # Return default URL if config cannot be loaded
+            return DEFAULT_HA_URL
 
     async def execute(self, action: str, **kwargs) -> bool:
         """Execute Home Assistant command."""
@@ -36,8 +59,11 @@ class HACommand(BaseCommand):
         # Extract HA connection parameters
         ha_token = kwargs.pop('ha_token', None)
         
+        # Get HA URL from config
+        ha_url = await self._get_ha_url_from_config()
+        
         # Show connection info
-        print_info("Conectando a Home Assistant en: homeassistant.local:8123")
+        print_info(f"Conectando a Home Assistant en: {ha_url}")
 
         if action == "entities":
             return await self._get_entities(ha_token=ha_token, **kwargs)
@@ -409,9 +435,12 @@ class HACommand(BaseCommand):
             except Exception as e:
                 print_error(f"Error obteniendo credenciales: {e}")
 
+            # Get HA URL from config
+            ha_url = await self._get_ha_url_from_config()
+            
             # Show current connection parameters
             print_info("\n🔗 Parámetros de conexión actuales:")
-            print_info("  URL: homeassistant.local:8123")
+            print_info(f"  URL: {ha_url}")
             
             if ha_token:
                 print_info(f"  Token especificado: {'Configurado' if ha_token else 'No configurado'}")

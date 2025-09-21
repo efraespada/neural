@@ -14,7 +14,7 @@ _LOGGER = logging.getLogger(__name__)
 class HAAuthClient:
     """Home Assistant authentication client."""
 
-    def __init__(self, ha_url: str = "http://homeassistant.local:8123") -> None:
+    def __init__(self, ha_url: str) -> None:
         """Initialize the Home Assistant authentication client."""
         self._ha_url = ha_url.rstrip('/')
         self._session: Optional[aiohttp.ClientSession] = None

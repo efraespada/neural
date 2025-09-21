@@ -20,28 +20,37 @@ _LOGGER.warning("Package file: %s", pathlib.Path(__file__).resolve())
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import callback
 
-from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
+from .core.dependency_injection.providers import setup_dependencies, clear_dependencies, create_default_config
 from .core import get_ai_use_case, get_ha_use_case
-
-from .const import (
-    DOMAIN,
-    CONF_HA_TOKEN,
-    CONF_OPENROUTER_TOKEN,
-    CONF_WORK_MODE,
-    CONF_PERSONALITY,
-    CONF_AI_MODEL,
-    CONF_MICROPHONE_ENABLED,
-    CONF_VOICE_LANGUAGE,
-    CONF_VOICE_TIMEOUT,
-    WORK_MODES,
-    PERSONALITIES,
-    AI_MODELS,
+from .core.managers.config_manager import ConfigManager
+from .core.repositories.implementations.file_repository_impl import FileRepositoryImpl
+from .core.api.models.domain.config import AppConfig, LLMConfig, HAConfig
+from core.const import (
+    DEFAULT_CONFIG_FILE_PATH,
     DEFAULT_WORK_MODE,
     DEFAULT_PERSONALITY,
+    DEFAULT_AI_URL,
     DEFAULT_AI_MODEL,
     DEFAULT_MICROPHONE_ENABLED,
     DEFAULT_VOICE_LANGUAGE,
     DEFAULT_VOICE_TIMEOUT,
+    WORK_MODES,
+    PERSONALITIES,
+)
+from .const import (
+    DOMAIN,
+    CONF_HA_TOKEN,
+    CONF_AI_API_KEY,
+    CONF_WORK_MODE,
+    CONF_PERSONALITY,
+    CONF_AI_MODEL,
+    CONF_AI_URL,
+    CONF_HA_URL,
+    CONF_MICROPHONE_ENABLED,
+    CONF_VOICE_LANGUAGE,
+    CONF_VOICE_TIMEOUT,
+    AI_MODELS,
+    
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -68,16 +77,38 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             # Validate tokens
+            ai_url = user_input[CONF_AI_URL].strip()
+            ai_model = user_input[CONF_AI_MODEL].strip()
+            ai_api_key = user_input[CONF_AI_API_KEY].strip()
+            ha_url = user_input[CONF_HA_URL].strip()
             ha_token = user_input[CONF_HA_TOKEN].strip()
-            openrouter_token = user_input[CONF_OPENROUTER_TOKEN].strip()
+            work_mode = user_input[CONF_WORK_MODE].strip()
+            personality = user_input[CONF_PERSONALITY].strip()
+            microphone_enabled = user_input[CONF_MICROPHONE_ENABLED]
+            voice_language = user_input[CONF_VOICE_LANGUAGE].strip()
+            voice_timeout = user_input[CONF_VOICE_TIMEOUT]
             
             if not ha_token:
                 errors["base"] = "ha_token_required"
-            elif not openrouter_token:
-                errors["base"] = "openrouter_token_required"
+            elif not ai_api_key:
+                errors["base"] = "ai_api_key_required"
             else:
                 # Test tokens (basic validation)
-                if await self._test_tokens(ha_token, openrouter_token):
+                if await self._check_configuration(
+                    ai_url,
+                    ai_model,
+                    ai_api_key,
+                    ha_url,
+                    ha_token,
+                    work_mode,
+                    personality,
+                    microphone_enabled,
+                    voice_language,
+                    voice_timeout,
+                ):
+                    # Save configuration to config.json
+                    await self._save_config_to_file(user_input)
+                    
                     return self.async_create_entry(
                         title="Neural AI",
                         data=user_input,
@@ -89,11 +120,13 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
+                    vol.Required(CONF_HA_URL): str,
                     vol.Required(CONF_HA_TOKEN): str,
-                    vol.Required(CONF_OPENROUTER_TOKEN): str,
+                    vol.Required(CONF_AI_URL, default=DEFAULT_AI_URL): str,
+                    vol.Required(CONF_AI_MODEL, default=DEFAULT_AI_MODEL): vol.In(AI_MODELS),
+                    vol.Required(CONF_AI_API_KEY): str,
                     vol.Required(CONF_WORK_MODE, default=DEFAULT_WORK_MODE): vol.In(WORK_MODES),
                     vol.Required(CONF_PERSONALITY, default=DEFAULT_PERSONALITY): vol.In(PERSONALITIES),
-                    vol.Required(CONF_AI_MODEL, default=DEFAULT_AI_MODEL): vol.In(AI_MODELS),
                     vol.Required(CONF_MICROPHONE_ENABLED, default=DEFAULT_MICROPHONE_ENABLED): bool,
                     vol.Required(CONF_VOICE_LANGUAGE, default=DEFAULT_VOICE_LANGUAGE): str,
                     vol.Required(CONF_VOICE_TIMEOUT, default=DEFAULT_VOICE_TIMEOUT): vol.All(
@@ -104,17 +137,34 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def _test_tokens(self, ha_token: str, openrouter_token: str) -> bool:
+    async def _check_configuration(self, ai_url: str, ai_model: str, ai_api_key: str, ha_url: str, ha_token: str, work_mode: str, personality: str, microphone_enabled: bool, voice_language: str, voice_timeout: int) -> bool:
         """Test if the provided tokens are valid using core use cases."""
         try:
-            # Setup dependencies with test tokens
-            await setup_dependencies(
-                ai_url="https://openrouter.ai/api/v1",
-                ai_model="openai/gpt-4o-mini",  # Use a default model for testing
-                ai_api_key=openrouter_token,
-                ha_url="http://supervisor/core",
-                ha_token=ha_token
+            # Create temporary config
+            config = AppConfig(
+                llm=LLMConfig(
+                    url=ai_url,
+                    model=ai_model,
+                    api_key=ai_api_key
+                ),
+                ha=HAConfig(
+                    url=ha_url,
+                    token=ha_token
+                ),
+                work_mode=work_mode,
+                personality=personality,
+                microphone_enabled=microphone_enabled,
+                voice_language=voice_language,
+                voice_timeout=voice_timeout
             )
+            
+            # Save temporary config
+            file_repo = FileRepositoryImpl(base_path=".")
+            config_manager = ConfigManager(file_repo, DEFAULT_CONFIG_FILE_PATH)
+            await config_manager.save_config(config)
+            
+            # Setup dependencies with temporary config
+            await setup_dependencies()
             
             # Test AI connection
             ai_use_case = get_ai_use_case()
@@ -137,6 +187,39 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
             except:
                 pass
             return False
+
+    async def _save_config_to_file(self, user_input: dict[str, Any]) -> None:
+        """Save configuration from config flow to config.json file."""
+        try:
+            # Create file repository and config manager
+            file_repo = FileRepositoryImpl(base_path=".")
+            config_manager = ConfigManager(file_repo, DEFAULT_CONFIG_FILE_PATH)
+            
+            # Create configuration from user input
+            config = AppConfig(
+                llm=LLMConfig(
+                    url="https://openrouter.ai/api/v1",
+                    model=user_input.get(CONF_AI_MODEL, DEFAULT_AI_MODEL),
+                    api_key=user_input.get(CONF_AI_API_KEY, "")
+                ),
+                ha=HAConfig(
+                    url="http://homeassistant.local:8123",
+                    token=user_input.get(CONF_HA_TOKEN, "")
+                ),
+                work_mode=user_input.get(CONF_WORK_MODE, DEFAULT_WORK_MODE),
+                personality=user_input.get(CONF_PERSONALITY, DEFAULT_PERSONALITY),
+                microphone_enabled=user_input.get(CONF_MICROPHONE_ENABLED, DEFAULT_MICROPHONE_ENABLED),
+                voice_language=user_input.get(CONF_VOICE_LANGUAGE, DEFAULT_VOICE_LANGUAGE),
+                voice_timeout=user_input.get(CONF_VOICE_TIMEOUT, DEFAULT_VOICE_TIMEOUT)
+            )
+            
+            # Save configuration
+            await config_manager.save_config(config)
+            _LOGGER.info("Configuration saved to config.json")
+            
+        except Exception as e:
+            _LOGGER.error("Error saving configuration: %s", e)
+            raise
 
 
 class NeuralOptionsFlowHandler(OptionsFlow):

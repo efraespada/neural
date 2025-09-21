@@ -98,15 +98,10 @@ class CredentialManager:
         decrypted_data = fernet.decrypt(encrypted_bytes)
         return decrypted_data.decode()
 
-    def store_credentials(self, ha_url: str, username: str, password: str, token: str = None) -> bool:
+    def store_credentials(self, token: str = None) -> bool:
         """Store Home Assistant credentials securely."""
         try:
-            # Always use fixed URL for Home Assistant
-            fixed_ha_url = "http://homeassistant.local:8123"
             credentials = {
-                "ha_url": fixed_ha_url,
-                "username": username,
-                "password": self._encrypt_data(password),
                 "token": token,
                 "stored_at": str(datetime.now())
             }
@@ -160,21 +155,6 @@ class CredentialManager:
     def has_credentials(self) -> bool:
         """Check if credentials are stored."""
         return self._config_file.exists()
-
-    def get_ha_url(self) -> Optional[str]:
-        """Get stored HA URL."""
-        # Always return fixed URL for Home Assistant
-        return "http://homeassistant.local:8123"
-
-    def get_username(self) -> Optional[str]:
-        """Get stored username."""
-        credentials = self.get_credentials()
-        return credentials.get("username") if credentials else None
-
-    def get_password(self) -> Optional[str]:
-        """Get stored password."""
-        credentials = self.get_credentials()
-        return credentials.get("password") if credentials else None
 
     def get_token(self) -> Optional[str]:
         """Get stored token."""
