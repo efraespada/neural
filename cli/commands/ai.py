@@ -286,6 +286,21 @@ class AICommand(BaseCommand):
                     print_info(f"     Acción: {action.action}")
                     if action.parameters:
                         print_info(f"     Parámetros: {action.parameters}")
+                
+                # Execute actions using do_actions_use_case
+                print_info("Ejecutando acciones...")
+                from core.dependency_injection.injector_container import get_do_actions_use_case
+                do_actions_use_case = get_do_actions_use_case()
+                
+                execution_result = await do_actions_use_case.execute_actions(decision.actions)
+                
+                print_success(f"✓ Ejecución completada: {execution_result.successful_actions}/{execution_result.total_actions} acciones exitosas")
+                
+                if execution_result.failed_actions > 0:
+                    print_warning(f"⚠ {execution_result.failed_actions} acciones fallaron:")
+                    for result in execution_result.results:
+                        if not result.success:
+                            print_error(f"  - {result.entity}.{result.action}: {result.error_message}")
             else:
                 print_info("No se requieren acciones")
             

@@ -245,6 +245,40 @@ class HAClient(BaseClient):
             _LOGGER.error("Failed to get config from Home Assistant: %s", e)
             raise MyVerisureError(f"Failed to get config from Home Assistant: {e}") from e
 
+    async def call_service(self, domain: str, service: str, entity_id: str = None, service_data: dict = None) -> dict:
+        """Call a service on Home Assistant."""
+        if not self._session:
+            raise MyVerisureConnectionError("Client not connected")
+
+        try:
+            # Prepare the service call data
+            call_data = {}
+            if entity_id:
+                call_data["entity_id"] = entity_id
+            if service_data:
+                call_data.update(service_data)
+            
+            _LOGGER.debug("Calling service %s.%s with data: %s", domain, service, call_data)
+            
+            async with self._session.post(
+                f"{self._ha_url}/api/services/{domain}/{service}",
+                headers=self._headers,
+                json=call_data
+            ) as response:
+                if response.status == 200:
+                    result = await response.json()
+                    _LOGGER.info("Service call successful: %s.%s", domain, service)
+                    return result
+                else:
+                    error_text = await response.text()
+                    _LOGGER.error("Service call failed: %s.%s - Status: %d, Error: %s", 
+                                 domain, service, response.status, error_text)
+                    raise MyVerisureError(f"Service call failed: {response.status} - {error_text}")
+                    
+        except Exception as e:
+            _LOGGER.error("Failed to call service %s.%s: %s", domain, service, e)
+            raise MyVerisureError(f"Failed to call service {domain}.{service}: {e}") from e
+
     def update_ha_config(self, ha_url: str = None, ha_token: str = None) -> None:
         """Update Home Assistant configuration."""
         if ha_url:

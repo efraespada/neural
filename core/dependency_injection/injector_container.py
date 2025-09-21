@@ -16,11 +16,13 @@ from ..use_cases.interfaces.ai_use_case import AIUseCase
 from ..use_cases.interfaces.ha_use_case import HAUseCase
 from ..use_cases.interfaces.config_use_case import ConfigUseCase
 from ..use_cases.interfaces.decision_use_case import DecisionUseCase
+from ..use_cases.interfaces.do_actions_use_case import DoActionsUseCase
 from ..use_cases.interfaces.update_home_info_use_case import UpdateHomeInfoUseCase
 from ..use_cases.implementations.ai_use_case_impl import AIUseCaseImpl
 from ..use_cases.implementations.ha_use_case_impl import HAUseCaseImpl
 from ..use_cases.implementations.config_use_case_impl import ConfigUseCaseImpl
 from ..use_cases.implementations.decision_use_case_impl import DecisionUseCaseImpl
+from ..use_cases.implementations.do_actions_use_case_impl import DoActionsUseCaseImpl
 from ..use_cases.implementations.update_home_info_use_case_impl import UpdateHomeInfoUseCaseImpl
 from ..managers.config_manager import ConfigManager
 
@@ -131,6 +133,13 @@ class DependencyModule(Module):
         """Provide Decision use case as singleton."""
         _LOGGER.debug("Creating Decision use case")
         return DecisionUseCaseImpl(ai_repository, ha_repository, file_repository)
+    
+    @provider
+    @singleton
+    def provide_do_actions_use_case(self, ha_repository: HARepository) -> DoActionsUseCase:
+        """Provide Do Actions use case as singleton."""
+        _LOGGER.debug("Creating Do Actions use case")
+        return DoActionsUseCaseImpl(ha_repository)
     
     @provider
     @singleton
@@ -261,3 +270,8 @@ def get_config_use_case() -> ConfigUseCase:
 def get_decision_use_case() -> DecisionUseCase:
     """Get the Decision use case."""
     return get(DecisionUseCase)
+
+
+def get_do_actions_use_case() -> DoActionsUseCase:
+    """Get the Do Actions use case."""
+    return get(DoActionsUseCase)

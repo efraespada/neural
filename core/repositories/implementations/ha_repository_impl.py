@@ -231,3 +231,20 @@ class HARepositoryImpl(HARepository):
         except Exception as e:
             _LOGGER.error("Failed to get complete information: %s", e)
             raise
+
+    async def call_service(self, domain: str, service: str, entity_id: str = None, service_data: dict = None) -> dict:
+        """Call a service on Home Assistant."""
+        try:
+            # Ensure client is connected
+            if not self._ha_client._session:
+                await self._ha_client.connect()
+            
+            # Use the HA client to call the service
+            result = await self._ha_client.call_service(domain, service, entity_id, service_data)
+            
+            _LOGGER.info("Service call successful: %s.%s", domain, service)
+            return result
+                
+        except Exception as e:
+            _LOGGER.error("Failed to call service %s.%s: %s", domain, service, e)
+            raise

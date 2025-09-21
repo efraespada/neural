@@ -68,3 +68,8 @@ class HARepository(ABC):
     async def test_connection(self) -> bool:
         """Test connection to Home Assistant."""
         pass
+
+    @abstractmethod
+    async def call_service(self, domain: str, service: str, entity_id: str = None, service_data: dict = None) -> dict:
+        """Call a service on Home Assistant."""
+        pass
