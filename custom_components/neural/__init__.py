@@ -53,15 +53,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 "stt_model": entry.data.get("stt_model", "whisper-1"),
                 "stt_api_key": entry.data.get("stt_api_key", "")
             }
-            # Mask secrets for logging
-            safe_stt_config = dict(stt_config)
-            if safe_stt_config.get("ai_api_key"):
-                safe_stt_config["ai_api_key"] = "***"
-            if safe_stt_config.get("stt_api_key"):
-                safe_stt_config["stt_api_key"] = "***"
             hass.data[DOMAIN]["stt_config"] = stt_config
             hass.data[DOMAIN]["stt_setup"] = True
-            _LOGGER.warning("STT configuration stored successfully: %s", safe_stt_config)
+            _LOGGER.warning("STT configuration stored successfully: %s", stt_config)
         except Exception as e:
             _LOGGER.error("Error setting up STT configuration: %s", e)
             # Continue without STT if setup fails

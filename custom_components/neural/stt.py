@@ -13,13 +13,14 @@ from homeassistant.components.stt import (
     AudioCodecs,
     AudioFormats,
     AudioSampleRates,
-    Provider,
+    SpeechToTextEntity,
     SpeechMetadata,
     SpeechResult,
     SpeechResultState,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
 from .core.dependency_injection.injector_container import get_audio_use_case
@@ -35,12 +36,28 @@ from .core.const import (
     DEFAULT_STT_MODEL,
 )
 
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
+) -> None:
+    """Set up Neural STT entity."""
+    model = config_entry.data.get(CONF_STT_MODEL, DEFAULT_STT_MODEL)
+    api_key = config_entry.data.get(CONF_STT_API_KEY, "")
 
-class NeuralSTTProvider(Provider):
-    """Neural AI STT provider using OpenRouter API."""
+    stt_config = {
+        CONF_STT_API_KEY: api_key,
+        CONF_STT_MODEL: model,
+    }
+
+    _LOGGER.warning("Creating Neural STT entity with config: %s", stt_config)
+    async_add_entities([NeuralSTTEntity(hass, stt_config)])
+
+class NeuralSTTEntity(SpeechToTextEntity):
+    """Neural AI STT entity using OpenAI Whisper."""
 
     def __init__(self, hass: HomeAssistant, config: dict[str, Any]) -> None:
-        """Initialize Neural STT provider."""
+        """Initialize Neural STT entity."""
         self.hass = hass
         self.config = config
         self._session: aiohttp.ClientSession | None = None
@@ -48,10 +65,20 @@ class NeuralSTTProvider(Provider):
         # Log configuration details (without sensitive data)
         safe_config = {k: v for k, v in config.items() if k != "stt_api_key"}
         safe_config["stt_api_key"] = "***" if config.get("stt_api_key") else "None"
-        _LOGGER.info("Neural STT provider initialized with config: %s", safe_config)
+        _LOGGER.info("Neural STT entity initialized with config: %s", safe_config)
         _LOGGER.info("STT Model: %s", config.get("stt_model", "whisper-1"))
         _LOGGER.info("AI URL: %s", config.get("ai_url", "https://openrouter.ai/api/v1"))
         _LOGGER.info("AI Model: %s", config.get("ai_model", "openai/gpt-oss-20b"))
+
+    @property
+    def name(self) -> str:
+        """Return the name of the entity."""
+        return "Neural AI STT"
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID for the entity."""
+        return "neural_stt"
 
     @property
     def supported_languages(self) -> list[str]:
@@ -83,7 +110,7 @@ class NeuralSTTProvider(Provider):
         """Return a list of supported channels."""
         return [AudioChannels.CHANNEL_MONO, AudioChannels.CHANNEL_STEREO]
 
-    async def async_process_audio(
+    async def async_process_audio_stream(
         self, metadata: SpeechMetadata, stream: Any
     ) -> SpeechResult:
         """Process audio stream and return speech result."""
@@ -169,32 +196,3 @@ class NeuralSTTProvider(Provider):
         if self._session:
             await self._session.close()
             self._session = None
-
-async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, async_add_entities) -> None:
-    """Set up entry."""
-    _LOGGER.warning("STT async_setup_entry called for Neural AI")
-    _LOGGER.warning("Config entry data: %s", config_entry.data)
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload a config entry."""
-    return True
-
-async def async_get_engine(
-    hass: HomeAssistant, config: dict[str, Any] | None = None
-) -> NeuralSTTProvider:
-    """Create the Neural STT provider, merging stored config."""
-    # Start with stored config from hass.data
-    stored = hass.data.get("neural", {}).get("stt_config", {})
-    # Merge with provided config (UI may pass some values)
-    merged: dict[str, Any] = {**stored, **(config or {})}
-
-    # Build safe config for logs
-    safe = dict(merged)
-    if safe.get("ai_api_key"):
-        safe["ai_api_key"] = "***"
-    if safe.get("stt_api_key"):
-        safe["stt_api_key"] = "***"
-    _LOGGER.warning("Creating Neural STT provider with config: %s", safe)
-
-    return NeuralSTTProvider(hass, merged)
-
