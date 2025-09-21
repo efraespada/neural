@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T03:02:31.673893",
+  "user_prompt": "Enciende la luz en el ático",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "I'm sorry Efra, I'm afraid I can't do that. No se encontró una entidad de luz específica para el ático en los datos disponibles.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 98969,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_030221"
+  }
+}

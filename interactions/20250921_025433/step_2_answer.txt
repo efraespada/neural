@@ -1,0 +1,6 @@
+```json
+{
+  "message": "Lo siento Efra, me temo que no puedo hacer eso. La temperatura ambiente actual es de 28.5°C en las habitaciones y 28.0°C en la planta principal, lo cual es bastante cálido. No es recomendable encender la calefacción en estas condiciones.",
+  "actions": []
+}
+```

@@ -1,0 +1,6 @@
+```json
+{
+  "message": "Lo siento Efra, no puedo encender la calefacción. La temperatura ambiente ya es de 28.5°C, lo cual es más que suficiente para mantener un ambiente confortable.",
+  "actions": []
+}
+```

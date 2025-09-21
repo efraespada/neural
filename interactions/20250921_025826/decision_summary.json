@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-09-21T02:58:31.216261",
+  "user_prompt": "Enciende la luz en el ático",
+  "mode": "assistant",
+  "ai_response": {
+    "message": "Lo siento Efra, me temo que no puedo hacer eso. No hay ninguna luz en el ático configurada en el sistema.",
+    "actions": [],
+    "actions_count": 0
+  },
+  "context": {
+    "ha_information_used": true,
+    "ha_info_length": 98967,
+    "decision_type": "with_ha_context"
+  },
+  "metadata": {
+    "file_generated_by": "DecisionUseCase",
+    "purpose": "AI decision summary",
+    "version": "2.0",
+    "interaction_timestamp": "20250921_025826"
+  }
+}

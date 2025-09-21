@@ -1,0 +1,8 @@
+```json
+{
+  "message": "De acuerdo, enciendo la luz en el ático",
+  "actions": [
+    {"entity": "light.attic", "action": "turn_on"}
+  ]
+}
+```

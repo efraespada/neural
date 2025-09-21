@@ -1,0 +1,6 @@
+```json
+{
+  "message": "Lo siento, Dave, me temo que no puedo hacer eso. No tengo información sobre la temperatura actual para decidir si es necesario encender la calefacción.",
+  "actions": []
+}
+```

@@ -1,0 +1,11 @@
+```json
+{
+  "message": "De acuerdo, Efra, enciendo la luz en el ático.",
+  "actions": [
+    {
+      "entity": "light.hue_color_spot_6",
+      "action": "turn_on"
+    }
+  ]
+}
+```

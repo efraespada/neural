@@ -1,0 +1,6 @@
+```json
+{
+  "message": "Lo siento Efra, me temo que no puedo hacer eso. No hay ninguna luz en el ático configurada en el sistema.",
+  "actions": []
+}
+```
