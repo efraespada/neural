@@ -18,9 +18,7 @@ from homeassistant.components.stt import (
     SpeechMetadata,
     SpeechResult,
     SpeechResultState,
-    async_unregister_provider,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
