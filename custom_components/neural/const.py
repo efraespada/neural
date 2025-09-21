@@ -33,7 +33,8 @@ AI_MODELS = [
 ]
 
 STT_MODELS = [
-    "whisper-1",
+    "whisper-1",  # OpenAI API model (recommended)
+    "whisper-2",  # OpenAI API model (if available)
 ]
 
 # Service names

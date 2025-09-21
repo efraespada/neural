@@ -198,6 +198,7 @@ class NeuralConfigFlowHandler(ConfigFlow, domain=DOMAIN):
                         ai_url=ai_url,
                         ai_model=ai_model,
                         api_key=ai_api_key,
+                        stt_model=stt_model,
                         stt_api_key=stt_api_key
                     )
                     # Test STT connection by checking if Whisper is available

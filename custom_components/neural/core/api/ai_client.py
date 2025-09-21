@@ -16,12 +16,13 @@ _LOGGER = logging.getLogger(__name__)
 class AIClient(BaseClient):
     """AI client for OpenRouter integration."""
 
-    def __init__(self, ai_url: str, ai_model: str, api_key: str, stt_api_key: str) -> None:
+    def __init__(self, ai_url: str, ai_model: str, api_key: str, stt_model: str, stt_api_key: str) -> None:
         """Initialize the AI client."""
         super().__init__()
         self._ai_url = ai_url
         self._ai_model = ai_model
         self._api_key = api_key
+        self.stt_model = stt_model
         self._stt_api_key = stt_api_key
         self._whisper_client: Optional[openai.OpenAI] = None
         self._headers = {
@@ -300,7 +301,7 @@ class AIClient(BaseClient):
                     raise ValueError("STT API key is required for audio transcription")
                 self._whisper_client = openai.OpenAI(api_key=self._stt_api_key)
             
-            _LOGGER.info("Transcribing audio with Whisper, language: %s", language)
+            _LOGGER.info("Transcribing audio with Whisper model: %s, language: %s", self.stt_model, language)
             
             # Create a file-like object from audio data
             audio_file = BytesIO(audio_data)
@@ -308,7 +309,7 @@ class AIClient(BaseClient):
             
             # Transcribe using OpenAI Whisper
             transcription = self._whisper_client.audio.transcriptions.create(
-                model="whisper-1",
+                model=self.stt_model,
                 file=audio_file,
                 language=language,
                 response_format="json"

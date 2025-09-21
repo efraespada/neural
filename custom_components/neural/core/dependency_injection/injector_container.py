@@ -37,6 +37,7 @@ from ..const import (
     DEFAULT_AI_URL,
     DEFAULT_AI_MODEL,
     DEFAULT_HA_URL,
+    DEFAULT_STT_MODEL,
     DEFAULT_CONFIG_FILE_PATH
 )
 
@@ -47,6 +48,7 @@ class Configuration:
                  ai_url: str = DEFAULT_AI_URL,
                  ai_model: str = DEFAULT_AI_MODEL,
                  ai_api_key: str = "",
+                 stt_model: str = DEFAULT_STT_MODEL,
                  stt_api_key: str = "",
                  ha_url: str = DEFAULT_HA_URL,
                  ha_token: str = "",
@@ -56,6 +58,7 @@ class Configuration:
         self.ai_url = ai_url
         self.ai_model = ai_model
         self.ai_api_key = ai_api_key
+        self.stt_model = stt_model
         self.stt_api_key = stt_api_key
         self.ha_url = ha_url
         self.ha_token = ha_token
@@ -75,12 +78,13 @@ class DependencyModule(Module):
     @singleton
     def provide_ai_client(self) -> AIClient:
         """Provide AI client as singleton."""
-        _LOGGER.info("Creating AI client with URL: %s, Model: %s", 
-                    self.config.ai_url, self.config.ai_model)
+        _LOGGER.info("Creating AI client with URL: %s, Model: %s, STT Model: %s", 
+                    self.config.ai_url, self.config.ai_model, self.config.stt_model)
         return AIClient(
             ai_url=self.config.ai_url, 
             ai_model=self.config.ai_model,
             api_key=self.config.ai_api_key,
+            stt_model=self.config.stt_model,
             stt_api_key=self.config.stt_api_key
         )
     

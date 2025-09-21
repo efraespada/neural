@@ -52,8 +52,9 @@ async def setup_dependencies() -> None:
             # Configuration not loaded, load it
             config_data = await config_manager.load_config()
             
-        _LOGGER.info("Using configuration from file: AI URL=%s, Model=%s", 
-                    config_data.llm.url, config_data.llm.model)
+        _LOGGER.info("Using configuration from file: AI URL=%s, Model=%s, STT Model=%s", 
+                    config_data.llm.url, config_data.llm.model, config_data.stt.model)
+        _LOGGER.info("STT API key configured: %s", "Yes" if config_data.stt.api_key else "No")
 
         # Get HA token
         ha_token = config_data.ha.token
@@ -78,6 +79,8 @@ async def setup_dependencies() -> None:
             ai_url=config_data.llm.url,
             ai_model=config_data.llm.model,
             ai_api_key=config_data.llm.api_key,
+            stt_model=config_data.stt.model,
+            stt_api_key=config_data.stt.api_key,
             ha_url=config_data.ha.url,
             ha_token=ha_token
         )

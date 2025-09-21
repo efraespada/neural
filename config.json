@@ -6,8 +6,8 @@
     "personality": "hal9000"
   },
   "stt": {
-    "model": "whisper",
-    "api_key": ""
+    "model": "whisper-1",
+    "api_key": "sk-your-openai-api-key-here"
   },
   "ha": {
     "url": "http://homeassistant.local:8123",

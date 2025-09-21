@@ -49,5 +49,9 @@
         }
       }
     }
+  },
+  "stt_models": {
+    "whisper-1": "Whisper-1 (OpenAI API - Recommended)",
+    "whisper-2": "Whisper-2 (OpenAI API - Latest)"
   }
 } 
