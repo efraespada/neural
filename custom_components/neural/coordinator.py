@@ -16,7 +16,8 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 # Add core path to sys.path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
 
-from core.dependency_injection.providers import setup_dependencies, get_decision_use_case, get_do_actions_use_case, get_ha_use_case, clear_dependencies
+from core.dependency_injection.providers import setup_dependencies, clear_dependencies
+from core.dependency_injection.injector_container import get_decision_use_case, get_do_actions_use_case, get_ha_use_case
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -71,12 +72,12 @@ class NeuralDataUpdateCoordinator(DataUpdateCoordinator):
             await self.async_request_refresh()
             
             # Setup dependencies with configuration
-            setup_dependencies(
-                ha_token=self.entry.data.get("ha_token"),
-                openrouter_token=self.entry.data.get("openrouter_token"),
+            await setup_dependencies(
+                ai_url="https://openrouter.ai/api/v1",
                 ai_model=self.entry.data.get("ai_model", "openai/gpt-4o-mini"),
-                personality=self.entry.data.get("personality", "jarvis"),
-                work_mode=self.entry.data.get("work_mode", "assistant")
+                ai_api_key=self.entry.data.get("openrouter_token"),
+                ha_url="http://supervisor/core",
+                ha_token=self.entry.data.get("ha_token")
             )
             
             # Get use cases
