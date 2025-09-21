@@ -11,7 +11,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, ENTITY_AI_STATUS, ENTITY_AI_RESPONSE
+from neural.const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 

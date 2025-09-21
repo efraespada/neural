@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.intent import IntentHandler, IntentResponse
 from homeassistant.helpers import intent
 
-from .const import DOMAIN
+from neural.const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 

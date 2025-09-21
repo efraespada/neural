@@ -4,11 +4,10 @@ from __future__ import annotations
 
 import logging
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN, PLATFORMS
-from .coordinator import NeuralDataUpdateCoordinator
+from neural.const import DOMAIN, PLATFORMS
+from neural.coordinator import NeuralDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 

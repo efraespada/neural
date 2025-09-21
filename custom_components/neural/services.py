@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 from homeassistant.core import HomeAssistant, ServiceCall
-from homeassistant.helpers import intent
 
-from .const import DOMAIN, SERVICE_SEND_MESSAGE, SERVICE_GET_STATUS, SERVICE_UPDATE_CONFIG
+from neural.const import DOMAIN, SERVICE_SEND_MESSAGE, SERVICE_GET_STATUS, SERVICE_UPDATE_CONFIG
 
 _LOGGER = logging.getLogger(__name__)
 

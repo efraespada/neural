@@ -3,22 +3,7 @@
 __version__ = "1.0.0"
 __author__ = "Neural Team"
 
-# Import main components
-from .api import AIClient, HAClient, BaseClient
-from .auth import CredentialManager
-from .use_cases import (
-    AIUseCase,
-    HAUseCase,
-    ConfigUseCase,
-    DecisionUseCase,
-    DecisionResponse,
-    DecisionAction,
-    DoActionsUseCase,
-    ActionExecutionResult,
-    ActionsExecutionResponse,
-    UpdateHomeInfoUseCase,
-)
-from .dependency_injection import setup_dependencies, clear_dependencies
+from .dependency_injection.providers import setup_dependencies, clear_dependencies
 from .dependency_injection.injector_container import (
     get_ai_use_case,
     get_ha_use_case,
@@ -28,23 +13,6 @@ from .dependency_injection.injector_container import (
 )
 
 __all__ = [
-    # API Clients
-    "AIClient",
-    "HAClient", 
-    "BaseClient",
-    # Auth
-    "CredentialManager",
-    # Use Cases
-    "AIUseCase",
-    "HAUseCase",
-    "ConfigUseCase",
-    "DecisionUseCase",
-    "DecisionResponse",
-    "DecisionAction",
-    "DoActionsUseCase",
-    "ActionExecutionResult",
-    "ActionsExecutionResponse",
-    "UpdateHomeInfoUseCase",
     # Dependency Injection
     "setup_dependencies",
     "clear_dependencies",

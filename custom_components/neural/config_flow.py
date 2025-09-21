@@ -6,14 +6,11 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-import aiohttp
 
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
 
-# Import core dependencies
-from .core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_ai_use_case, get_ha_use_case
+from neural.core.dependency_injection.providers import setup_dependencies, clear_dependencies, get_ai_use_case, get_ha_use_case
 
 from .const import (
     DOMAIN,
