@@ -19,6 +19,7 @@ from homeassistant.components.stt import (
     SpeechResultState,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
 
 from .core.dependency_injection.providers import setup_dependencies, clear_dependencies
 from .core.dependency_injection.injector_container import get_audio_use_case
@@ -144,6 +145,13 @@ class NeuralSTTProvider(Provider):
             await self._session.close()
             self._session = None
 
+async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, async_add_entities) -> None:
+    """Set up entry."""
+    pass
+
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a config entry."""
+    return True
 
 async def async_get_engine(
     hass: HomeAssistant, config: dict, discovery_info: dict | None = None
