@@ -63,11 +63,11 @@ class NeuralConversationAgent(
         """Process a conversation turn."""
         conversation_id = user_input.conversation_id or ulid_util.ulid_now()
         try:
-            _LOGGER.info("Neural AI processing conversation: %s", user_input.text)
+            _LOGGER.warning("Neural AI processing conversation: %s", user_input.text)
             
             # Get configuration from config entry
             work_mode = self._config_entry.data.get("work_mode", DEFAULT_WORK_MODE)
-            _LOGGER.info("Using work mode: %s", work_mode)
+            _LOGGER.warning("Using work mode: %s", work_mode)
  
             # Setup dependencies and get use cases
             await setup_dependencies()
@@ -75,17 +75,17 @@ class NeuralConversationAgent(
             do_actions_use_case = get_do_actions_use_case()
             
             # Step 1: Decision Use Case - Interpret the user request
-            _LOGGER.info("Step 1: Interpreting user request with Decision Use Case")
+            _LOGGER.warning("Step 1: Interpreting user request with Decision Use Case")
             decision_result = await decision_use_case.make_decision(user_input.text, work_mode)
             
             # Step 2: Do Actions Use Case - Execute necessary actions
-            _LOGGER.info("Step 2: Executing actions with Do Actions Use Case")
+            _LOGGER.warning("Step 2: Executing actions with Do Actions Use Case")
             actions_result = await do_actions_use_case.execute_actions(decision_result)
             
             # Step 3: Return the AI response message
             response = actions_result.get("message", "")
             
-            _LOGGER.info("Neural AI response: %s", response)
+            _LOGGER.warning("Neural AI response: %s", response)
             return ConversationResult(
                 response=response,
                 conversation_id=conversation_id,
