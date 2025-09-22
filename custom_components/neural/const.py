@@ -3,7 +3,7 @@
 from homeassistant.const import Platform
 
 DOMAIN = "neural"
-PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.STT]
+PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.STT, Platform.CONVERSATION]
 
 # Configuration keys
 CONF_HA_TOKEN = "ha_token"
