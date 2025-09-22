@@ -937,21 +937,28 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
             ValueError: If the response is not valid JSON or missing required fields
         """
         try:
-            _LOGGER.debug("Validating decision response")
+            _LOGGER.warning("Validating decision response")
+            _LOGGER.warning("Raw AI response: %s", response)
             
             # Clean the response (remove any markdown formatting)
             cleaned_response = response.strip()
+            _LOGGER.warning("Cleaned response: %s", cleaned_response)
+            
             if cleaned_response.startswith("```json"):
                 cleaned_response = cleaned_response[7:]
             if cleaned_response.endswith("```"):
                 cleaned_response = cleaned_response[:-3]
             cleaned_response = cleaned_response.strip()
             
+            _LOGGER.warning("Final cleaned response: %s", cleaned_response)
+            
             # Parse JSON
             try:
                 response_data = json.loads(cleaned_response)
+                _LOGGER.warning("Successfully parsed JSON: %s", response_data)
             except json.JSONDecodeError as e:
                 _LOGGER.error("Invalid JSON in AI response: %s", e)
+                _LOGGER.error("Response that failed to parse: %s", cleaned_response)
                 raise ValueError(f"Invalid JSON in AI response: {e}")
             
             # Validate required fields
