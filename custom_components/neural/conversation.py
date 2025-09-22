@@ -77,13 +77,18 @@ class NeuralConversationAgent(
             # Step 1: Decision Use Case - Interpret the user request
             _LOGGER.warning("Step 1: Interpreting user request with Decision Use Case")
             decision_result = await decision_use_case.make_decision(user_input.text, work_mode)
+            _LOGGER.warning("Decision result: %s", decision_result)
             
             # Step 2: Do Actions Use Case - Execute necessary actions
             _LOGGER.warning("Step 2: Executing actions with Do Actions Use Case")
-            actions_result = await do_actions_use_case.execute_actions(decision_result)
+            _LOGGER.warning("Actions to execute: %s", decision_result.actions)
+            actions_result = await do_actions_use_case.execute_actions(decision_result.actions)
+            _LOGGER.warning("Actions result type: %s", type(actions_result))
+            _LOGGER.warning("Actions result content: %s", actions_result)
             
             # Step 3: Return the AI response message
-            response = actions_result.get("message", "")
+            response = actions_result.message
+            _LOGGER.warning("Extracted message from actions_result: %s", response)
             
             _LOGGER.warning("Neural AI response: %s", response)
             return ConversationResult(

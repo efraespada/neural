@@ -40,7 +40,9 @@ class DoActionsUseCaseImpl(DoActionsUseCase):
             OSError: If there's an error executing actions
         """
         try:
-            _LOGGER.debug("Executing %d actions", len(actions))
+            _LOGGER.warning("DoActionsUseCase.execute_actions called with: %s", type(actions))
+            _LOGGER.warning("Actions content: %s", actions)
+            _LOGGER.warning("Executing %d actions", len(actions))
             
             # Validate inputs
             if not actions:
@@ -89,8 +91,11 @@ class DoActionsUseCaseImpl(DoActionsUseCase):
                 failed_actions=failed_count
             )
             
-            _LOGGER.info("Actions execution completed: %d/%d successful (%.1f%%)", 
+            _LOGGER.warning("Actions execution completed: %d/%d successful (%.1f%%)", 
                         successful_count, len(actions), response.success_rate)
+            _LOGGER.warning("ActionsExecutionResponse created: %s", response)
+            _LOGGER.warning("Response message: %s", response.message)
+            _LOGGER.warning("Response results: %s", response.results)
             
             return response
             
