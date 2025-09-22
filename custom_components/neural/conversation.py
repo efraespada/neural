@@ -13,7 +13,7 @@ from homeassistant.components.conversation import (
     ConversationResult,
     ConversationInput,
 )
-from homeassistant.components.intent import IntentResponse
+from homeassistant.helpers import intent
 from homeassistant.util import ulid as ulid_util
 
 from .core.dependency_injection.providers import setup_dependencies
@@ -89,7 +89,7 @@ class NeuralConversationAgent(
             
             _LOGGER.warning("Neural AI response: %s", response)
 
-            intent_response = IntentResponse(language=user_input.language or "es")
+            intent_response = intent.IntentResponse(language=user_input.language or "es")
             intent_response.async_set_speech(response)
 
             return ConversationResult(
@@ -100,9 +100,11 @@ class NeuralConversationAgent(
         except Exception as e:
             _LOGGER.error("Error processing conversation: %s", e)
             error_msg = f"Lo siento, hubo un error procesando tu solicitud: {str(e)}"
-            intent_response = IntentResponse(language=user_input.language or "es")
-            intent_response.async_set_speech(error_msg)
-
+            intent_response = intent.IntentResponse(language=user_input.language or "es")
+            intent_response.async_set_error(
+                intent.IntentResponseErrorCode.FAILED_TO_HANDLE,
+                error_msg or "",
+            )
             return ConversationResult(
                 response=intent_response,
                 conversation_id=conversation_id,
