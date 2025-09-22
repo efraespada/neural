@@ -156,7 +156,9 @@ class DependencyModule(Module):
     def provide_decision_use_case(self, ai_repository: AIRepository, ha_repository: HARepository, file_repository: FileRepository) -> DecisionUseCase:
         """Provide Decision use case as singleton."""
         _LOGGER.debug("Creating Decision use case")
-        return DecisionUseCaseImpl(ai_repository, ha_repository, file_repository)
+        # Detect if running in Home Assistant context
+        is_ha_mode = _detect_ha_mode()
+        return DecisionUseCaseImpl(ai_repository, ha_repository, file_repository, is_ha_mode)
     
     @provider
     @singleton
@@ -311,3 +313,19 @@ def get_do_actions_use_case() -> DoActionsUseCase:
 def get_audio_use_case() -> AudioUseCase:
     """Get the Audio use case."""
     return get(AudioUseCase)
+
+
+def _detect_ha_mode() -> bool:
+    """
+    Detect if running in Home Assistant context.
+    
+    Returns:
+        True if running in HA context, False otherwise
+    """
+    try:
+        # Check if we're in a Home Assistant environment
+        import homeassistant
+        return True
+    except ImportError:
+        # Not in HA context
+        return False

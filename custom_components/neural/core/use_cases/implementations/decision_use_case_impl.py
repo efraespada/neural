@@ -12,6 +12,7 @@ from ...repositories.interfaces.ha_repository import HARepository
 from ...repositories.interfaces.file_repository import FileRepository
 from ...api.models.domain.ha_entity import HAEntity
 from ...constants import RELEVANT_DOMAINS
+from ...utils.md_utils import read_md_template
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ class DecisionUseCaseImpl(DecisionUseCase):
     Combines Home Assistant state with AI decision-making capabilities.
     """
     
-    def __init__(self, ai_repository: AIRepository, ha_repository: HARepository, file_repository: FileRepository):
+    def __init__(self, ai_repository: AIRepository, ha_repository: HARepository, file_repository: FileRepository, is_ha_mode: bool = False):
         """
         Initialize the DecisionUseCaseImpl.
         
@@ -30,22 +31,18 @@ class DecisionUseCaseImpl(DecisionUseCase):
             ai_repository: AI repository for sending prompts
             ha_repository: Home Assistant repository for getting state
             file_repository: File repository for handling files and home info
+            is_ha_mode: If True, running in Home Assistant context
         """
         self._ai_repository = ai_repository
         self._ha_repository = ha_repository
         self._file_repository = file_repository
+        self._is_ha_mode = is_ha_mode
         self._prompt_template = self._load_prompt_template()
     
     def _load_prompt_template(self) -> str:
         """Load the prompt template from request_prompt.md."""
         try:
-            template_path = Path("request_prompt.md")
-            if template_path.exists():
-                with open(template_path, 'r', encoding='utf-8') as f:
-                    return f.read()
-            else:
-                _LOGGER.warning("Prompt template not found, using default")
-                return self._get_default_template()
+            return read_md_template("request_prompt.md", self._is_ha_mode)
         except Exception as e:
             _LOGGER.error("Error loading prompt template: %s", e)
             return self._get_default_template()
@@ -676,8 +673,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.debug("Building step 1 prompt")
             
             # Read the request_prompt.md template
-            with open("request_prompt.md", "r", encoding="utf-8") as f:
-                template = f.read()
+            template = read_md_template("request_prompt.md", self._is_ha_mode)
             
             # Replace placeholders
             prompt = template.replace("{{ original_prompt }}", user_prompt)
@@ -696,8 +692,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.debug("Building step 2 prompt")
             
             # Read the request_filter_prompt.md template
-            with open("request_filter_prompt.md", "r", encoding="utf-8") as f:
-                template = f.read()
+            template = read_md_template("request_filter_prompt.md", self._is_ha_mode)
             
             # Replace placeholders
             prompt = template.replace("{{ original_prompt }}", user_prompt)
@@ -717,8 +712,7 @@ No incluyas explicaciones ni texto fuera del JSON.
             _LOGGER.debug("Building action prompt")
             
             # Read the request_action_prompt.md template
-            with open("request_action_prompt.md", "r", encoding="utf-8") as f:
-                template = f.read()
+            template = read_md_template("request_action_prompt.md", self._is_ha_mode)
             
             # Get AI personality from configuration
             personality_instruction = await self._get_personality_instruction()
@@ -1082,8 +1076,7 @@ Basándote en la información de Home Assistant proporcionada, toma la decisión
             _LOGGER.debug("Building retry prompt")
             
             # Read the request_action_retry_prompt.md template
-            with open("request_action_retry_prompt.md", "r", encoding="utf-8") as f:
-                template = f.read()
+            template = read_md_template("request_action_retry_prompt.md", self._is_ha_mode)
             
             # Get AI personality from configuration
             personality_instruction = await self._get_personality_instruction()

@@ -11,7 +11,7 @@
   },
   "ha": {
     "url": "http://homeassistant.local:8123",
-    "token": ""
+    "token": "test-token-for-development"
   },
   "work_mode": "assistant",
   "personality": "hal9000",
