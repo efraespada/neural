@@ -2,14 +2,14 @@
 
 import asyncio
 import logging
+import wave
 from typing import Any, Dict, List, Optional
 from io import BytesIO
 
 import aiohttp
 import openai
-from pydub import AudioSegment
 
-from ..const import DEFAULT_SUPPORTED_LANGUAGES
+from ..const import SUPPORTED_LANGUAGES
 from .base_client import BaseClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -316,32 +316,22 @@ class AIClient(BaseClient):
             # Log audio data details for debugging
             _LOGGER.info("Audio data size: %d bytes, first 20 bytes: %s", len(audio_data), audio_data[:20].hex())
             
-            # Convert audio to proper WAV format
-            try:
-                # Convert raw audio data to WAV format using pydub
-                audio_segment = AudioSegment(
-                    data=audio_data,
-                    sample_width=2,  # 16-bit
-                    frame_rate=16000,  # 16kHz
-                    channels=1  # Mono
-                )
-                
-                # Export as WAV
-                wav_buffer = BytesIO()
-                audio_segment.export(wav_buffer, format="wav")
-                wav_data = wav_buffer.getvalue()
-                
-                _LOGGER.info("Converted audio to WAV format: %d bytes", len(wav_data))
-                
-                # Create file-like object with converted WAV data
-                audio_file = BytesIO(wav_data)
-                audio_file.name = "audio.wav"
-                
-            except Exception as e:
-                _LOGGER.error("Failed to convert audio to WAV format: %s", e)
-                # Fallback: try with original data
-                audio_file = BytesIO(audio_data)
-                audio_file.name = "audio.wav"
+            # Create proper WAV file using Python's wave module
+            wav_buffer = BytesIO()
+            
+            # Create WAV file with proper header
+            with wave.open(wav_buffer, 'wb') as wav_file:
+                wav_file.setnchannels(1)  # Mono
+                wav_file.setsampwidth(2)  # 16-bit
+                wav_file.setframerate(16000)  # 16kHz
+                wav_file.writeframes(audio_data)
+            
+            # Get the complete WAV data
+            wav_data = wav_buffer.getvalue()
+            audio_file = BytesIO(wav_data)
+            audio_file.name = "audio.wav"
+            
+            _LOGGER.info("Created WAV file: %d bytes (original: %d bytes)", len(wav_data), len(audio_data))
             
             # Transcribe using OpenAI Whisper in executor
             import asyncio
@@ -381,4 +371,4 @@ class AIClient(BaseClient):
 
     async def get_whisper_supported_languages(self) -> List[str]:
         """Get list of supported languages for Whisper."""
-        return DEFAULT_SUPPORTED_LANGUAGES
+        return SUPPORTED_LANGUAGES

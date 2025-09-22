@@ -1,26 +1,34 @@
 {
   "domain": "neural",
   "name": "Neural AI",
-  "codeowners": ["@efraespada"],
+  "codeowners": [
+    "@efraespada"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/efraespada/neural",
   "issue_tracker": "https://github.com/efraespada/neural/issues",
   "integration_type": "service",
   "iot_class": "cloud_polling",
-  "loggers": ["neural"],
+  "loggers": [
+    "neural"
+  ],
   "stt": true,
   "conversation": true,
-  "requirements": [
-    "aiohttp>=3.8.0",
-    "voluptuous>=0.13.0",
-    "requests>=2.28.0",
-    "gql[requests]>=3.4.0",
-    "keyring>=24.0.0",
-    "cryptography>=41.0.0",
-    "injector>=0.20.0",
-    "openai>=1.0.0",
-    "pydub>=0.25.1"
-  ],
+    "requirements": [
+      "aiofiles>=23.0.0",
+      "aiohttp>=3.8.0",
+      "black>=23.11.0",
+      "coverage>=7.10.0",
+      "cryptography>=41.0.0",
+      "flake8>=6.1.0",
+      "gql[requests]>=3.4.0",
+      "injector>=0.20.0",
+      "keyring>=24.0.0",
+      "mypy>=1.7.0",
+      "openai>=1.0.0",
+      "requests>=2.28.0",
+      "voluptuous>=0.13.0"
+    ],
   "version": "1.0.0",
   "icon": "icon.png"
-} 
+}

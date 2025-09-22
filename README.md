@@ -17,7 +17,8 @@ Custom integration for Home Assistant that provides local AI capabilities using 
 ## 📋 Requirements
 
 - Home Assistant 2024.1.0 or higher
-- Ollama or compatible local AI service running
+- OpenRouter API key for AI services
+- OpenAI API key for Speech-to-Text (STT)
 - Python 3.9 or higher
 
 ## 🛠️ Installation

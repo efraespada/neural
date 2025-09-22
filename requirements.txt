@@ -1,5 +1,6 @@
 # Dependencies for Neural AI integration
 aiohttp>=3.8.0
+aiofiles>=23.0.0
 gql[requests]>=3.4.0
 voluptuous>=0.13.0
 keyring>=24.0.0
@@ -7,7 +8,6 @@ cryptography>=41.0.0
 injector>=0.20.0
 requests>=2.28.0
 openai>=1.0.0
-pydub>=0.25.1
 
 # Development dependencies
 pytest>=8.4.0
