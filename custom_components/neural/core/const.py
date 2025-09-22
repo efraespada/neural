@@ -60,3 +60,26 @@ DEFAULT_VOICE_TIMEOUT = 5
 DEFAULT_HA_URL = "http://homeassistant.local:8123"  # Home Assistant default
 DEFAULT_SCAN_INTERVAL = 10  # minutes
 DEFAULT_CONFIG_FILE_PATH = "config.json"
+
+SUPPORTED_LANGUAGES = [
+    "es",  # Spanish
+    "en",  # English
+    "fr",  # French
+    "de",  # German
+    "it",  # Italian
+    "pt",  # Portuguese
+    "ru",  # Russian
+    "ja",  # Japanese
+    "ko",  # Korean
+    "zh",  # Chinese
+    "ar",  # Arabic
+    "hi",  # Hindi
+    "nl",  # Dutch
+    "sv",  # Swedish
+    "no",  # Norwegian
+    "da",  # Danish
+    "fi",  # Finnish
+    "pl",  # Polish
+    "tr",  # Turkish
+    "he",  # Hebrew
+]

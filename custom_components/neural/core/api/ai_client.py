@@ -9,6 +9,7 @@ import aiohttp
 import openai
 from pydub import AudioSegment
 
+from ..const import DEFAULT_SUPPORTED_LANGUAGES
 from .base_client import BaseClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -380,25 +381,4 @@ class AIClient(BaseClient):
 
     async def get_whisper_supported_languages(self) -> List[str]:
         """Get list of supported languages for Whisper."""
-        return [
-            "es",  # Spanish
-            "en",  # English
-            "fr",  # French
-            "de",  # German
-            "it",  # Italian
-            "pt",  # Portuguese
-            "ru",  # Russian
-            "ja",  # Japanese
-            "ko",  # Korean
-            "zh",  # Chinese
-            "ar",  # Arabic
-            "hi",  # Hindi
-            "nl",  # Dutch
-            "sv",  # Swedish
-            "no",  # Norwegian
-            "da",  # Danish
-            "fi",  # Finnish
-            "pl",  # Polish
-            "tr",  # Turkish
-            "he",  # Hebrew
-        ]
+        return DEFAULT_SUPPORTED_LANGUAGES
